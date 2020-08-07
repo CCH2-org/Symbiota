@@ -795,6 +795,14 @@ class OccurrenceManager extends OccurrenceTaxaManager {
 				unset($this->searchTermArr["includecult"]);
 			}
 		}
+		if(array_key_exists("isreproductive",$_REQUEST)){
+			if($_REQUEST["isreproductive"]){
+				$this->searchTermArr["isreproductive"] = true;
+			}
+			else{
+				unset($this->searchTermArr["isreproductive"]);
+			}
+		}
 		$llPattern = '-?\d+\.{0,1}\d*';
 		if(array_key_exists("upperlat",$_REQUEST)){
 			$upperLat = ''; $bottomlat = ''; $leftLong = ''; $rightlong = '';
