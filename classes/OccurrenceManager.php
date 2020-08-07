@@ -411,6 +411,10 @@ class OccurrenceManager extends OccurrenceTaxaManager {
 				$this->displaySearchArr[] = 'includes cultivated/captive occurrences';
 			}
 		}
+		if(array_key_exists("isreproductive",$this->searchTermArr)){
+			$sqlWhere .= "AND (o.occid IN(SELECT occid FROM tmattributes WHERE stateid = 2)) ";
+			$this->displaySearchArr[] = 'is in reproductive condition';
+		}
 		if($sqlWhere){
 			$this->sqlWhere = 'WHERE '.substr($sqlWhere,4);
 		}

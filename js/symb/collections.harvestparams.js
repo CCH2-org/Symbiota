@@ -1,6 +1,6 @@
 function displayTableView(f){
 	f.action = "listtabledisplay.php";
-	f.submit();	
+	f.submit();
 }
 
 function cleanNumericInput(formElem){
@@ -16,7 +16,7 @@ function checkHarvestParamsForm(frm){
 	if((frm.taxa.value.trim() == '') && (frm.country.value.trim() == '') && (frm.state.value.trim() == '') && (frm.county.value.trim() == '') &&
 		(frm.local.value.trim() == '') && (frm.elevlow.value.trim() == '') && (frm.upperlat.value.trim() == '') && (frm.footprintwkt.value.trim() == '') && (frm.pointlat.value.trim() == '') &&
 		(frm.collector.value.trim() == '') && (frm.collnum.value.trim() == '') && (frm.eventdate1.value.trim() == '') && (frm.catnum.value.trim() == '') &&
-		(frm.typestatus.checked == false) && (frm.hasimages.checked == false) && (frm.hasgenetic.checked == false)){
+		(frm.typestatus.checked == false) && (frm.hasimages.checked == false) && (frm.hasgenetic.checked == false) && (frm.isreproductive.checked == false) && (frm.issterile.checked == false) && (frm.isnotscorable.checked == false)){
 		alert("Please fill in at least one search parameter!");
 		return false;
 	}
@@ -70,7 +70,7 @@ function setHarvestParamsForm(){
 	if(sessionStorage.querystr){
 		var urlVar = parseUrlVariables(sessionStorage.querystr);
 		var frm = document.harvestparams;
-		
+
 		if(typeof urlVar.usethes !== 'undefined' && (urlVar.usethes == "" || urlVar.usethes == "0")){frm.usethes.checked = false;}
 		if(urlVar.taxontype){frm.taxontype.value = urlVar.taxontype;}
 		if(urlVar.taxa){frm.taxa.value = urlVar.taxa;}
@@ -113,6 +113,9 @@ function setHarvestParamsForm(){
 		if(typeof urlVar.hasimages !== 'undefined'){frm.hasimages.checked = true;}
 		if(typeof urlVar.hasgenetic !== 'undefined'){frm.hasgenetic.checked = true;}
 		if(typeof urlVar.includecult !== 'undefined'){frm.includecult.checked = true;}
+		if(typeof urlVar.isreproductive !== 'undefined'){frm.isreproductive.checked = true;}
+		if(typeof urlVar.issterile !== 'undefined'){frm.issterile.checked = true;}
+		if(typeof urlVar.isnotscorable !== 'undefined'){frm.isnotscorable.checked = true;}
 		if(urlVar.db){frm.db.value = urlVar.db;}
 	}
 }
@@ -121,7 +124,7 @@ function parseUrlVariables(varStr) {
 	var result = {};
 	varStr.split("&").forEach(function(part) {
 		if(!part) return;
-		part = part.split("+").join(" "); 
+		part = part.split("+").join(" ");
 		var eq = part.indexOf("=");
 		var key = eq>-1 ? part.substr(0,eq) : part;
 		var val = eq>-1 ? decodeURIComponent(part.substr(eq+1)) : "";
