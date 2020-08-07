@@ -58,4 +58,7 @@ $LANG['HAS_IMAGE'] = 'Limit to Specimens with Images';
 $LANG['HAS_GENETIC'] = 'Limit to Specimens with Genetic Data';
 $LANG['INCLUDE_CULTIVATED'] = 'Include cultivated/captive occurrences';
 $LANG['TRAIT_HEADER'] = 'Trait Criteria';
+$LANG['IS_REPRODUCTIVE'] = 'At least one reproductive structure of any kind is present (flowers, flower buds, fruits)';
+$LANG['IS_STERILE'] = 'No reproductive structures present (no unopen, open, or senesced flowers or fruits)';
+$LANG['IS_NOTSCORABLE'] = 'Not possible to score reproductive condition of material';
 ?>

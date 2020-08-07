@@ -255,7 +255,7 @@ $searchVar = $collManager->getQueryTermStr();
 				<input type='checkbox' name='issterile' value='1' /> <?php echo isset($LANG['IS_STERILE'])?$LANG['IS_STERILE']:'No reproductive structures present (no unopen, open, or senesced flowers or fruits)'; ?>
 			</div>
 			<div>
-				<input type='checkbox' name='isnotscorable' value='1' /> <?php echo isset($LANG['IS_NOTSCORABLE'])?$LANG['IS_NOTSCORABLE']:'Not possible to score reproductive condition using material present'; ?>
+				<input type='checkbox' name='isnotscorable' value='1' /> <?php echo isset($LANG['IS_NOTSCORABLE'])?$LANG['IS_NOTSCORABLE']:'Not possible to score reproductive condition of material'; ?>
 			</div>
 			<div>
 				<input type="hidden" name="reset" value="1" />
