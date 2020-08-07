@@ -220,10 +220,6 @@ $searchVar = $collManager->getQueryTermStr();
 				<input type="text" id="eventdate2" size="32" name="eventdate2" style="width:100px;" value="" title="<?php echo $LANG['TITLE_TEXT_4']; ?>" />
 			</div>
 			<hr/>
-			<div style="float:right;">
-				<div><button type="submit" style="width:100%"><?php echo isset($LANG['BUTTON_NEXT_LIST'])?$LANG['BUTTON_NEXT_LIST']:'List Display'; ?></button></div>
-				<div><button type="button" style="width:100%" onclick="displayTableView(this.form)"><?php echo isset($LANG['BUTTON_NEXT_TABLE'])?$LANG['BUTTON_NEXT_TABLE']:'Table Display'; ?></button></div>
-			</div>
 			<div>
 				<div style="font-weight:bold; font-size: 18px"><?php echo $LANG['SPECIMEN_HEADER']; ?></div>
 			</div>
@@ -243,6 +239,23 @@ $searchVar = $collManager->getQueryTermStr();
 			</div>
 			<div>
 				<input type='checkbox' name='includecult' value='1' /> <?php echo isset($LANG['INCLUDE_CULTIVATED'])?$LANG['INCLUDE_CULTIVATED']:'Include cultivated/captive occurrences'; ?>
+			</div>
+			<hr/>
+			<div style="float:right;">
+				<div><button type="submit" style="width:100%"><?php echo isset($LANG['BUTTON_NEXT_LIST'])?$LANG['BUTTON_NEXT_LIST']:'List Display'; ?></button></div>
+				<div><button type="button" style="width:100%" onclick="displayTableView(this.form)"><?php echo isset($LANG['BUTTON_NEXT_TABLE'])?$LANG['BUTTON_NEXT_TABLE']:'Table Display'; ?></button></div>
+			</div>
+			<div>
+				<div style="font-weight:bold; font-size: 18px"><?php echo $LANG['TRAIT_HEADER']; ?></div>
+			</div>
+			<div>
+				<input type='checkbox' name='isreproductive' value='1' /> <?php echo isset($LANG['IS_REPRODUCTIVE'])?$LANG['IS_REPRODUCTIVE']:'At least one reproductive structure of any kind is present (flowers, flower buds, fruits)'; ?>
+			</div>
+			<div>
+				<input type='checkbox' name='issterile' value='1' /> <?php echo isset($LANG['IS_STERILE'])?$LANG['IS_STERILE']:'No reproductive structures present (no unopen, open, or senesced flowers or fruits)'; ?>
+			</div>
+			<div>
+				<input type='checkbox' name='isnotscorable' value='1' /> <?php echo isset($LANG['IS_NOTSCORABLE'])?$LANG['IS_NOTSCORABLE']:'Not possible to score reproductive condition using material present'; ?>
 			</div>
 			<div>
 				<input type="hidden" name="reset" value="1" />
