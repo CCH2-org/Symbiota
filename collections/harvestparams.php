@@ -26,7 +26,7 @@ $searchVar = $collManager->getQueryTermStr();
 	<script src="../js/jquery-3.2.1.min.js?ver=3" type="text/javascript"></script>
 	<script src="../js/jquery-ui-1.12.1/jquery-ui.min.js?ver=3" type="text/javascript"></script>
 	<script src="../js/symb/collections.harvestparams.js?ver=180721" type="text/javascript"></script>
-	<script src="../js/symb/collections.traitattr.js?ver=8" type="text/javascript"></script> 
+	<script src="../js/symb/collections.cch2traitsearch.js?ver=8" type="text/javascript"></script> <!-- Cotains CCH2 serach-by-trait modifications -->
 	<script type="text/javascript">
 		$(document).ready(function() {
 			<?php
@@ -248,12 +248,14 @@ $searchVar = $collManager->getQueryTermStr();
 				<div><button type="submit" style="width:100%"><?php echo isset($LANG['BUTTON_NEXT_LIST'])?$LANG['BUTTON_NEXT_LIST']:'List Display'; ?></button></div>
 				<div><button type="button" style="width:100%" onclick="displayTableView(this.form)"><?php echo isset($LANG['BUTTON_NEXT_TABLE'])?$LANG['BUTTON_NEXT_TABLE']:'Table Display'; ?></button></div>
 			</div>
-			<div>
-				<div style="font-weight:bold; font-size: 18px"><?php echo $LANG['TRAIT_HEADER']; ?></div>
-			</div>
 			<?php
 				$traitArr = $attribSearch->getTraitArr();
 				if($traitArr){
+					?>
+					<div>
+						<div style="font-weight:bold; font-size: 18px"><?php echo $LANG['TRAIT_HEADER']; ?></div>
+					</div>
+					<?php
 					foreach($traitArr as $traitID => $traitData){
 						if(!isset($traitData['dependentTrait'])) {
 						?>
@@ -274,6 +276,7 @@ $searchVar = $collManager->getQueryTermStr();
 						<?php
 						}
 					}
+					echo '<hr />';
 				}
 			?>
 			<div>
