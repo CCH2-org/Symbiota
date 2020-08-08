@@ -2,9 +2,11 @@
 include_once('../config/symbini.php');
 include_once($SERVER_ROOT.'/content/lang/collections/harvestparams.'.$LANG_TAG.'.php');
 include_once($SERVER_ROOT.'/classes/OccurrenceManager.php');
+include_once($SERVER_ROOT.'/classes/OccurrenceAttributes.php');
 header("Content-Type: text/html; charset=".$CHARSET);
 
 $collManager = new OccurrenceManager();
+$attribSearch = new OccurrenceAttributes();
 $searchVar = $collManager->getQueryTermStr();
 ?>
 <html>
@@ -24,6 +26,7 @@ $searchVar = $collManager->getQueryTermStr();
 	<script src="../js/jquery-3.2.1.min.js?ver=3" type="text/javascript"></script>
 	<script src="../js/jquery-ui-1.12.1/jquery-ui.min.js?ver=3" type="text/javascript"></script>
 	<script src="../js/symb/collections.harvestparams.js?ver=180721" type="text/javascript"></script>
+	<script src="../js/symb/collections.traitattr.js?ver=8" type="text/javascript"></script> 
 	<script type="text/javascript">
 		$(document).ready(function() {
 			<?php
@@ -248,15 +251,31 @@ $searchVar = $collManager->getQueryTermStr();
 			<div>
 				<div style="font-weight:bold; font-size: 18px"><?php echo $LANG['TRAIT_HEADER']; ?></div>
 			</div>
-			<div>
-				<input type='checkbox' name='isreproductive' value='1' /> <?php echo isset($LANG['IS_REPRODUCTIVE'])?$LANG['IS_REPRODUCTIVE']:'At least one reproductive structure of any kind is present (flowers, flower buds, fruits)'; ?>
-			</div>
-			<div>
-				<input type='checkbox' name='issterile' value='1' /> <?php echo isset($LANG['IS_STERILE'])?$LANG['IS_STERILE']:'No reproductive structures present (no unopen, open, or senesced flowers or fruits)'; ?>
-			</div>
-			<div>
-				<input type='checkbox' name='isnotscorable' value='1' /> <?php echo isset($LANG['IS_NOTSCORABLE'])?$LANG['IS_NOTSCORABLE']:'Not possible to score reproductive condition of material'; ?>
-			</div>
+			<?php
+				$traitArr = $attribSearch->getTraitArr();
+				if($traitArr){
+					foreach($traitArr as $traitID => $traitData){
+						if(!isset($traitData['dependentTrait'])) {
+						?>
+						<fieldset style="margin-top:20px">
+							<legend><b>Trait: <?php echo $traitData['name']; ?></b></legend>
+							<div style="float:right">
+								<div class="trianglediv" style="margin:4px 3px;float:right;cursor:pointer" onclick="setAttributeTree(this)" title="Toggle attribute tree open/close">
+									<img class="triangleright" src="../images/triangleright.png" style="" />
+									<img class="triangledown" src="../images/triangledown.png" style="display:none" />
+								</div>
+							</div>
+							<div class="traitDiv" style="margin-left:5px;float:left">
+								<?php
+									$attribSearch->echoFormTraits($traitID);
+								?>
+							</div>
+						</fieldset>
+						<?php
+						}
+					}
+				}
+			?>
 			<div>
 				<input type="hidden" name="reset" value="1" />
 				<input type="hidden" name="db" value="<?php echo $collManager->getSearchTerm('db'); ?>" />

@@ -411,9 +411,20 @@ class OccurrenceManager extends OccurrenceTaxaManager {
 				$this->displaySearchArr[] = 'includes cultivated/captive occurrences';
 			}
 		}
-		if(array_key_exists("isreproductive",$this->searchTermArr)){
-			$sqlWhere .= "AND (o.occid IN(SELECT occid FROM tmattributes WHERE stateid = 2)) ";
-			$this->displaySearchArr[] = 'is in reproductive condition';
+		$anyTraitsHere = 0;
+		$traitSql = '';
+		foreach($this->searchTermArr as $stkey => $stval){
+			if("traitid-" == substr($stkey, 0, 8)){
+				if($stval){
+					if($anyTraitsHere == 1) { $traitSql .= ' OR '; }
+					$traitSql .= 'stateid = ' . $stval;
+					//$this->displaySearchArr[] = ''; // need to pull the trait name and state to fill this in
+					$anyTraitsHere = 1;
+				}
+			}
+		}
+		if($anyTraitsHere == 1) {
+			$sqlWhere .= 'AND (o.occid IN(SELECT occid FROM tmattributes WHERE ' . $traitSql . '))';
 		}
 		if($sqlWhere){
 			$this->sqlWhere = 'WHERE '.substr($sqlWhere,4);
@@ -795,12 +806,14 @@ class OccurrenceManager extends OccurrenceTaxaManager {
 				unset($this->searchTermArr["includecult"]);
 			}
 		}
-		if(array_key_exists("isreproductive",$_REQUEST)){
-			if($_REQUEST["isreproductive"]){
-				$this->searchTermArr["isreproductive"] = true;
-			}
-			else{
-				unset($this->searchTermArr["isreproductive"]);
+		// loop over all "traitid-" fields
+		foreach ($_REQUEST as $reqkey => $reqval){
+			if("traitid-" == substr($reqkey, 0, 8)){
+				if($reqval){
+					$this->searchTermArr[$reqkey] = $reqval[0];
+				} else {
+					unset($this->searchTermArr[$reqkey]);
+				}
 			}
 		}
 		$llPattern = '-?\d+\.{0,1}\d*';
