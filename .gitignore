@@ -3,3 +3,4 @@ content/.DS_Store
 content/lang.DS_Store
 config/symbini.php
 config/dbconnection.php
+cdt_notes.txt
