@@ -806,7 +806,7 @@ class OccurrenceManager extends OccurrenceTaxaManager {
 				unset($this->searchTermArr["includecult"]);
 			}
 		}
-		// loop over all "traitid-" fields
+		// Traits search: loop over all "traitid-" fields
 		foreach ($_REQUEST as $reqkey => $reqval){
 			if("traitid-" == substr($reqkey, 0, 8)){
 				if($reqval){
