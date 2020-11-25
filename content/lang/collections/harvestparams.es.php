@@ -58,7 +58,4 @@ $LANG['HAS_IMAGE'] = 'Limitar a ejemplares con im&aacute;genes';
 $LANG['HAS_GENETIC'] = 'Limitar a ejemplares con datos gen&eacute;ticos';
 $LANG['INCLUDE_CULTIVATED'] = 'Incluye ejemplares cultivadas/cautivas';
 $LANG['TRAIT_HEADER'] = 'Criterios de Rasgos';
-$LANG['IS_REPRODUCTIVE'] = 'El esp&eacute;cimen tiene al menos una estructura reproductiva';
-$LANG['IS_STERILE'] = 'El esp&eacute;cimen no tiene estructuras reproductiva';
-$LANG['IS_NOTSCORABLE'] = 'No se puede puntuar la condici&oacute;n reproductiva del esp&eacute;cimen';
 ?>
