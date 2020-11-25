@@ -113,9 +113,6 @@ function setHarvestParamsForm(){
 		if(typeof urlVar.hasimages !== 'undefined'){frm.hasimages.checked = true;}
 		if(typeof urlVar.hasgenetic !== 'undefined'){frm.hasgenetic.checked = true;}
 		if(typeof urlVar.includecult !== 'undefined'){frm.includecult.checked = true;}
-		if(typeof urlVar.isreproductive !== 'undefined'){frm.isreproductive.checked = true;}
-		if(typeof urlVar.issterile !== 'undefined'){frm.issterile.checked = true;}
-		if(typeof urlVar.isnotscorable !== 'undefined'){frm.isnotscorable.checked = true;}
 		if(urlVar.db){frm.db.value = urlVar.db;}
 	}
 }
