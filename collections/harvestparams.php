@@ -249,6 +249,7 @@ $searchVar = $collManager->getQueryTermStr();
 				<div><button type="button" style="width:100%" onclick="displayTableView(this.form)"><?php echo isset($LANG['BUTTON_NEXT_TABLE'])?$LANG['BUTTON_NEXT_TABLE']:'Table Display'; ?></button></div>
 			</div>
 			<?php
+			if(isset($SEARCH_BY_TRAITS) && $SEARCH_BY_TRAITS = 1) {
 				$traitArr = $attribSearch->getTraitArr();
 				if($traitArr){
 					?>
@@ -278,6 +279,7 @@ $searchVar = $collManager->getQueryTermStr();
 					}
 					echo '<hr />';
 				}
+			}
 			?>
 			<div>
 				<input type="hidden" name="reset" value="1" />
