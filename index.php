@@ -66,7 +66,7 @@ header("Content-Type: text/html; charset=".$CHARSET);
 			-->
 		</div>
 		<div style="padding: 0px 10px;font-size:120%">
-			<h1 style=>Welcome to the CCH2 data portal</h1>
+			<h1 class="text-huge">Welcome to the CCH2 data portal</h1>
 			<p>
 				<b>CCH2</b> serves data from specimens housed in member herbaria of the <b>Consortium of California Herbaria (CCH)</b>. This portal has a worldwide scope and a broad taxonomic basis including vascular plants, bryophytes, algae, fungi, and lichens.
 			</p>

@@ -7,15 +7,37 @@
 * * License URI: http://www.gnu.org/licenses/gpl-2.0.html 
 */
 
+/* include google font Roboto */
+@import url('https://fonts.googleapis.com/css?family=Roboto:400,500,700');
+/* include google font Averia Serif Libre */
+@import url('https://fonts.googleapis.com/css?family=Averia+Serif+Libre:400,700');
+
+/* Variables
+   ========================================================================== */
+:root {
+  --header-bg-color: #5a5a53;
+  --header-font-color: #fff;
+  --header-link-hover-color: yellow;
+  --brand-font-size: 1.5em;
+  --title-font-family: 'Averia Serif Libre', serif;
+  --logo-width: 120px;
+}
+
+/* Typography */
+.text-huge {
+  font-size: 4rem;
+  font-family: var(--title-font-family);
+}
+
 /* Base theme
    ========================================================================== */
 body {
   background-color: #fafafa;
-  /* font-family: ; */
   margin: 0;
   -webkit-text-size-adjust: 100%;
   font-size: 1rem;
   font-weight: 400;
+  font-family: Roboto, sans-serif;
 }
 
 #innertext {
@@ -25,33 +47,49 @@ body {
 
 /* Header
    ========================================================================== */
+.header__wrapper {
+  padding: 40px;
+  background-color: var(--header-bg-color);
+}
+
 header {
   display: grid;
   grid-template-columns: 1fr 3fr;
+  background-color: var(--header-bg-color);
+  color: var(--header-font-color);
 }
 
 #top-brand {
   grid-column: 1;
   grid-row: 1 / 3;
   display: flex;
-  align-items: center;
-  justify-content: baseline;
+  align-items: stretch;
 }
 
 #top-brand > img {
-  width: 120px;
+  width: var(--logo-width);
   max-width: 100%;
-  flex-basis: 40%;
 }
 
 #top-brand .brand-name {
   margin-left: 1rem;
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  justify-content: space-between;
 }
 
-.brand-name > h1,
-.brand-name > h2 {
-  font-size: 20px;
+.brand-name h1,
+.brand-name h2 {
+  font-size: var(--brand-font-size);
   text-transform: uppercase;
+  color: var(--header-font-color);
+  margin: 0;
+}
+
+header a {
+  color: var(--header-font-color);
+  text-decoration: none;
 }
 
 #top-login {
@@ -60,9 +98,8 @@ header {
   justify-self: end;
 }
 
-#top-nav {
-  grid-column: 2;
-  grid-row: 2;
+#top-menu {
+  align-self: end;
 }
 
 #top-menu > ul {

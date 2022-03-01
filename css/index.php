@@ -7,7 +7,7 @@
 ?>
 <html>
 	<head>
-		<title>Page</title>
+		<title class="huge-text">Page</title>
 		<link rel="stylesheet" href="<?php echo $CLIENT_ROOT; ?>/css/main.css<?php echo (isset($CSS_VERSION_LOCAL)?'?ver='.$CSS_VERSION_LOCAL:''); ?>" type="text/css" />
 	</head>
 	<body>
