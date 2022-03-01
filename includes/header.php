@@ -1,8 +1,10 @@
 <header>
   <div id="top-brand">
     <img src="./images/layout/CCH_logo_filled.png" alt="site logo">
-    <h1>CCH2 Specimen Data</h1>
-    <h2>Consortium of California Herbaria</h2>
+    <div class="brand-name">
+      <h1>CCH2 Specimen Data</h1>
+      <h2>Consortium of California Herbaria</h2>
+    </div>
   </div>
   <nav id="top-login">
     <?php
