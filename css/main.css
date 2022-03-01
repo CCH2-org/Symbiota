@@ -22,3 +22,46 @@ body {
   margin: 0 auto 4rem;
   max-width: 42rem;
 }
+
+/* Header
+   ========================================================================== */
+header {
+  display: grid;
+  grid-template-columns: 1fr 3fr;
+}
+
+#top-brand > img,
+#top-brand > h1,
+#top-brand > h2 {
+  display: inline-block;
+  width: 100px;
+}
+
+#top-brand {
+  grid-column: 1;
+  grid-row: 1 / 3;
+}
+
+#top-login {
+  grid-column: 2;
+  grid-row: 1;
+  justify-self: end;
+}
+
+#top-nav {
+  grid-column: 2;
+  grid-row: 2;
+}
+
+#top-menu > ul {
+  /* turn list into horizontal menu */
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-end;
+  list-style: none;
+  margin: 0;
+}
+
+#top-menu > ul > li {
+  margin-left: 1.5rem;
+}
