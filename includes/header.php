@@ -1,7 +1,7 @@
 <div class="header__wrapper">
   <header>
     <div id="top-brand">
-      <img src="./images/layout/CCH_logo_filled.png" alt="site logo">
+      <img src="<?php echo $CLIENT_ROOT; ?>/images/layout/CCH_logo_filled.png" alt="site logo">
       <div class="brand-name">
         <h1>CCH2 Specimen Data</h1>
         <div>
@@ -20,7 +20,7 @@
         <span>
           <a href="<?php echo $CLIENT_ROOT; ?>/profile/viewprofile.php">My Profile</a>
         </span>
-        <span>
+        <span class="button">
           <a href="<?php echo $CLIENT_ROOT; ?>/profile/index.php?submit=logout">Logout</a>
         </span>
         <?php
@@ -37,7 +37,7 @@
             New Account
           </a>
         </span> -->
-        <span>
+        <span class="button">
           <a href="<?php echo $CLIENT_ROOT."/profile/index.php?refurl=".$_SERVER['SCRIPT_NAME']."?".htmlspecialchars($_SERVER['QUERY_STRING'], ENT_QUOTES); ?>">
             Log In
           </a>

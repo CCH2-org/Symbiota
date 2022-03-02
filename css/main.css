@@ -7,9 +7,9 @@
 * * License URI: http://www.gnu.org/licenses/gpl-2.0.html 
 */
 
-/* include google font Roboto */
+/* Fonts
+  ========================================================================== */
 @import url('https://fonts.googleapis.com/css?family=Roboto:400,500,700');
-/* include google font Averia Serif Libre */
 @import url('https://fonts.googleapis.com/css?family=Averia+Serif+Libre:400,700');
 
 /* Variables
@@ -17,16 +17,17 @@
 :root {
   --header-bg-color: #5a5a53;
   --header-font-color: #fff;
-  --header-link-hover-color: yellow;
-  --brand-font-size: 1.5em;
+  --brand-font-size: 1.3em;
   --title-font-family: 'Averia Serif Libre', serif;
   --logo-width: 120px;
-}
-
-/* Typography */
-.text-huge {
-  font-size: 4rem;
-  font-family: var(--title-font-family);
+  --body-text-color: #828277;
+  --body-font-size: 1em;
+  --body-font-family: 'Roboto', sans-serif;
+  --heading-font-family: 'Roboto', sans-serif;
+  --darkest-color: #000;
+  --medium-color: #5a5a53;
+  --light-color: #e3f8d0;
+  --bright-color: #f86201;
 }
 
 /* Base theme
@@ -37,24 +38,62 @@ body {
   -webkit-text-size-adjust: 100%;
   font-size: 1rem;
   font-weight: 400;
-  font-family: Roboto, sans-serif;
+  font-family: var(--body-font-family);
 }
 
-#innertext {
-  margin: 0 auto 4rem;
-  max-width: 42rem;
+/* medium-large screens only */
+@media screen and (min-width: 64em) {
+  #innertext {
+    margin: 0 auto 4rem;
+    max-width: 42rem;
+  }
+}
+
+/* Utilities
+   ========================================================================== */
+.text-huge {
+  font-size: 4rem;
+  font-family: var(--title-font-family);
+}
+
+/* Components 
+   ========================================================================== */
+.button {
+  background-color: #000;
+  color: #fff;
+  border: none;
+  border-radius: 5px;
+  padding: 0.5rem 1rem;
+  /* font-size: 1.2rem; */
+  font-family: 'Roboto', sans-serif;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease-in-out;
+}
+
+.button:hover {
+  background-color: var(--bright-color);
+  color: #000;
+}
+
+.button a {
+  transition: all 0.2s ease-in-out;
+}
+
+.button:hover a {
+  text-decoration: none;
+  color: #000;
 }
 
 /* Header
    ========================================================================== */
 .header__wrapper {
-  padding: 40px;
+  padding: 20px;
   background-color: var(--header-bg-color);
 }
 
 header {
   display: grid;
-  grid-template-columns: 1fr 3fr;
   background-color: var(--header-bg-color);
   color: var(--header-font-color);
 }
@@ -69,6 +108,8 @@ header {
 #top-brand > img {
   width: var(--logo-width);
   max-width: 100%;
+  height: auto;
+  object-fit: contain; /* scale image keeping proportions */
 }
 
 #top-brand .brand-name {
@@ -81,36 +122,103 @@ header {
 
 .brand-name h1,
 .brand-name h2 {
-  font-size: var(--brand-font-size);
   text-transform: uppercase;
   color: var(--header-font-color);
   margin: 0;
+  letter-spacing: 0.05em;
+}
+
+.brand-name h1 {
+  font-size: var(--brand-font-size);
+}
+
+.brand-name h2 {
+  font-size: calc(var(--brand-font-size) * 0.9);
 }
 
 header a {
   color: var(--header-font-color);
   text-decoration: none;
+  font-weight: 500;
+}
+
+header a:hover {
+  color: var(--bright-color);
+  text-decoration: none;
 }
 
 #top-login {
-  grid-column: 2;
-  grid-row: 1;
-  justify-self: end;
+  /* stack */
+  margin-top: 2rem;
 }
 
+/* hide menu by default */
 #top-menu {
-  align-self: end;
+  /* display: none; */
 }
 
-#top-menu > ul {
-  /* turn list into horizontal menu */
-  display: flex;
-  flex-direction: row;
-  justify-content: flex-end;
+#top-menu ul {
   list-style: none;
-  margin: 0;
+  margin: 1rem 0;
+  padding: 0;
 }
 
 #top-menu > ul > li {
-  margin-left: 1.5rem;
+  padding-bottom: 1rem;
+}
+
+/* small desktop screens */
+@media screen and (max-width: 1444px) {
+  .brand-name h1 {
+    font-size: 1em;
+  }
+
+  .brand-name h2 {
+    font-size: 0.8em;
+  }
+}
+
+/* medium-large desktop screens */
+@media screen and (min-width: 1024px) {
+  .header__wrapper {
+    padding: 40px;
+  }
+
+  header {
+    grid-template-columns: 1fr 3fr;
+  }
+
+  #top-brand {
+    grid-column: 1;
+  }
+
+  #top-login {
+    grid-column: 2;
+    grid-row: 1;
+    justify-self: end;
+  }
+
+  #top-login > span {
+    margin-left: 1.5rem;
+  }
+
+  #top-menu {
+    display: initial;
+    align-self: end;
+  }
+
+  #top-menu > ul {
+    /* turn list into horizontal menu */
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-end;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+
+  #top-menu > ul > li {
+    margin-left: 1.5rem;
+    padding-bottom: 0;
+  }
 }
