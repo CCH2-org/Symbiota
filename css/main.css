@@ -33,19 +33,21 @@
 /* Base theme
    ========================================================================== */
 body {
-  background-color: #fafafa;
+  background-color: #fff;
   margin: 0;
   -webkit-text-size-adjust: 100%;
   font-size: 1rem;
   font-weight: 400;
   font-family: var(--body-font-family);
+  /* display: grid;
+  grid-template-rows: auto 1fr auto; */
 }
 
 /* medium-large screens only */
 @media screen and (min-width: 64em) {
   #innertext {
     margin: 0 auto 4rem;
-    max-width: 42rem;
+    /* max-width: 42rem; */
   }
 }
 
@@ -54,6 +56,24 @@ body {
 .text-huge {
   font-size: 4rem;
   font-family: var(--title-font-family);
+  margin: 0;
+}
+
+.text-big {
+  font-size: 2em;
+}
+
+/* huge screens only */
+@media screen and (min-width: 120em) {
+  .text-huge {
+    font-size: 5rem;
+    font-family: var(--title-font-family);
+    margin: 0;
+  }
+
+  .text-big {
+    font-size: 2.5em;
+  }
 }
 
 /* Components 
@@ -64,7 +84,6 @@ body {
   border: none;
   border-radius: 5px;
   padding: 0.5rem 1rem;
-  /* font-size: 1.2rem; */
   font-family: 'Roboto', sans-serif;
   font-weight: 500;
   cursor: pointer;
@@ -76,11 +95,11 @@ body {
   color: #000;
 }
 
-.button a {
+.button > a {
   transition: all 0.2s ease-in-out;
 }
 
-.button:hover a {
+.button:hover > a {
   text-decoration: none;
   color: #000;
 }
@@ -147,16 +166,6 @@ header a:hover {
   text-decoration: none;
 }
 
-#top-login {
-  /* stack */
-  margin-top: 2rem;
-}
-
-/* hide menu by default */
-#top-menu {
-  /* display: none; */
-}
-
 #top-menu ul {
   list-style: none;
   margin: 1rem 0;
@@ -181,7 +190,7 @@ header a:hover {
 /* medium-large desktop screens */
 @media screen and (min-width: 1024px) {
   .header__wrapper {
-    padding: 40px;
+    padding: 30px;
   }
 
   header {
@@ -221,4 +230,98 @@ header a:hover {
     margin-left: 1.5rem;
     padding-bottom: 0;
   }
+}
+
+/* huge screens only */
+@media screen and (min-width: 1600px) {
+  #top-menu > ul > li {
+    margin-left: 3rem;
+    padding-bottom: 0;
+  }
+}
+
+/* Innertext    ========================================================================== */
+#innertext {
+  /* max-width: 66em; */
+  padding-top: 0;
+  margin: 0 auto;
+  /* grid-template-columns: 1fr repeat(6, minmax(auto, 11em)) 1fr; */
+  background-color: #fff;
+}
+
+/* Home    ========================================================================== */
+#home-hero {
+  background: url(../images/layout/bg-hero-home-overlay.jpg) no-repeat center
+    center;
+  background-size: cover;
+  height: 562px;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: repeat(12, 1fr);
+}
+
+#home-hero h1 {
+  text-align: center;
+  margin: 0 auto;
+  color: #fff;
+  max-width: 12em;
+  grid-column: 3/11;
+  margin-top: 6rem;
+}
+
+#home-hero .text-big {
+  color: #fff;
+  font-family: 'Roboto', sans-serif;
+  font-style: normal;
+  font-weight: 700;
+  text-align: center;
+  text-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+}
+
+#home-hero div:first-of-type {
+  grid-column: 4/6;
+}
+
+#home-hero div:nth-of-type(2) {
+  grid-column: 8/10;
+}
+
+#home-hero > div.button {
+  grid-column: 6/8;
+  height: 3rem;
+  text-align: center;
+  background-color: var(--bright-color);
+  margin: 2rem 0;
+  padding: 1rem 1rem 0 1rem;
+}
+
+#home-hero > div.button > a {
+  text-decoration: none;
+  color: #fff;
+}
+
+/* Footer
+   ========================================================================== */
+footer {
+  text-align: center;
+  background-color: #fff;
+  padding: 2rem 0;
+}
+
+footer p {
+  font-size: 0.8em;
+  margin: 2px;
+}
+
+footer p:first-of-type {
+  margin-top: 4em;
+}
+
+.gallery-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(11em, 1fr));
+  align-items: center;
+  margin: 0 auto;
+  padding: 0;
+  max-width: 77em;
 }

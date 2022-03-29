@@ -15,9 +15,7 @@ header("Content-Type: text/html; charset=".$CHARSET);
 	<script src="js/jquery-3.2.1.min.js" type="text/javascript"></script>
 	<script src="js/jquery-ui-1.12.1/jquery-ui.min.js" type="text/javascript"></script>
 	<script src="js/symb/api.taxonomy.taxasuggest.js" type="text/javascript"></script>
-	<script type="text/javascript">
-		<?php include_once($SERVER_ROOT.'/includes/googleanalytics.php'); ?>
-	</script>
+  <?php include_once($SERVER_ROOT.'/includes/googleanalytics.php'); ?>
 	<script src="<?PHP echo $CLIENT_ROOT; ?>/js/jquery.slides.js"></script>
 </head>
 <body>
@@ -25,7 +23,12 @@ header("Content-Type: text/html; charset=".$CHARSET);
 	include($SERVER_ROOT.'/includes/header.php');
 	?>
   <main id="innertext">
-    <h1 class="text-huge">Welcome to the CCH2 data portal</h1>
+    <div id="home-hero">
+      <h1 class="text-huge">Consortium of California Herbaria Specimen Data</h1>
+      <div class="text-big">28 institutions</div>
+      <div class="text-big">> 1 mi samples</div>
+      <div class="button"><a href="#">Search Our Collections</a></div>
+    </div>
   </main>
 	<?php
 	include($SERVER_ROOT.'/includes/footer.php');
