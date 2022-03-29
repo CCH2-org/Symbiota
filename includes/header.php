@@ -1,4 +1,4 @@
-<div class="header__wrapper">
+<div class="header-wrapper">
   <header>
     <div id="top-brand">
       <img src="<?php echo $CLIENT_ROOT; ?>/images/layout/CCH_logo_filled.png" alt="site logo">
