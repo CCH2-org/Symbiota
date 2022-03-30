@@ -52,15 +52,61 @@ body {
   font-family: var(--body-font-family);
 }
 
+a {
+  transition: all 0.2s ease-in-out;
+}
+
+button {
+  background-color: #000;
+  color: #fff;
+  border: none;
+  border-radius: 5px;
+  padding: 0.5rem 1rem;
+  font-family: 'Roboto', sans-serif;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease-in-out;
+}
+
+button:hover {
+  background-color: var(--bright-color);
+  color: #000;
+}
+
+button > a {
+  transition: all 0.2s ease-in-out;
+}
+
+button:hover > a {
+  text-decoration: none;
+  color: #000;
+}
+
+#innertext {
+  margin: 0 auto;
+  padding: 10px;
+  background-color: #fff;
+}
+
 /* medium-large screens only */
 @media screen and (min-width: 64em) {
   #innertext {
-    margin: 0 auto 4rem;
+    padding: 2rem 4rem;
   }
 }
 
-a {
-  transition: all 0.2s ease-in-out;
+#innertext p {
+  color: var(--body-text-color);
+}
+
+.navpath {
+  margin: 10px;
+}
+
+/* overriding jQuery UI CSS */
+.ui-widget,
+.ui-widget button {
+  font-family: var(--body-font-family);
 }
 
 /* Utilitiy classes
@@ -266,15 +312,6 @@ header a:hover {
     margin-left: 3rem;
     padding-bottom: 0;
   }
-}
-
-/* Innertext    ========================================================================== */
-#innertext {
-  /* max-width: 66em; */
-  padding-top: 0;
-  margin: 0 auto;
-  /* grid-template-columns: 1fr repeat(6, minmax(auto, 11em)) 1fr; */
-  background-color: #fff;
 }
 
 /* Footer
