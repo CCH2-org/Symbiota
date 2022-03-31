@@ -1,7 +1,9 @@
 <div class="header-wrapper">
   <header>
     <div id="top-brand">
-      <img src="<?php echo $CLIENT_ROOT; ?>/images/layout/CCH_logo_filled.png" alt="site logo">
+      <a href="<?php echo $CLIENT_ROOT; ?>/index.php">
+        <img src="<?php echo $CLIENT_ROOT; ?>/images/layout/CCH_logo_filled.png" alt="site logo">
+      </a>
       <div class="brand-name">
         <h1>CCH2 Specimen Data</h1>
         <div>

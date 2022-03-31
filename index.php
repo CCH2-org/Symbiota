@@ -29,35 +29,33 @@ header("Content-Type: text/html; charset=".$CHARSET);
       <h1>Consortium of California Herbaria Specimen Data</h1>
       <div class="text-big">28 institutions</div>
       <div class="text-big">> 1 mi samples</div>
-      <div class="button button--secondary"><a href="<?php echo $CLIENT_ROOT; ?>/#">Search Our Collections</a></div>
+      <div class="button button--secondary"><a href="<?php echo $CLIENT_ROOT; ?>/collections/index.php">Search Our Collections</a></div>
     </section>
     <section class="grid-2">
       <article id="home-about">
         <h2>About CCH2</h2>
-        <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Ipsam fuga ab officiis nisi, saepe vel? Eveniet sunt necessitatibus eos veniam, nam aliquid debitis ratione voluptatum, repudiandae odio quibusdam sint ipsam!</p>
-        <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam quaerat tempora et quo dolores ducimus totam harum consectetur optio. Error saepe doloribus eos aut odit modi voluptatibus inventore molestias a.</p>
-        <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Sequi, nulla tempora autem quam consequuntur ipsa praesentium, incidunt dolorem unde voluptatum similique consectetur quisquam rem, doloremque quis illo saepe dicta iste.</p>
+        <p>The California Phenology Network was originally an NSF-funded collaboration of 22 California herbaria that aimed to image 904,200 herbarium specimens by 2022.</p>
+        <p>In July 2020, this network was expanded by a <a href="https://www.nsf.gov/awardsearch/showAward?AWD_ID=2001644" target="_blank">partner-to-existing-network grant</a> to include six additional institutions and over 148,000 more specimens, for a total of over one million specimens.</p>
+        <p>In this data portal we will georeference and transcribe over 320,000 specimens, making their data publicly available.</p>
       </article>
       <article id="home-tools">
         <h2>Our Tools</h2>
         <div class="grid-3">
           <article>
-            <a href="<?php echo $CLIENT_ROOT; ?>/#" target="_blank" rel="noopener noreferrer">
+            <a href="<?php echo $CLIENT_ROOT; ?>/collections/index.php" target="_blank" rel="noopener noreferrer">
               <img src="<?php echo $CLIENT_ROOT; ?>/images/layout/outline_search_black_48dp.png" alt="Search icon - Google Material icons magnifying glass">
               <div class="text-md">Text Search</div>
             </a>
           </article>
           <article>
-            <a href="<?php echo $CLIENT_ROOT; ?>/#" target="_blank" rel="noopener noreferrer">
+            <a href="<?php echo $CLIENT_ROOT; ?>/collections/map/index.php" target="_blank" rel="noopener noreferrer">
               <img src="<?php echo $CLIENT_ROOT; ?>/images/layout/outline_public_black_48dp.png" alt="Search icon - Google Material icons map">
               <div class="text-md">Map Search</div>
             </a>
           </article>
           <article>
-            <a href="<?php echo $CLIENT_ROOT; ?>/#" target="_blank" rel="noopener noreferrer">
+            <a href="<?php echo $CLIENT_ROOT; ?>/checklists/index.php" target="_blank" rel="noopener noreferrer">
               <img src="<?php echo $CLIENT_ROOT; ?>/images/layout/outline_checklist_black_48dp.png" alt="Search icon - Google Material icons checklist">
-            </a>
-            <a href="<?php echo $CLIENT_ROOT; ?>/#" target="_blank" rel="noopener noreferrer">
               <div class="text-md">Checklists</div>
             </a>
           </article>
@@ -79,29 +77,33 @@ header("Content-Type: text/html; charset=".$CHARSET);
         <h2>Some of our Specimens</h2>
         <p>Click the image to learn more about the sample.</p>
         <article>
-          <img src="#" alt="Exsicata">
-          <h4>Lorem ipsum dolor</h4>
+          <img src="<?php echo $CLIENT_ROOT; ?>/images/layout/random-img1.png" alt="Exsicata">
+          <h4 style="font-style: italic">Taxon name</h4>
+          <h5>CatalogNumber, ColCODE</h5>
           <p>
             <a href="http://" target="_blank" rel="noopener noreferrer">Learn More</a>
           </p>
         </article>
         <article>
-          <img src="#" alt="Exsicata">
-          <h4>Lorem ipsum dolor</h4>
+          <img src="<?php echo $CLIENT_ROOT; ?>/images/layout/random-img2.png" alt="Exsicata">
+          <h4 style="font-style: italic">Taxon name</h4>
+          <h5>CatalogNumber, ColCODE</h5>
           <p>
             <a href="http://" target="_blank" rel="noopener noreferrer">Learn More</a>
           </p>
         </article>
         <article>
-          <img src="#" alt="Exsicata">
-          <h4>Lorem ipsum dolor</h4>
+          <img src="<?php echo $CLIENT_ROOT; ?>/images/layout/random-img3.png" alt="Exsicata">
+          <h4 style="font-style: italic">Taxon name</h4>
+          <h5>CatalogNumber, ColCODE</h5>
           <p>
             <a href="http://" target="_blank" rel="noopener noreferrer">Learn More</a>
           </p>
         </article>
         <article>
-          <img src="#" alt="Exsicata">
-          <h4>Lorem ipsum dolor</h4>
+          <img src="<?php echo $CLIENT_ROOT; ?>/images/layout/random-img4.png" alt="Exsicata">
+          <h4 style="font-style: italic">Taxon name</h4>
+          <h5>CatalogNumber, ColCODE</h5>
           <p>
             <a href="http://" target="_blank" rel="noopener noreferrer">Learn More</a>
           </p>

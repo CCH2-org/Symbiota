@@ -69,6 +69,7 @@ a {
 
 a:hover {
   color: var(--bright-color);
+  cursor: pointer;
 }
 
 button {
@@ -299,7 +300,7 @@ header {
   align-items: stretch;
 }
 
-#top-brand > img {
+#top-brand img {
   width: var(--logo-width);
   max-width: 90px;
   height: auto;
@@ -423,6 +424,13 @@ footer {
   padding: 2rem 0;
 }
 
+/* medium and large screens */
+@media screen and (min-width: 768px) {
+  footer {
+    padding-top: 5rem;
+  }
+}
+
 footer p {
   font-size: 0.8em;
   margin: 2px;
@@ -434,9 +442,16 @@ footer p:first-of-type {
 
 .gallery-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(11em, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(8em, 1fr));
+  column-gap: 3rem;
   align-items: center;
   margin: 0 auto;
   padding: 0;
   max-width: 77em;
+}
+
+.gallery-grid img {
+  max-width: 100%;
+  height: auto;
+  object-fit: contain;
 }
