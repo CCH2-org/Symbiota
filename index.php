@@ -44,13 +44,13 @@ header("Content-Type: text/html; charset=".$CHARSET);
           <article>
             <a href="<?php echo $CLIENT_ROOT; ?>/#" target="_blank" rel="noopener noreferrer">
               <img src="<?php echo $CLIENT_ROOT; ?>/images/layout/outline_search_black_48dp.png" alt="Search icon - Google Material icons magnifying glass">
-              <h3>Text Search</h3>
+              <div class="text-md">Text Search</div>
             </a>
           </article>
           <article>
             <a href="<?php echo $CLIENT_ROOT; ?>/#" target="_blank" rel="noopener noreferrer">
               <img src="<?php echo $CLIENT_ROOT; ?>/images/layout/outline_public_black_48dp.png" alt="Search icon - Google Material icons map">
-              <h3>Map Search</h3>
+              <div class="text-md">Map Search</div>
             </a>
           </article>
           <article>
@@ -58,7 +58,7 @@ header("Content-Type: text/html; charset=".$CHARSET);
               <img src="<?php echo $CLIENT_ROOT; ?>/images/layout/outline_checklist_black_48dp.png" alt="Search icon - Google Material icons checklist">
             </a>
             <a href="<?php echo $CLIENT_ROOT; ?>/#" target="_blank" rel="noopener noreferrer">
-              <h3>Checklists</h3>
+              <div class="text-md">Checklists</div>
             </a>
           </article>
         </div>
