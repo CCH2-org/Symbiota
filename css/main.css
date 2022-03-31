@@ -233,8 +233,8 @@ button:hover > a {
 /* Components 
    ========================================================================== */
 .button {
-  background-color: #000;
-  color: #fff;
+  /* background-color: #000;
+  color: #fff; */
   border: none;
   border-radius: 5px;
   padding: 0.5rem 1rem;
@@ -244,18 +244,39 @@ button:hover > a {
   transition: all 0.2s ease-in-out;
 }
 
-.button:hover {
-  background-color: var(--bright-color);
-  color: #000;
-}
-
 .button > a {
   transition: all 0.2s ease-in-out;
 }
 
 .button:hover > a {
   text-decoration: none;
+}
+
+.button--primary {
+  background-color: #000;
+  color: #fff;
+}
+
+.button--primary:hover {
+  background-color: var(--bright-color);
   color: #000;
+}
+
+.button--primary:hover a {
+  color: #000;
+}
+
+.button--secondary {
+  background-color: var(--bright-color);
+  color: #fff;
+}
+
+.button--secondary:hover {
+  background-color: #000;
+}
+
+.button--secondary:hover a {
+  color: #fff;
 }
 
 /* Header

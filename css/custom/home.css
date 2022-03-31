@@ -39,6 +39,7 @@
   font-size: 4rem;
   font-family: var(--title-font-family);
   color: #fff;
+  text-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
 }
 
 #home-hero span {
@@ -56,16 +57,15 @@
   grid-column: 8/10;
 }
 
-#home-hero > div.button {
+#home-hero .button--secondary {
   grid-column: 6/8;
   height: 3rem;
-  text-align: center;
-  background-color: var(--bright-color);
+  /* background-color: var(--bright-color); */
   margin: 2rem 0;
   padding: 1rem 1rem 0 1rem;
 }
 
-#home-hero > div.button > a {
+#home-hero .button--secondary > a {
   text-decoration: none;
   color: #fff;
 }

@@ -29,7 +29,7 @@ header("Content-Type: text/html; charset=".$CHARSET);
       <h1>Consortium of California Herbaria Specimen Data</h1>
       <div class="text-big">28 institutions</div>
       <div class="text-big">> 1 mi samples</div>
-      <div class="button"><a href="<?php echo $CLIENT_ROOT; ?>/#">Search Our Collections</a></div>
+      <div class="button button--secondary"><a href="<?php echo $CLIENT_ROOT; ?>/#">Search Our Collections</a></div>
     </section>
     <section class="grid-2">
       <article id="home-about">
