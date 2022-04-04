@@ -235,8 +235,6 @@ button:hover > a {
 /* Components 
    ========================================================================== */
 .button {
-  /* background-color: #000;
-  color: #fff; */
   border: none;
   border-radius: 5px;
   padding: 0.5rem 1rem;
