@@ -19,7 +19,7 @@
         <span>
           Welcome <?php echo $USER_DISPLAY_NAME; ?>!
         </span>
-        <span>
+        <span class="button button--primary">
           <a href="<?php echo $CLIENT_ROOT; ?>/profile/viewprofile.php">My Profile</a>
         </span>
         <span class="button button--primary">
@@ -39,7 +39,7 @@
             New Account
           </a>
         </span> -->
-        <span class="button">
+        <span class="button button--primary">
           <a href="<?php echo $CLIENT_ROOT."/profile/index.php?refurl=".$_SERVER['SCRIPT_NAME']."?".htmlspecialchars($_SERVER['QUERY_STRING'], ENT_QUOTES); ?>">
             Log In
           </a>
