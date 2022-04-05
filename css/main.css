@@ -206,12 +206,13 @@ button:hover > a {
 
 .grid-2 {
   display: grid;
-  grid-template-columns: repeat(2, 1fr);
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 1rem;
 }
 
 .grid-3 {
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
+  grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
 }
 
 .grid-4 {
@@ -351,6 +352,10 @@ header a:hover {
   padding-bottom: 1rem;
 }
 
+#top-login {
+  margin-top: 2rem;
+}
+
 /* small desktop screens */
 @media screen and (max-width: 1444px) {
   .brand-name h1 {
@@ -377,6 +382,7 @@ header a:hover {
   }
 
   #top-login {
+    margin-top: 0;
     grid-column: 2;
     grid-row: 1;
     justify-self: end;

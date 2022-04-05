@@ -71,10 +71,11 @@
   }
 }
 
+/* Text section */
 #home section:nth-of-type(2) {
-  max-width: 77em;
+  max-width: 60em;
   margin: 0 auto;
-  padding: 2rem 0;
+  padding: 2rem 0.5em;
   gap: 2rem;
 }
 
@@ -93,6 +94,12 @@
   gap: 2rem;
   align-items: center;
   text-align: center;
+}
+
+#home-tools img {
+  max-width: 100%;
+  width: 60px;
+  height: auto;
 }
 
 #home-tools a,

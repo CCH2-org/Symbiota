@@ -33,7 +33,7 @@ header("Content-Type: text/html; charset=".$CHARSET);
       </article>
       <div class="button button--secondary"><a href="<?php echo $CLIENT_ROOT; ?>/collections/index.php">Search Our Collections</a></div>
     </section>
-    <!-- <section class="grid-2">
+    <section class="grid-2">
       <article id="home-about">
         <h2>About CCH2</h2>
         <p>The California Phenology Network was originally an NSF-funded collaboration of 22 California herbaria that aimed to image 904,200 herbarium specimens by 2022.</p>
@@ -73,7 +73,7 @@ header("Content-Type: text/html; charset=".$CHARSET);
         <p>Lorem ipsum dolor, sit amet consectetur adipisicing elit. Odio, laudantium quis aut nesciunt officia fugit, aspernatur non tempora, praesentium quo dolor perspiciatis omnis sint quas sapiente nam voluptatem doloribus. Cupiditate.</p>
         <p>Lorem ipsum, dolor sit amet consectetur adipisicing elit. Asperiores debitis tempore suscipit voluptas ducimus quod, delectus eaque officia nesciunt id eos aut, sapiente accusamus illum, eligendi fugit distinctio consectetur quisquam.</p>
       </article>
-    </section> -->
+    </section>
     <!-- <section id="home-specimens">
       <article>
         <h2>Some of our Specimens</h2>
