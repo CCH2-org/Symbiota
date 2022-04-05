@@ -74,10 +74,10 @@ header("Content-Type: text/html; charset=".$CHARSET);
         <p>Lorem ipsum, dolor sit amet consectetur adipisicing elit. Asperiores debitis tempore suscipit voluptas ducimus quod, delectus eaque officia nesciunt id eos aut, sapiente accusamus illum, eligendi fugit distinctio consectetur quisquam.</p>
       </article>
     </section>
-    <!-- <section id="home-specimens">
-      <article>
-        <h2>Some of our Specimens</h2>
-        <p>Click the image to learn more about the sample.</p>
+    <section id="home-specimens">
+      <h2>Some of our Specimens</h2>
+      <p>Click the image to learn more about the sample.</p>
+      <article id="home-specimens-gallery">
         <article>
           <img src="<?php echo $CLIENT_ROOT; ?>/images/layout/random-img1.png" alt="Exsicata">
           <h4 style="font-style: italic">Taxon name</h4>
@@ -111,10 +111,10 @@ header("Content-Type: text/html; charset=".$CHARSET);
           </p>
         </article>
       </article>
-    </section> -->
+    </section>
   </main>
 	<?php
-	// include($SERVER_ROOT.'/includes/footer.php');
+	include($SERVER_ROOT.'/includes/footer.php');
 	?>
 </body>
 </html>

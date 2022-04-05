@@ -212,6 +212,7 @@ button:hover > a {
 
 .grid-3 {
   display: grid;
+  gap: 1rem;
   grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
 }
 
