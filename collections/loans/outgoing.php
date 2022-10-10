@@ -6,13 +6,20 @@ if(!$SYMB_UID) header('Location: '.$CLIENT_ROOT.'/profile/index.php?refurl=../co
 
 $collid = $_REQUEST['collid'];
 $loanId = array_key_exists('loanid',$_REQUEST)?$_REQUEST['loanid']:0;
-$formSubmit = array_key_exists('formsubmit',$_REQUEST)?$_REQUEST['formsubmit']:'';
 $tabIndex = array_key_exists('tabindex',$_REQUEST)?$_REQUEST['tabindex']:0;
+$sortTag = (isset($_REQUEST['sortTag'])?$_REQUEST['sortTag']:'');
+$formSubmit = array_key_exists('formsubmit',$_REQUEST)?$_REQUEST['formsubmit']:'';
+
+//Sanitation
+if(!is_numeric($collid)) $collid = 0;
+if(!is_numeric($loanId)) $loanId = 0;
+if(!is_numeric($tabIndex)) $tabIndex = 0;
+$sortTag = filter_var($sortTag, FILTER_SANITIZE_STRING);
 
 $isEditor = 0;
 if($SYMB_UID && $collid){
-	if($IS_ADMIN || (array_key_exists("CollAdmin",$USER_RIGHTS) && in_array($collid,$USER_RIGHTS["CollAdmin"]))
-		|| (array_key_exists("CollEditor",$USER_RIGHTS) && in_array($collid,$USER_RIGHTS["CollEditor"]))){
+	if($IS_ADMIN || (array_key_exists('CollAdmin',$USER_RIGHTS) && in_array($collid,$USER_RIGHTS['CollAdmin']))
+		|| (array_key_exists('CollEditor',$USER_RIGHTS) && in_array($collid,$USER_RIGHTS['CollEditor']))){
 		$isEditor = 1;
 	}
 }
@@ -92,6 +99,16 @@ if($isEditor){
 			$loanManager->exportSpecimenList($loanId);
 			exit;
 		}
+		elseif ($formSubmit == "delAttachment") {
+			// Delete correspondence attachment
+			if (array_key_exists('attachid',$_REQUEST) && is_numeric($_REQUEST['attachid'])) $loanManager->deleteAttachment($_REQUEST['attachid']);
+			$statusStr = $loanManager->getErrorMessage();
+		}
+		elseif ($formSubmit == "saveAttachment") {
+			// Save correspondence attachment
+			if (array_key_exists('uploadfile',$_FILES)) $loanManager->uploadAttachment($collid, 'loan', $loanId, $loanIdOwn, $_POST['uploadtitle'], $_FILES['uploadfile']);
+			$statusStr = $loanManager->getErrorMessage();
+		}
 	}
 }
 $specimenTotal = $loanManager->getSpecimenTotal($loanId);
@@ -124,7 +141,7 @@ $specimenTotal = $loanManager->getSpecimenTotal($loanId);
 			return submitStatus;
 		}
 	</script>
-	<script type="text/javascript" src="../../js/symb/collections.loans.js?ver=1"></script>
+	<script type="text/javascript" src="../../js/symb/collections.loans.js?ver=2"></script>
 	<style>
 		fieldset{ padding:15px; margin:15px }
 		fieldset legend{ font-weight:bold }
@@ -161,7 +178,7 @@ $specimenTotal = $loanManager->getSpecimenTotal($loanId);
 			<div id="tabs" style="margin:0px;">
 			    <ul>
 					<li><a href="#outloandetaildiv"><span>Loan Details</span></a></li>
-					<li><a href="specimentab.php?collid=<?php echo $collid.'&loanid='.$loanId; ?>"><span>Specimens</span></a></li>
+					<li><a href="specimentab.php?collid=<?php echo $collid.'&loanid='.$loanId.'&sortTag='.$sortTag; ?>"><span>Specimens</span></a></li>
 					<li><a href="#outloandeldiv"><span>Admin</span></a></li>
 				</ul>
 				<div id="outloandetaildiv">
@@ -329,9 +346,48 @@ $specimenTotal = $loanManager->getSpecimenTotal($loanId);
 						</fieldset>
 					</form>
 					<?php
+					//Following variables are used within reportsinclude.php, with different values when used on different pages
 					$loanType = 'out';
 					$identifier = $loanId;
 					include('reportsinclude.php');
+					$attachments = $loanManager->getAttachments('loan', $loanId);
+					if($attachments !== false){
+						?>
+						<div>
+							<form id="attachmentform" name="attachmentform" action="outgoing.php" method="post" enctype="multipart/form-data" onsubmit="return verifyFileUploadForm(this)">
+								<fieldset>
+									<legend>Correspondence Attachments</legend>
+									<?php
+									// Add any correspondence attachments
+									if ($attachments) {
+										echo '<ul>';
+										foreach($attachments as $attachId => $attachArr){
+											echo '<li><div style="float: left;">' . $attachArr['timestamp'] . ' -</div>';
+											echo '<div style="float: left; margin-left: 5px;"><a href="../../' .
+												$attachArr['path'] . $attachArr['filename']  .'" target="_blank">' .
+												($attachArr['title'] != "" ? $attachArr['title'] : $attachArr['filename']) . '</a></div>';
+											echo '<a href="outgoing.php?collid='.$collid . '&loanid=' . $loanId . '&attachid='. $attachId . '&formsubmit=delAttachment"><img src="../../images/del.png" style="width: 15px; margin-left: 5px;"></a></li>';
+										}
+										echo '</ul>';
+									}
+									?>
+									<input name="collid" type="hidden" value="<?php echo $collid; ?>" />
+									<input name="loanid" type="hidden" value="<?php echo $loanId; ?>" />
+									<input name="loanidentifierown" type="hidden" value="<?php echo $loanArr['loanidentifierown']; ?>" />
+									<label style="font-weight: bold;">Add Correspondence Attachment:<sup>*</sup> </label><br/>
+									<label>Attachment Title: </label>
+									<input name="uploadtitle" type="text" placeholder=" optional, replaces filename" maxlength="80" size="30" />
+									<input id="uploadfile" name="uploadfile" type="file" size="30" onchange="verifyFileSize(this)">
+									<button name="formsubmit" type="submit" value="saveAttachment">Save Attachment</button>
+									<div style="margin-left: 10px"><br/>
+									<sup>*</sup>Supported file types include PDF, Word, Excel, images (.jpg/.jpeg or .png), and text files (.txt or .csv). </br>
+									PDFs, images, and text files are preferred, since they will display in the browser.
+									</div>
+								</fieldset>
+							</form>
+						</div>
+						<?php
+					}
 					?>
 					<div style="margin:20px"><b>&lt;&lt; <a href="index.php?collid=<?php echo $collid; ?>">Return to Loan Index Page</a></b></div>
 				</div>
