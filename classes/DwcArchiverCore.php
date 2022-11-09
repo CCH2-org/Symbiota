@@ -941,7 +941,6 @@ class DwcArchiverCore extends Manager{
 		$occCnt = 1;
 		$termArr = $this->occurrenceFieldArr['terms'];
 		if ($this->schemaType == 'dwc' || $this->schemaType == 'pensoft') {
-			unset($termArr['eventDate2']);
 			unset($termArr['localitySecurity']);
 		}
 		if ($this->schemaType == 'dwc' || $this->schemaType == 'pensoft' || $this->schemaType == 'backup') {
