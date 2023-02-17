@@ -314,7 +314,7 @@ class DwcArchiverCore extends Manager{
 							if ($cond == 'NOTEQUALS' || $cond == 'NOTLIKE') $sqlFrag2 .= ' OR id.identifierValue IS NULL';
 							$sqlFrag2 .= ')) ';
 						} else {
-							$sqlFrag2 = $this->getSqlFragment($field, $cond, $valueArr);
+							$sqlFrag2 .= $this->getSqlFragment($field, $cond, $valueArr);
 						}
 					}
 					if ($sqlFrag2) $sqlFrag .= 'AND (' . substr($sqlFrag2, 4) . ') ';
