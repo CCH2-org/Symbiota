@@ -214,13 +214,19 @@ ALTER TABLE `fmchklstcoordinates`
   CHANGE COLUMN `decimallongitude` `decimalLongitude` DOUBLE NOT NULL ,
   CHANGE COLUMN `initialtimestamp` `initialTimestamp` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP() ;
 
-
 ALTER TABLE `ctcontrolvocab` 
   ADD COLUMN `collid` INT UNSIGNED NULL DEFAULT NULL AFTER `cvID`,
   ADD INDEX `FK_ctControlVocab_collid_idx` (`collid` ASC);
 
 ALTER TABLE `ctcontrolvocab` 
   ADD CONSTRAINT `FK_ctControlVocab_collid`  FOREIGN KEY (`collid`)  REFERENCES `omcollections` (`CollID`)  ON DELETE CASCADE  ON UPDATE CASCADE;
+
+ALTER TABLE `ctcontrolvocab` 
+  CHANGE COLUMN `title` `title` VARCHAR(45) NOT NULL ,
+  CHANGE COLUMN `tableName` `tableName` VARCHAR(45) NOT NULL ,
+  CHANGE COLUMN `fieldName` `fieldName` VARCHAR(45) NOT NULL ,
+  ADD UNIQUE INDEX `UQ_ctControlVocab` (`title` ASC, `tableName` ASC, `fieldName` ASC);
+
 
 ALTER TABLE `fmprojects` 
   CHANGE COLUMN `projname` `projname` VARCHAR(75) NOT NULL ;
@@ -415,13 +421,9 @@ ALTER TABLE `omcollections`
   CHANGE COLUMN `InitialTimeStamp` `initialTimestamp` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP() ;
 
 ALTER TABLE `omcollections` 
-  ADD COLUMN `dwcTermJson` TEXT NULL AFTER `aggKeysStr`;
+  ADD COLUMN `dwcTermJson` TEXT NULL AFTER `aggKeysStr`,
+  ADD COLUMN `recordID` VARCHAR(45) NULL AFTER `dwcTermJson`;
 
-#ALTER TABLE `omcollections` 
-#  ADD COLUMN `collectionGuid` TEXT NULL AFTER `aggKeysStr`;
-
-ALTER TABLE `omcollections` 
-  ADD COLUMN `recordID` VARCHAR(45) NULL AFTER `aggKeysStr`;
 
 ALTER TABLE `omoccurdeterminations` 
   DROP FOREIGN KEY `FK_omoccurdets_idby`;
@@ -835,11 +837,28 @@ ALTER TABLE `taxa`
 UPDATE IGNORE taxa SET author = "" WHERE author IS NULL;
 
 ALTER TABLE `taxa` 
-  CHANGE COLUMN `Author` `author` VARCHAR(150) NOT NULL DEFAULT "";
+  CHANGE COLUMN `Author` `author` VARCHAR(150) NOT NULL DEFAULT '';
+
+UPDATE taxa SET kingdomName = "" WHERE kingdomName IS NULL;
 
 ALTER TABLE `taxa` 
-  DROP INDEX `sciname_unique` ,
-  ADD UNIQUE INDEX `sciname_unique` (`SciName` ASC, `RankId` ASC);
+  CHANGE COLUMN `kingdomName` `kingdomName` VARCHAR(45) NOT NULL DEFAULT '' ,
+  CHANGE COLUMN `rankID` `rankID` SMALLINT(5) UNSIGNED NOT NULL DEFAULT 0 ;
+
+ALTER TABLE `taxa` 
+  DROP INDEX `sciname_unique`;
+
+# Following statement is the default unique index in the taxa table to support a multi-kingdom portal 
+# If UNIQUE INDEX fails, run following query below to identify duplicate records. Duplicates can be deleted, or you can apply the alternate index that supports the existance of homonyms 
+# Duplicate check: SELECT sciname, rankID, kingdomName, count(*) as cnt FROM taxa GROUP BY sciname, rankID, kingdomName HAVING cnt > 1;
+ALTER TABLE `taxa` 
+  ADD UNIQUE INDEX `sciname_unique` (`sciName` ASC, `rankId` ASC, `kingdomName` ASC);
+
+# Alternate UNIQUE INDEX that support single kingdom homonyms. Above index supports cross-kingdom homonyms
+#  ADD UNIQUE INDEX `sciname_unique` (`sciName` ASC, `author` ASC, `rankId` ASC, `kingdomName` ASC);
+  
+# Alternate more restrictive UNIQUE INDEX that can be used for a single kingdom portal. Cross-kingdom homonyms are not supported
+#  ADD UNIQUE INDEX `sciname_unique` (`sciName` ASC, `rankId` ASC);
   
 ALTER TABLE `taxstatus` 
   CHANGE COLUMN `taxonomicSource` `taxonomicSource` VARCHAR(500) NULL DEFAULT NULL;
@@ -891,13 +910,14 @@ ALTER TABLE `taxadescrblock`
 ALTER TABLE `taxadescrblock` 
   ADD CONSTRAINT `FK_taxadescrblock_tdProfileID`  FOREIGN KEY (`tdProfileID`)  REFERENCES `taxadescrprofile` (`tdProfileID`)  ON UPDATE CASCADE  ON DELETE CASCADE;
 
-
+# Test query if following UNIQUE INDEX fails: SELECT url, tid, count(*) as cnt FROM taxalinks GROUP BY url, tid HAVING cnt > 1;
 ALTER TABLE `taxalinks` 
   ADD INDEX `FK_taxaLinks_tid` (`tid` ASC),
   ADD UNIQUE INDEX `UQ_taxaLinks_tid_url` (`tid` ASC, `url` ASC);
 
 ALTER TABLE `taxalinks` 
   DROP INDEX `Index_unique` ;
+
 
 ALTER TABLE `uploaddetermtemp` 
   ADD COLUMN `higherClassification` VARCHAR(150) NULL AFTER `dateIdentifiedInterpreted`,
@@ -982,8 +1002,11 @@ ALTER TABLE `users`
   ADD UNIQUE INDEX `UQ_users_username` (`username` ASC);
   
 ALTER TABLE `users` 
-  RENAME INDEX `Index_email` TO `IX_users_email`;
+  DROP INDEX `Index_email` ;
   
+ALTER TABLE `users` 
+  ADD INDEX `IX_users_email` (`lastName` ASC, `email` ASC);
+
 UPDATE users u INNER JOIN userlogin l ON u.uid = l.uid
 SET u.username = l.username, u.password = l.password, u.lastLoginDate = l.lastlogindate
 WHERE u.username IS NULL;

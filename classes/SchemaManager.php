@@ -17,7 +17,7 @@ class SchemaManager extends Manager{
 	private $amendmentFH = false;
 
 	public function __construct(){
-		parent::__construct();
+		//parent::__construct();
 	}
 
 	public function __destruct(){
@@ -27,20 +27,22 @@ class SchemaManager extends Manager{
 
 	public function installPatch(){
 		if($this->targetSchema){
-			$this->logPath = $GLOBALS['SERVER_ROOT'] . '/content/logs/install/db_schema_patch-' . $this->targetSchema. '_'.date('Y-m-d').'.log';
-			$this->amendmentPath = $GLOBALS['SERVER_ROOT'] . '/content/logs/install/db_schema_patch-' . $this->targetSchema. '_' . time() . '_failed.sql';
+			set_time_limit(7200);
+			$basePath = $GLOBALS['SERVER_ROOT'] . '/content/logs/install/';
+			$t = time();
+			if($this->targetSchema == 'baseInstall'){
+				$this->logPath = $basePath . 'baseSchema_' . $t . '.log';
+				$this->amendmentPath = $basePath . 'baseSchema_' . $t . '_failed.sql';
+			}
+			else{
+				$this->logPath = $basePath . 'db_schema_patch-' . $this->targetSchema. '_' . $t . '.log';
+				$this->amendmentPath = $basePath . 'db_schema_patch-' . $this->targetSchema. '_' . $t . '_failed.sql';
+			}
 			$this->setVerboseMode(3);
 			$this->setLogFH($this->logPath);
 			if($this->setDatabaseConnection()){
 				$this->logOrEcho('Connection to database established ('.date('Y-m-d H:i:s').')');
 				if($sqlArr = $this->readSchemaFile()){
-					/*
-					foreach($sqlArr as $arr){
-						print_r($arr);
-						echo '<br>';
-					}
-					return false;
-					*/
 					$this->logOrEcho('DB schema file analyzed: '. count($sqlArr) . ' statements to apply');
 					$cnt = 0;
 					foreach($sqlArr as $lineCnt => $stmtArr){
@@ -83,8 +85,8 @@ class SchemaManager extends Manager{
 								$this->logOrEcho('Success!', 1);
 								if(isset($this->warningArr['updated'])){
 									$this->logOrEcho('Following adjustments applied:', 2);
-									foreach($this->warningArr['updated'] as $adjustStr){
-										$this->logOrEcho($adjustStr, 3);
+									foreach($this->warningArr['updated'] as $colName => $adjustStr){
+										$this->logOrEcho($colName . ': ' . $adjustStr, 3);
 									}
 									unset($this->warningArr['updated']);
 								}
@@ -100,14 +102,16 @@ class SchemaManager extends Manager{
 											$failedSql .= $frag;
 										}
 									}
+									$failedSql = trim($failedSql, ', ') . ';';
 									fwrite($this->amendmentFH, '# '.$targetTable."\n");
-									fwrite($this->amendmentFH, $failedSql."\n\n");
+									fwrite($this->amendmentFH, $failedSql . "\n\n");
 								}
 							}
 							else{
+								$sql = trim($sql,', ') . ';';
 								if(!$this->amendmentFH) $this->amendmentFH = fopen($this->amendmentPath, 'w');
 								fwrite($this->amendmentFH, '# ERROR: '.$this->conn->error."\n\n");
-								fwrite($this->amendmentFH, $sql."\n\n");
+								fwrite($this->amendmentFH, $sql . "\n\n");
 								$this->logOrEcho('ERROR: ' . $this->conn->error, 2);
 								$this->logOrEcho('SQL: ' . $sql, 2);
 								//break;
@@ -131,9 +135,17 @@ class SchemaManager extends Manager{
 
 	private function readSchemaFile(){
 		$sqlArr = false;
-		$filename = $GLOBALS['SERVER_ROOT'] . '/config/schema-1.0/utf8/db_schema';
-		if($this->targetSchema != '1.0') $filename .= '_patch';
-		$filename .= '-'.$this->targetSchema.'.sql';
+		if(!$this->targetSchema){
+			$this->logOrEcho('No valid schema patch selected');
+			return false;
+		}
+		$filename = $GLOBALS['SERVER_ROOT'];
+		if($this->targetSchema == 'baseInstall'){
+			$filename .= '/config/schema/3.0/db_schema-3.0.sql';
+		}
+		else{
+			$filename .= '/config/schema/1.0/patches/db_schema_patch-'.$this->targetSchema.'.sql';
+		}
 		if(file_exists($filename)){
 			if($fileHandler = fopen($filename, 'r')){
 				$sqlArr = array();
@@ -217,7 +229,7 @@ class SchemaManager extends Manager{
 					$colWidth = $m[2];
 					if(isset($this->activeTableArr[$colName]['length']) && $colWidth < $this->activeTableArr[$colName]['length']){
 						$this->warningArr['updated'][$colName] = 'Field length expanded from '.$colWidth.' to '.$this->activeTableArr[$colName]['length'];
-						$fragment = preg_replace('/VARCHAR(\d+)/', 'VARCHAR(' . $this->activeTableArr[$colName]['length'] . ')', $fragment);
+						$fragment = str_replace('VARCHAR('.$colWidth.')', 'VARCHAR(' . $this->activeTableArr[$colName]['length'] . ')', $fragment);
 					}
 				}
 			}
@@ -227,16 +239,15 @@ class SchemaManager extends Manager{
 
 	//Misc support functions
 	private function setDatabaseConnection(){
-		$password = filter_var($_POST['password'], FILTER_SANITIZE_STRING);
-		if($this->host && $this->username && $password && $this->database && $this->port){
-			$this->conn = new mysqli($this->host, $this->username, $password, $this->database, $this->port);
-			if($this->conn->connect_error){
-				$this->logOrEcho('Connection error: ' . $this->conn->connect_error);
-				return false;
-			}
+		if(!$this->host || !$this->username || !$this->database || !$this->port || !isset($_POST['password']) || !$_POST['password']){
+			$this->logOrEcho('One or more connection variables not set');
+			return false;
 		}
-		else{
-			$this->conn = MySQLiConnectionFactory::getCon('admin');
+		$password = filter_var($_POST['password'], FILTER_SANITIZE_STRING);
+		$this->conn = new mysqli($this->host, $this->username, $password, $this->database, $this->port);
+		if($this->conn->connect_error){
+			$this->logOrEcho('Connection error: ' . $this->conn->connect_error);
+			return false;
 		}
 		return true;
 	}
@@ -244,6 +255,12 @@ class SchemaManager extends Manager{
 	//Misc data retrival functions
 	public function getVersionHistory(){
 		$versionHistory = false;
+		$this->conn = MySQLiConnectionFactory::getCon('readonly');
+		if(!$this->conn && isset($_POST['password']) && $_POST['password']){
+			$password = filter_var($_POST['password'], FILTER_SANITIZE_STRING);
+			$this->conn = new mysqli($this->host, $this->username, $password, $this->database, $this->port);
+		}
+		if(!$this->conn) return false;
 		$sql = 'SELECT versionNumber, dateApplied FROM schemaversion ORDER BY id';
 		if($rs = $this->conn->query($sql)){
 			$versionHistory = array();

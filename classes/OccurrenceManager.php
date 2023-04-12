@@ -408,14 +408,9 @@ class OccurrenceManager extends OccurrenceTaxaManager {
 				if($includeOtherCatNum){
 					$catWhere .= 'OR (o.othercatalognumbers IN("'.implode('","',$inFrag).'")) ';
 					$catWhere .= 'OR (o.occurrenceID IN("'.implode('","',$inFrag).'")) ';
+					$catWhere .= 'OR (o.recordID IN("'.implode('","',$inFrag).'")) ';
 					//$catWhere .= 'OR (oi.identifiervalue IN("'.implode('","',$inFrag).'")) ';
 					$identFrag[] = '(identifiervalue IN("'.implode('","',$inFrag).'"))';
-					if(strlen($inFrag[0]) == 36){
-						$guidOccid = $this->queryRecordID($inFrag);
-						if($guidOccid){
-							$catWhere .= 'OR (o.occid IN('.implode(',',$guidOccid).')) ';
-						}
-					}
 				}
 			}
 			if($identFrag){
@@ -487,19 +482,6 @@ class OccurrenceManager extends OccurrenceTaxaManager {
 				}
 				$rs->free();
 			}
-		}
-		return $retArr;
-	}
-
-	private function queryRecordID($idArr){
-		$retArr = array();
-		if($idArr){
-			$sql = 'SELECT occid FROM guidoccurrences WHERE guid IN("'.implode('","', $idArr).'")';
-			$rs = $this->conn->query($sql);
-			while($r = $rs->fetch_object()){
-				$retArr[] = $r->occid;
-			}
-			$rs->free();
 		}
 		return $retArr;
 	}

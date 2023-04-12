@@ -68,10 +68,15 @@ elseif($action == 'login'){
 		}
 	}
 	else{
-		if(isset($LANG['INCORRECT'])) $statusStr = $LANG['INCORRECT'];
-		else $statusStr = 'Your username or password was incorrect. Please try again.<br/> If you are unable to remember your login credentials,<br/> use the controls below to retrieve your login or reset your password.';
-		$statusStr .= '<ERR/>';
-		error_log('Authorization of user <F-USER>' . $login . '</F-USER> to access ' . $_SERVER['PHP_SELF']. ' failed', 0);
+		if($pHandler->getErrorMessage()){
+			$statusStr = $pHandler->getErrorMessage();
+		}
+		else{
+			if(isset($LANG['INCORRECT'])) $statusStr = $LANG['INCORRECT'];
+			else $statusStr = 'Your username or password was incorrect. Please try again.<br/> If you are unable to remember your login credentials, use the controls below to retrieve your login or reset your password.';
+			$statusStr .= '<ERR/>';
+			error_log('Authorization of user <F-USER>' . $login . '</F-USER> to access ' . $_SERVER['PHP_SELF']. ' failed', 0);
+		}
 	}
 }
 elseif($action == 'Retrieve Login'){

@@ -245,19 +245,18 @@ class ChecklistVoucherReport extends ChecklistVoucherAdmin {
 
 			$fieldArr = $this->getOccurrenceFieldArr();
 			$exportSql = 'SELECT '.implode(',',$fieldArr).', o.localitysecurity, o.collid '.
-				$this->getMissingTaxaBaseSql($sqlFrag,true);
+				$this->getMissingTaxaBaseSql($sqlFrag);
 			//echo $exportSql;
 			$this->exportCsv($fileName, $exportSql);
 		}
 	}
 
-	private function getMissingTaxaBaseSql($sqlFrag, $asExport = false){
+	private function getMissingTaxaBaseSql($sqlFrag){
 		$clidStr = $this->clid;
 		if($this->childClidArr) $clidStr .= ','.implode(',',$this->childClidArr);
 		$retSql = 'FROM omoccurrences o LEFT JOIN omcollections c ON o.collid = c.collid '.
 			'INNER JOIN taxstatus ts ON o.tidinterpreted = ts.tid '.
 			'INNER JOIN taxa t ON ts.tidaccepted = t.tid ';
-		if($asExport) $retSql .= 'LEFT JOIN guidoccurrences g ON o.occid = g.occid ';
 		$retSql .= $this->getTableJoinFrag($sqlFrag);
 		$retSql .= 'WHERE ('.$sqlFrag.') AND (t.rankid > 219) AND (ts.taxauthid = 1) ';
 		$idArr = $this->getVoucherIDs('occid');
@@ -304,18 +303,17 @@ class ChecklistVoucherReport extends ChecklistVoucherAdmin {
 
 		if($sqlFrag = $this->getSqlFrag()){
 			$fieldArr = $this->getOccurrenceFieldArr();
-			$sql = 'SELECT DISTINCT '.implode(',',$fieldArr).', o.localitysecurity, o.collid '.$this->getProblemTaxaSql($sqlFrag,true);
+			$sql = 'SELECT DISTINCT '.implode(',',$fieldArr).', o.localitysecurity, o.collid '.$this->getProblemTaxaSql($sqlFrag);
 			$this->exportCsv($fileName, $sql);
 		}
 	}
 
-	private function getProblemTaxaSql($sqlFrag, $asExport = false){
+	private function getProblemTaxaSql($sqlFrag){
 		//$clidStr = $this->clid;
 		//if($this->childClidArr) $clidStr .= ','.implode(',',$this->childClidArr);
-		$retSql = 'FROM omoccurrences o LEFT JOIN omcollections c ON o.collid = c.CollID ';
-		if($asExport) $retSql .= 'LEFT JOIN guidoccurrences g ON o.occid = g.occid ';
-		$retSql .= $this->getTableJoinFrag($sqlFrag);
-		$retSql .= 'WHERE ('.$sqlFrag.') AND (o.tidinterpreted IS NULL) AND (o.sciname IS NOT NULL) ';
+		$retSql = 'FROM omoccurrences o LEFT JOIN omcollections c ON o.collid = c.CollID '.
+			$this->getTableJoinFrag($sqlFrag).
+			'WHERE ('.$sqlFrag.') AND (o.tidinterpreted IS NULL) AND (o.sciname IS NOT NULL) ';
 		$idArr = $this->getVoucherIDs('occid');
 		if($idArr) $retSql .= 'AND (o.occid NOT IN('.implode(',',$idArr).')) ';
 		return $retSql;
@@ -424,7 +422,6 @@ class ChecklistVoucherReport extends ChecklistVoucherAdmin {
 				'LEFT JOIN fmvouchers v ON ctl.clid = v.clid AND ctl.tid = v.tid '.
 				'LEFT JOIN omoccurrences o ON v.occid = o.occid '.
 				'LEFT JOIN omcollections c ON o.collid = c.collid '.
-				'LEFT JOIN guidoccurrences g ON o.occid = g.occid '.
 				'WHERE (ts.taxauthid = 1) AND (ctl.clid IN('.$clidStr.')) ';
 			$this->exportCsv($fileName, $sql);
 		}
@@ -455,7 +452,6 @@ class ChecklistVoucherReport extends ChecklistVoucherAdmin {
 					'LEFT JOIN taxstatus ts2 ON ts.tidaccepted = ts2.tidaccepted '.
 					'LEFT JOIN omoccurrences o ON ts2.tid = o.tidinterpreted '.
 					'LEFT JOIN omcollections c ON o.collid = c.collid '.
-					'LEFT JOIN guidoccurrences g ON o.occid = g.occid '.
 					$this->getTableJoinFrag($sqlFrag).
 					'WHERE ('.$sqlFrag.') AND (ts.taxauthid = 1) AND (ts2.taxauthid = 1) AND (ctl.clid IN('.$clidStr.')) ';
 				$this->exportCsv($fileName, $sql);
@@ -520,12 +516,12 @@ class ChecklistVoucherReport extends ChecklistVoucherAdmin {
 
 	private function getOccurrenceFieldArr(){
 		$retArr = array('o.family AS family_occurrence', 'o.sciName AS scientificName_occurrence', 'IFNULL(o.institutionCode,c.institutionCode) AS institutionCode','IFNULL(o.collectionCode,c.collectionCode) AS collectionCode',
-			'CASE guidTarget WHEN "symbiotaUUID" THEN IFNULL(o.occurrenceID,g.guid) WHEN "occurrenceId" THEN o.occurrenceID WHEN "catalogNumber" THEN o.catalogNumber ELSE "" END AS occurrenceID',
+			'CASE guidTarget WHEN "symbiotaUUID" THEN IFNULL(o.occurrenceID,o.recordID) WHEN "occurrenceId" THEN o.occurrenceID WHEN "catalogNumber" THEN o.catalogNumber ELSE "" END AS occurrenceID',
 			'o.catalogNumber', 'o.otherCatalogNumbers', 'o.identifiedBy', 'o.dateIdentified',
  			'o.recordedBy', 'o.recordNumber', 'o.eventDate', 'o.country', 'o.stateProvince', 'o.county', 'o.municipality', 'o.locality',
  			'o.decimalLatitude', 'o.decimalLongitude', 'o.coordinateUncertaintyInMeters', 'o.minimumElevationInMeters', 'o.maximumelevationinmeters',
 			'o.verbatimelevation', 'o.habitat', 'o.occurrenceRemarks', 'o.associatedTaxa', 'o.reproductivecondition', 'o.informationWithheld', 'o.occid');
-		$retArr[] = 'g.guid AS recordID';
+		$retArr[] = 'o.recordID AS recordID';
 		$retArr[] = 'CONCAT("' . $this->getDomain() . $GLOBALS['CLIENT_ROOT'] . '/collections/individual/index.php?occid=",o.occid) as `references`';
 		return $retArr;
 

@@ -80,7 +80,7 @@ if($isEditor){
 			$updateStatus = $pHandler->changePassword($newPwd);
 		}
 		if($updateStatus){
-			$statusStr = "<span color='green'>".(isset($LANG['PWORD_SUCCESS'])?$LANG['PWORD_SUCCESS']:'Password update successful')."!</span>";
+			$statusStr = '<span color="green">'.(isset($LANG['PWORD_SUCCESS'])?$LANG['PWORD_SUCCESS']:'Password update successful').'!</span>';
 		}
 		else{
 			$statusStr = (isset($LANG['PWORD_FAILED'])?$LANG['PWORD_FAILED']:'Password update failed! Are you sure you typed the old password correctly?');
@@ -90,8 +90,11 @@ if($isEditor){
 	}
 	elseif($action == 'changeLogin'){
 		$pwd = '';
-		if($isSelf && isset($_POST["newloginpwd"])) $pwd = $_POST["newloginpwd"];
-		if(!$pHandler->changeLogin($_POST["newlogin"], $pwd)){
+		if($isSelf && isset($_POST['newloginpwd'])) $pwd = $_POST['newloginpwd'];
+		if($pHandler->changeLogin($_POST['newlogin'], $pwd)){
+			$statusStr = '<span color="green">Username update successful!</span>';
+		}
+		else{
 			$statusStr = $pHandler->getErrorStr();
 		}
 		$person = $pHandler->getPerson();
@@ -153,36 +156,35 @@ if($isEditor){
 		<a href='../index.php'><?php echo (isset($LANG['HOME'])?$LANG['HOME']:'Home'); ?></a> &gt;&gt;
 		<a href="../profile/viewprofile.php"><?php echo (isset($LANG['MY_PROFILE'])?$LANG['MY_PROFILE']:'My Profile'); ?></a>
 	</div>
-	<!-- inner text -->
 	<div id="innertext">
-	<?php
-	if($isEditor){
-		if($statusStr){
-			echo "<div style='color:#FF0000;margin:10px 0px 10px 10px;'>".$statusStr."</div>";
+		<?php
+		if($isEditor){
+			if($statusStr){
+				echo "<div style='color:#FF0000;margin:10px 0px 10px 10px;'>".$statusStr."</div>";
+			}
+			?>
+			<div id="tabs" style="margin:10px;">
+				<ul>
+					<?php
+					if($floraModIsActive){
+						?>
+						<li><a href="../checklists/checklistadminmeta.php?userid=<?php echo $userId; ?>"><?php echo (isset($LANG['SPEC_CHECKLIST'])?$LANG['SPEC_CHECKLIST']:'Species Checklists'); ?></a></li>
+						<?php
+					}
+					?>
+					<li><a href="occurrencemenu.php"><?php echo (isset($LANG['OCC_MGMNT'])?$LANG['OCC_MGMNT']:'Occurrence Management'); ?></a></li>
+					<li><a href="userprofile.php?userid=<?php echo $userId; ?>"><?php echo (isset($LANG['USER_PROFILE'])?$LANG['USER_PROFILE']:'User Profile'); ?></a></li>
+					<?php
+					if($person->getIsTaxonomyEditor()) {
+						echo '<li><a href="specimenstoid.php?userid='.$userId.'&action='.$action.'">'.(isset($LANG['IDS_NEEDED'])?$LANG['IDS_NEEDED']:'IDs Needed').'</a></li>';
+						echo '<li><a href="imagesforid.php">'.(isset($LANG['IMAGES_ID'])?$LANG['IMAGES_ID']:'Images for ID').'</a></li>';
+					}
+					?>
+				</ul>
+			</div>
+			<?php
 		}
 		?>
-		<div id="tabs" style="margin:10px;">
-			<ul>
-				<?php
-				if($floraModIsActive){
-					?>
-					<li><a href="../checklists/checklistadminmeta.php?userid=<?php echo $userId; ?>"><?php echo (isset($LANG['SPEC_CHECKLIST'])?$LANG['SPEC_CHECKLIST']:'Species Checklists'); ?></a></li>
-					<?php
-				}
-				?>
-				<li><a href="occurrencemenu.php"><?php echo (isset($LANG['OCC_MGMNT'])?$LANG['OCC_MGMNT']:'Occurrence Management'); ?></a></li>
-				<li><a href="userprofile.php?userid=<?php echo $userId; ?>"><?php echo (isset($LANG['USER_PROFILE'])?$LANG['USER_PROFILE']:'User Profile'); ?></a></li>
-				<?php
-				if($person->getIsTaxonomyEditor()) {
-					echo '<li><a href="specimenstoid.php?userid='.$userId.'&action='.$action.'">'.(isset($LANG['IDS_NEEDED'])?$LANG['IDS_NEEDED']:'IDs Needed').'</a></li>';
-					echo '<li><a href="imagesforid.php">'.(isset($LANG['IMAGES_ID'])?$LANG['IMAGES_ID']:'Images for ID').'</a></li>';
-				}
-				?>
-			</ul>
-		</div>
-		<?php
-	}
-	?>
 	</div>
 	<?php
 	include($SERVER_ROOT.'/includes/footer.php');

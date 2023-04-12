@@ -87,10 +87,11 @@ $IS_ADMIN = true;
 						<div class="form-section">
 							<label>Schema: </label>
 							<select name="schemaCode">
-								<option value="1.0" <?php echo !$curentVersion || $curentVersion < 1 ? 'selected' : ''; ?>>Base Schema 1.0</option>
-								<option value="1.1"<?php echo $curentVersion == 1.0 ? 'selected' : ''; ?>>Schema Patch 1.1</option>
-								<option value="1.2"<?php echo $curentVersion == 1.1 ? 'selected' : ''; ?>>Schema Patch 1.2</option>
-								<option value="2.0"<?php echo $curentVersion == 1.2 ? 'selected' : ''; ?>>Schema Patch 2.0</option>
+								<option value="baseInstall" <?php echo !$curentVersion || $curentVersion < 1 ? 'selected' : ''; ?>>New Install (ver. 3.0)</option>
+								<option value="1.1" <?php echo $curentVersion == 1.0 ? 'selected' : ''; ?>>Schema Patch 1.1</option>
+								<option value="1.2" <?php echo $curentVersion == 1.1 ? 'selected' : ''; ?>>Schema Patch 1.2</option>
+								<option value="3.0" <?php echo $curentVersion == 1.2 ? 'selected' : ''; ?>>Schema Patch 3.0</option>
+								<option value="" <?php echo $curentVersion == 3.0 ? 'selected' : ''; ?>>Schema is Current - nothing to do</option>
 							</select>
 						</div>
 						<div class="form-section">

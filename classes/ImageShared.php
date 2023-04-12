@@ -526,15 +526,15 @@ class ImageShared{
 			}
 
 			//Save currently loaded record
-			$sql = 'INSERT INTO images (tid, url, thumbnailurl, originalurl, photographer, photographeruid, format, caption, '.
-				'owner, sourceurl, copyright, locality, occid, notes, username, sortsequence, sortoccurrence, sourceIdentifier, rights, accessrights) '.
-				'VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)';
+			$guid = UuidFactory::getUuidV4();
+			$sql = 'INSERT INTO images (tid, url, thumbnailurl, originalurl, photographer, photographeruid, format, caption, owner, sourceurl,
+				copyright, locality, occid, notes, username, sortsequence, sortoccurrence, sourceIdentifier, rights, accessrights, recordID)
+				VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)';
 			if($stmt = $this->conn->prepare($sql)) {
 				$userName = $this->cleanInStr($GLOBALS['USERNAME']);
 				$stmt->bind_param('issssissssssissiisss', $this->tid, $this->imgWebUrl, $this->imgTnUrl, $this->imgLgUrl, $this->photographer, $this->photographerUid, $this->format,
 					$this->caption, $this->owner, $this->sourceUrl, $this->copyright, $this->locality, $this->occid, $this->notes, $userName, $this->sortSeq, $this->sortOccurrence,
-					$this->sourceIdentifier, $this->rights, $this->accessRights);
-
+					$this->sourceIdentifier, $this->rights, $this->accessRights, $guid);
 				$stmt->execute();
 				if($stmt->affected_rows == 1){
 					$status = true;
@@ -545,13 +545,6 @@ class ImageShared{
 					$status = false;
 				}
 				$stmt->close();
-			}
-			if($status){
-				//Create and insert Symbiota GUID for image(UUID)
-				$guid = UuidFactory::getUuidV4();
-				if(!$this->conn->query('INSERT INTO guidimages(guid,imgid) VALUES("'.$guid.'",'.$this->activeImgId.')')) {
-					$this->errArr[] = ' Warning: Symbiota GUID mapping failed';
-				}
 			}
 		}
 		return $status;
