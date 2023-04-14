@@ -3,16 +3,14 @@ include_once('../config/symbini.php');
 include_once($SERVER_ROOT.'/classes/ProfileManager.php');
 include_once($SERVER_ROOT.'/classes/Person.php');
 @include_once($SERVER_ROOT.'/content/lang/profile/viewprofile.'.$LANG_TAG.'.php');
-header("Content-Type: text/html; charset=".$CHARSET);
+header('Content-Type: text/html; charset=' . $CHARSET);
 
-$action = array_key_exists("action",$_REQUEST)?$_REQUEST["action"]:"";
-$userId = array_key_exists("userid",$_REQUEST)?$_REQUEST["userid"]:0;
-$tabIndex = array_key_exists("tabindex",$_REQUEST)?$_REQUEST["tabindex"]:0;
+$action = array_key_exists('action', $_REQUEST) ? htmlspecialchars($_REQUEST['action'], HTML_SPECIAL_CHARS_FLAGS) : '';
+$userId = array_key_exists('userid', $_REQUEST) ? filter_var($_REQUEST['userid'], FILTER_VALIDATE_INT) : 0;
+$tabIndex = array_key_exists('tabindex',$_REQUEST) ? filter_var($_REQUEST['tabindex'], FILTER_VALIDATE_INT) : 0;
 
 //Sanitation
 if($action && !preg_match('/^[a-zA-Z0-9\s_]+$/',$action)) $action = '';
-if(!is_numeric($userId)) $userId = 0;
-if(!is_numeric($tabIndex)) $tabIndex = 0;
 
 $isSelf = 0;
 $isEditor = 0;
@@ -32,58 +30,31 @@ if(!$userId) header('Location: index.php?refurl=viewprofile.php');
 $pHandler = new ProfileManager();
 $pHandler->setUid($userId);
 
-$statusStr = "";
+$statusStr = '';
 $person = null;
 if($isEditor){
-	// ******************************  editing a profile  ************************************//
-	if($action == "Submit Edits"){
-		$firstname = $_REQUEST["firstname"];
-		$lastname = $_REQUEST["lastname"];
-		$email = $_REQUEST["email"];
-
-		$title = array_key_exists("title",$_REQUEST)?$_REQUEST["title"]:"";
-		$institution = array_key_exists("institution",$_REQUEST)?$_REQUEST["institution"]:"";
-		$city = array_key_exists("city",$_REQUEST)?$_REQUEST["city"]:"";
-		$state = array_key_exists("state",$_REQUEST)?$_REQUEST["state"]:"";
-		$zip = array_key_exists("zip",$_REQUEST)?$_REQUEST["zip"]:"";
-		$country = array_key_exists("country",$_REQUEST)?$_REQUEST["country"]:"";
-		$url = array_key_exists("url",$_REQUEST)?$_REQUEST["url"]:"";
-		$guid = array_key_exists('guid',$_REQUEST)?$_REQUEST['guid']:'';
-
-		$newPerson = new Person();
-		$newPerson->setUid($userId);
-		$newPerson->setFirstName($firstname);
-		$newPerson->setLastName($lastname);
-		$newPerson->setTitle($title);
-		$newPerson->setInstitution($institution);
-		$newPerson->setCity($city);
-		$newPerson->setState($state);
-		$newPerson->setZip($zip);
-		$newPerson->setCountry($country);
-		$newPerson->setEmail($email);
-		$newPerson->setGUID($guid);
-
-		if(!$pHandler->updateProfile($newPerson)){
+	if($action == 'Submit Edits'){
+		if(!$pHandler->updateProfile($_POST)){
 			$statusStr = (isset($LANG['FAILED'])?$LANG['FAILED']:'Profile update failed!');
 		}
 		$person = $pHandler->getPerson();
 		$tabIndex = 2;
 	}
-	elseif($action == "Change Password"){
-		$newPwd = $_REQUEST["newpwd"];
+	elseif($action == 'Change Password'){
+		$newPwd = $_REQUEST['newpwd'];
 		$updateStatus = false;
 		if($isSelf){
-			$oldPwd = $_REQUEST["oldpwd"];
+			$oldPwd = $_REQUEST['oldpwd'];
 			$updateStatus = $pHandler->changePassword($newPwd, $oldPwd, $isSelf);
 		}
 		else{
 			$updateStatus = $pHandler->changePassword($newPwd);
 		}
 		if($updateStatus){
-			$statusStr = '<span color="green">'.(isset($LANG['PWORD_SUCCESS'])?$LANG['PWORD_SUCCESS']:'Password update successful').'!</span>';
+			$statusStr = '<span style="color:green">'.(isset($LANG['PWORD_SUCCESS'])?$LANG['PWORD_SUCCESS']:'Password update successful').'!</span>';
 		}
 		else{
-			$statusStr = (isset($LANG['PWORD_FAILED'])?$LANG['PWORD_FAILED']:'Password update failed! Are you sure you typed the old password correctly?');
+			$statusStr = '<span style="color:red">'.(isset($LANG['PWORD_FAILED'])?$LANG['PWORD_FAILED']:'Password update failed! Are you sure you typed the old password correctly?').'</span>';
 		}
 		$person = $pHandler->getPerson();
 		$tabIndex = 2;
@@ -92,33 +63,38 @@ if($isEditor){
 		$pwd = '';
 		if($isSelf && isset($_POST['newloginpwd'])) $pwd = $_POST['newloginpwd'];
 		if($pHandler->changeLogin($_POST['newlogin'], $pwd)){
-			$statusStr = '<span color="green">Username update successful!</span>';
+			$statusStr = '<span style="color:green">Username update successful!</span>';
 		}
 		else{
-			$statusStr = $pHandler->getErrorStr();
+			$statusStr = '<span style="color:red">';
+			if($pHandler->getErrorMessage() == 'loginExists') $statusStr .= 'Login is already being used by another user. Please try a new login';
+			elseif($pHandler->getErrorMessage() == 'incorrectPassword') $statusStr .= 'ERROR saving new login: incorrect password';
+			else $statusStr .= 'ERROR saving new login. Please contact administrator';
+			$statusStr .= '</span>';
 		}
 		$person = $pHandler->getPerson();
 		$tabIndex = 2;
 	}
-    elseif($action == "Clear Tokens"){
-        $statusStr = $pHandler->clearAccessTokens();
-        $person = $pHandler->getPerson();
-        $tabIndex = 2;
-    }
-	elseif($action == "Delete Profile"){
+	elseif($action == 'Clear Tokens'){
+		if($pHandler->clearAccessTokens()) $statusStr = '<span color="green">Access tokens cleared!</span>';
+		else $statusStr = '<span style="color:red">ERROR clearing access tokens: '.$pHandler->getErrorMessage().'</span>';
+		$person = $pHandler->getPerson();
+		$tabIndex = 2;
+	}
+	elseif($action == 'Delete Profile'){
 		if($pHandler->deleteProfile($userId, $isSelf)){
-			header("Location: ../index.php");
+			header('Location: ../index.php');
 		}
 		else{
-			$statusStr = (isset($LANG['DELETE_FAILED'])?$LANG['DELETE_FAILED']:'Profile deletion failed! Please contact the system administrator');
+			$statusStr = '<span style="color:red">'.(isset($LANG['DELETE_FAILED'])?$LANG['DELETE_FAILED']:'Profile deletion failed! Please contact the system administrator').'</span>';
 		}
 	}
-	elseif($action == "delusertaxonomy"){
+	elseif($action == 'delusertaxonomy'){
 		$statusStr = $pHandler->deleteUserTaxonomy($_GET['utid']);
 		$person = $pHandler->getPerson();
 		$tabIndex = 2;
 	}
-	elseif($action == "Add Taxonomic Relationship"){
+	elseif($action == 'Add Taxonomic Relationship'){
 		$statusStr = $pHandler->addUserTaxonomy($_POST['taxon'], $_POST['editorstatus'], $_POST['geographicscope'], $_POST['notes']);
 		$person = $pHandler->getPerson();
 		$tabIndex = 2;
@@ -159,9 +135,7 @@ if($isEditor){
 	<div id="innertext">
 		<?php
 		if($isEditor){
-			if($statusStr){
-				echo "<div style='color:#FF0000;margin:10px 0px 10px 10px;'>".$statusStr."</div>";
-			}
+			if($statusStr) echo $statusStr;
 			?>
 			<div id="tabs" style="margin:10px;">
 				<ul>
