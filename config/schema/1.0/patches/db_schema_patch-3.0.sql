@@ -623,10 +623,11 @@ ALTER TABLE `omoccurdeterminations`
   ADD INDEX `IX_omoccurdets_recordID` (`recordID` ASC),
   ADD INDEX `FK_omoccurdets_dateModified` (`dateLastModified` ASC),
   ADD INDEX `FK_omoccurdets_initialTimestamp` (`initialTimestamp` ASC);
-  
+
+# Transfer GUIDs from old guid determination table  
 UPDATE omoccurdeterminations d INNER JOIN guidoccurdeterminations g ON d.detid = g.detid SET d.recordID = g.guid WHERE d.recordID IS NULL;
 
-
+# Transfer current determinations from omoccurrences table
 INSERT IGNORE INTO omoccurdeterminations(occid, identifiedBy, dateIdentified, family, sciname, verbatimIdentification, scientificNameAuthorship, tidInterpreted, 
 identificationQualifier, genus, specificEpithet, verbatimTaxonRank, infraSpecificEpithet, isCurrent, identificationReferences, identificationRemarks, 
 taxonRemarks)
@@ -1155,3 +1156,46 @@ INSERT INTO ctcontrolvocabterm(cvID, term, resourceUrl, activeStatus) SELECT cvI
 INSERT INTO ctcontrolvocabterm(cvID, term, resourceUrl, activeStatus) SELECT cvID, "poolDnaExtracts", "http://gensc.org/ns/mixs/pool_dna_extracts", 1 FROM ctcontrolvocab WHERE tableName = "ommaterialsampleextended" AND fieldName = "fieldName";
 INSERT INTO ctcontrolvocabterm(cvID, term, resourceUrl, activeStatus) SELECT cvID, "sampleDesignation", "http://data.ggbn.org/schemas/ggbn/terms/sampleDesignation", 1 FROM ctcontrolvocab WHERE tableName = "ommaterialsampleextended" AND fieldName = "fieldName";
 
+
+#Rename for archive various deprecated tables 
+ALTER TABLE `guidimages` 
+  RENAME TO  `deprecated_guidimages` ;
+
+ALTER TABLE `guidoccurrences` 
+  RENAME TO  `deprecated_guidoccurrences` ;
+
+ALTER TABLE `guidoccurdeterminations` 
+  RENAME TO  `deprecated_guidoccurdeterminations` ;
+
+ALTER TABLE `userlogin` 
+  RENAME TO  `deprecated_userlogin` ;
+
+ALTER TABLE `adminstats` 
+  RENAME TO  `deprecated_adminstats` ;
+
+ALTER TABLE `imageannotations` 
+  RENAME TO  `deprecated_imageannotations` ;
+
+ALTER TABLE `kmdescrdeletions` 
+  RENAME TO  `deprecated_kmdescrdeletions` ;
+
+ALTER TABLE `media` 
+  RENAME TO  `deprecated_media` ;
+
+ALTER TABLE `omcollsecondary` 
+  RENAME TO  `deprecated_omcollsecondary` ;
+
+ALTER TABLE `unknowncomments` 
+  RENAME TO  `deprecated_unknowncomments` ;
+
+ALTER TABLE `unknownimages` 
+  RENAME TO  `deprecated_unknownimages` ;
+
+ALTER TABLE `unknowns` 
+  RENAME TO  `deprecated_unknowns` ;
+
+ALTER TABLE `omcollpublications` 
+  RENAME TO  `deprecated_omcollpublications` ;
+
+ALTER TABLE `omcollpuboccurlink` 
+  RENAME TO  `deprecated_omcollpuboccurlink` ;

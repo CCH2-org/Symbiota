@@ -63,30 +63,37 @@ if($isEditor){
 		$pwd = '';
 		if($isSelf && isset($_POST['newloginpwd'])) $pwd = $_POST['newloginpwd'];
 		if($pHandler->changeLogin($_POST['newlogin'], $pwd)){
-			$statusStr = '<span style="color:green">Username update successful!</span>';
+			$statusStr = '<span style="color:green">'.$LANG['UPDATE_SUCCESSFUL'].'</span>';
 		}
 		else{
 			$statusStr = '<span style="color:red">';
-			if($pHandler->getErrorMessage() == 'loginExists') $statusStr .= 'Login is already being used by another user. Please try a new login';
-			elseif($pHandler->getErrorMessage() == 'incorrectPassword') $statusStr .= 'ERROR saving new login: incorrect password';
-			else $statusStr .= 'ERROR saving new login. Please contact administrator';
+			if($pHandler->getErrorMessage() == 'loginExists') $statusStr .= $LANG['LOGIN_USED'];
+			elseif($pHandler->getErrorMessage() == 'incorrectPassword') $statusStr .= $LANG['INCORRECT_PWD'];
+			else $statusStr .= $LANG['ERROR_SAVING_LOGIN'];
 			$statusStr .= '</span>';
 		}
 		$person = $pHandler->getPerson();
 		$tabIndex = 2;
 	}
 	elseif($action == 'Clear Tokens'){
-		if($pHandler->clearAccessTokens()) $statusStr = '<span color="green">Access tokens cleared!</span>';
-		else $statusStr = '<span style="color:red">ERROR clearing access tokens: '.$pHandler->getErrorMessage().'</span>';
+		if($pHandler->clearAccessTokens()) $statusStr = '<span color="green">'.$LANG['TOKENS_CLEARED'].'</span>';
+		else $statusStr = '<span style="color:red">'.$LANG['TOKENS_ERROR'].': '.$pHandler->getErrorMessage().'</span>';
 		$person = $pHandler->getPerson();
 		$tabIndex = 2;
 	}
-	elseif($action == 'Delete Profile'){
-		if($pHandler->deleteProfile($userId, $isSelf)){
-			header('Location: ../index.php');
+	elseif($action == 'deleteProfile'){
+		if($pHandler->deleteProfile()){
+			if($isSelf) header('Location: ../index.php');
+			else header('Location: usermanagement.php');
 		}
 		else{
-			$statusStr = '<span style="color:red">'.(isset($LANG['DELETE_FAILED'])?$LANG['DELETE_FAILED']:'Profile deletion failed! Please contact the system administrator').'</span>';
+			$statusStr = $LANG['DELETE_FAILED'].' ';
+			if(strpos($pHandler->getErrorMessage(), 'foreign key constraint fails')){
+				$statusStr .= $LANG['DATA_CONFLICT'].' ';
+			}
+			$statusStr .= $LANG['CONTACT_ADMIN'];
+			if($IS_ADMIN) $statusStr .= '<br>'.$pHandler->getErrorMessage();
+			$statusStr = '<span style="color:red">'.$statusStr.'</span>';
 		}
 	}
 	elseif($action == 'delusertaxonomy'){

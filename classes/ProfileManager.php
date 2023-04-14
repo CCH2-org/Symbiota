@@ -192,7 +192,7 @@ class ProfileManager extends Manager{
 		return $status;
 	}
 
-	public function deleteProfile($reset = 0){
+	public function deleteProfile(){
 		$status = false;
 		if($this->uid){
 			$this->resetConnection();
@@ -206,7 +206,7 @@ class ProfileManager extends Manager{
 			}
 			else $this->errorMessage = 'ERROR preparing statement for user profile delete: '.$this->conn->error;
 		}
-		if($reset) $this->reset();
+		if($status && $this->uid == $GLOBALS['SYMB_UID']) $this->reset();
 		return $status;
 	}
 
@@ -325,7 +325,7 @@ class ProfileManager extends Manager{
 				$this->uid = $stmt->insert_id;
 				$this->displayName = $firstName;
 				$this->reset();
-				$this->authenticate();
+				$this->authenticate($pwd);
 				$status = true;
 			}
 			elseif($stmt->error) $this->errorMessage = 'ERROR inserting new user: '.$stmt->error;
@@ -923,9 +923,10 @@ class ProfileManager extends Manager{
 		$cArr = array();
 		if(array_key_exists('CollAdmin',$USER_RIGHTS)) $cArr = $USER_RIGHTS['CollAdmin'];
 		if(array_key_exists('CollEditor',$USER_RIGHTS)) $cArr = array_merge($cArr,$USER_RIGHTS['CollEditor']);
-		if(!$cArr || !preg_match('/^[\d,]$/', $cArr)) return $retArr;
+		$collidStr = implode(',',$cArr);
+		if(!$collidStr || !preg_match('/^[\d,]+$/', $collidStr)) return $retArr;
 
-		$sql = 'SELECT collid, institutioncode, collectioncode, collectionname, colltype FROM omcollections WHERE collid IN('.implode(',',$cArr).') ORDER BY collectionname';
+		$sql = 'SELECT collid, institutioncode, collectioncode, collectionname, colltype FROM omcollections WHERE collid IN('.$collidStr.') ORDER BY collectionname';
 		if($rs = $this->conn->query($sql)){
 			while($r = $rs->fetch_object()){
 				$retArr[$r->collid]['collectionname'] = $r->collectionname;
