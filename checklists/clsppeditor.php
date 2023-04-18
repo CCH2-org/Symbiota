@@ -24,8 +24,10 @@ $followUpAction = '';
 if($action == 'renameTransfer'){
 	$rareLocality = '';
 	if($_POST['cltype'] == 'rarespp') $rareLocality = $_POST['locality'];
-	$vManager->renameTaxon($_POST['renametid'],$rareLocality);
-	$followUpAction = 'removeTaxon()';
+	if($vManager->renameTaxon($_POST['renametid'], $rareLocality)){
+		$followUpAction = 'removeTaxon()';
+	}
+	else echo $vManager->getErrorMessage();
 }
 elseif($action == 'editChecklist'){
 	$eArr = Array();
@@ -45,10 +47,14 @@ elseif($action == 'deleteTaxon'){
 	$followUpAction = 'removeTaxon()';
 }
 elseif($action == 'editVoucher'){
-	$status = $vManager->editVoucher($_POST['voucherID'],$_POST['notes'],$_POST['editornotes']);
+	if(!$vManager->editVoucher($_POST['voucherID'], $_POST['notes'], $_POST['editornotes'])){
+		$status = $vManager->getErrorMessage();
+	}
 }
 elseif($action == 'deleteVoucher'){
-	$status = $vManager->deleteVoucher($_POST['voucherID']);
+	if(!$vManager->deleteVoucher($_POST['voucherID'])){
+		$status = $vManager->getErrorMessage();
+	}
 }
 elseif($action == 'Add Voucher'){
 	//For processing requests sent from /collections/individual/index.php
@@ -232,11 +238,12 @@ $clArray = $vManager->getChecklistData();
 									<b>*</b> <?php echo (isset($LANG['VOUCHERS_TRANSFER'])?$LANG['VOUCHERS_TRANSFER']:'Note that vouchers &amp; notes will transfer to new taxon'); ?>
 								</div>
 								<div style="margin:15px">
-									<input name='tid' type="hidden" value="<?php echo $vManager->getTid(); ?>" />
-									<input name='clid' type="hidden" value="<?php echo $vManager->getClid(); ?>" />
-									<input name='cltype' type="hidden" value="<?php echo $clArray['cltype']; ?>" />
-									<input name='locality' type="hidden" value="<?php echo $clArray['locality']; ?>" />
-									<button type="submit" name="action" value="renameTransfer"><?php echo (isset($LANG['RENAME'])?$LANG['RENAME']:'Rename and Transfer'); ?></button>
+									<input name="tid" type="hidden" value="<?php echo $vManager->getTid(); ?>" />
+									<input name="clid" type="hidden" value="<?php echo $vManager->getClid(); ?>" />
+									<input name="cltype" type="hidden" value="<?php echo $clArray['cltype']; ?>" />
+									<input name="locality" type="hidden" value="<?php echo $clArray['locality']; ?>" />
+									<input name="action" type="hidden" value="renameTransfer" />
+									<button type="submit" name="submitaction"><?php echo (isset($LANG['RENAME'])?$LANG['RENAME']:'Rename and Transfer'); ?></button>
 								</div>
 							</fieldset>
 						</form>
@@ -297,7 +304,6 @@ $clArray = $vManager->getChecklistData();
 													<input type="hidden" name='tid' value="<?php echo $vManager->getTid();?>" />
 													<input type="hidden" name='clid' value="<?php echo $vManager->getClid();?>" />
 													<input type="hidden" name='voucherID' value="<?php echo $voucherID;?>" />
-													<input type="hidden" name='clTaxaID' value="<?php echo $iArray['clTaxaID'];?>" />
 													<input type="hidden" name='tabindex' value="1" />
 													<div style='margin-top:0.5em;'>
 														<b>Notes:</b>

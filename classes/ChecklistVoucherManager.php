@@ -55,13 +55,14 @@ class ChecklistVoucherManager extends  ChecklistVoucherAdmin{
 	}
 
 	public function renameTaxon($targetTid, $rareLocality = ''){
-		$statusStr = '';
+		$statusStr = false;
 		if(is_numeric($targetTid)){
 			$clTaxaID = $this->getClTaxaID($this->tid);
-			$sql = 'UPDATE fmchklsttaxalink SET TID = '.$targetTid.' WHERE clTaxaID = '.$clTaxaID.')';
+			$sql = 'UPDATE fmchklsttaxalink SET TID = '.$targetTid.' WHERE (clTaxaID = '.$clTaxaID.')';
 			if($this->conn->query($sql)){
 				$this->tid = $targetTid;
 				$this->taxonName = '';
+				$statusStr = true;
 			}
 			else{
 				$sqlTarget = 'SELECT clTaxaID, Habitat, Abundance, Notes, internalnotes, source, Nativity FROM fmchklsttaxalink WHERE (tid = '.$targetTid.') AND (clid = '.$this->clid.')';
@@ -77,13 +78,14 @@ class ChecklistVoucherManager extends  ChecklistVoucherAdmin{
 
 					//Move all vouchers to new name
 					$sqlVouch = 'UPDATE IGNORE fmvouchers SET clTaxaID = '.$clTaxaIDTarget.' WHERE (clTaxaID = '.$clTaxaID.')';
+
 					if(!$this->conn->query($sqlVouch)){
-						$statusStr = 'ERROR transferring vouchers during taxon transfer: '.$this->conn->error;
+						$this->errorMessage = 'ERROR transferring vouchers during taxon transfer: '.$this->conn->error;
 					}
 					//Delete all Vouchers that didn't transfer because they were already linked to target name
 					$sqlVouchDel = 'DELETE FROM fmvouchers WHERE (clTaxaID = '.$clTaxaID.')';
 					if(!$this->conn->query($sqlVouchDel)){
-						$statusStr = "ERROR removing vouchers during taxon transfer: ".$this->conn->error;
+						$this->errorMessage = "ERROR removing vouchers during taxon transfer: ".$this->conn->error;
 					}
 
 					//Merge chklsttaxalink data
@@ -113,17 +115,18 @@ class ChecklistVoucherManager extends  ChecklistVoucherAdmin{
 						internalnotes = '.($internalNotesStr ? '"'.$this->cleanInStr($internalNotesStr).'"' : 'NULL').',
 						source = '. ($sourceStr ? '"'.$this->cleanInStr($sourceStr).'"' : 'NULL').',
 						Nativity = '. ($nativeStr? '"'.$this->cleanInStr($nativeStr).'"' : 'NULL').'
-						WHERE (clTaxaCL = '.$clTaxaIDTarget.')';
+						WHERE (clTaxaID = '.$clTaxaIDTarget.')';
 					if($this->conn->query($sqlCl)){
 						//Delete unwanted taxon
 						$sqlDel = 'DELETE FROM fmchklsttaxalink WHERE (clTaxaID = '.$clTaxaID.')';
 						if($this->conn->query($sqlDel)){
 							$this->tid = $targetTid;
 							$this->taxonName = '';
+							$statusStr = true;
 						}
-						else $statusStr = 'ERROR removing taxon during taxon transfer: '.$this->conn->error;
+						else $this->errorMessage = 'ERROR removing taxon during taxon transfer: '.$this->conn->error;
 					}
-					else $statusStr = 'ERROR updating new taxon during taxon transfer: '.$this->conn->error;
+					else $this->errorMessage = 'ERROR updating new taxon during taxon transfer: '.$this->conn->error;
 				}
 				$rsTarget->free();
 			}
@@ -167,7 +170,7 @@ class ChecklistVoucherManager extends  ChecklistVoucherAdmin{
 					'AND o.stateprovince = "'.$rareLocality.'" AND ts2.tid = '.$this->tid;
 				//echo $sqlRare; exit;
 				if(!$this->conn->query($sqlRare)){
-					$statusStr = "ERROR resetting locality security during taxon delete: ".$this->conn->error;
+					$this->errorMessage = "ERROR resetting locality security during taxon delete: ".$this->conn->error;
 				}
 			}
 		}
@@ -199,16 +202,20 @@ class ChecklistVoucherManager extends  ChecklistVoucherAdmin{
 	}
 
 	public function editVoucher($voucherID, $notes, $editorNotes){
-		$statusStr = '';
+		$status = false;
 		if(is_numeric($voucherID)){
 			if(!$notes) $notes = null;
 			if(!$editorNotes) $editorNotes = null;
 			$sql = 'UPDATE fmvouchers SET notes = ?, editornotes = ? WHERE (voucherID = ?)';
-			if(!$this->conn->query($sql)){
-				$statusStr = 'ERROR editing voucher: '.$this->conn->error;
+			if($stmt = $this->conn->prepare($sql)){
+				$stmt->bind_param('ssi', $notes, $editorNotes, $voucherID);
+				$stmt->execute();
+				if($stmt->affected_rows) $status = true;
+				elseif($stmt->error) $this->errorMessage = 'ERROR editing voucher: '.$stmt->error;
+				$stmt->close();
 			}
 		}
-		return $statusStr;
+		return $status;
 	}
 
 	public function addVoucher($vOccId, $vNotes, $vEditNotes){
@@ -253,12 +260,12 @@ class ChecklistVoucherManager extends  ChecklistVoucherAdmin{
 
 	public function deleteVoucher($voucherID){
 		$status = false;
-		if(is_numeric($clTaxaID)){
+		if(is_numeric($voucherID)){
 			$sql = 'DELETE FROM fmvouchers WHERE (voucherID = ?)';
 			if($stmt = $this->conn->prepare($sql)) {
 				$stmt->bind_param('i', $voucherID);
 				$stmt->execute();
-				if($stmt->affected_rows && !$stmt->error) $status = true;
+				if($stmt->affected_rows) $status = true;
 				elseif($stmt->error) $this->errorMessage = 'ERROR deleting vouchers: '.$stmt->error;
 				$stmt->close();
 			}

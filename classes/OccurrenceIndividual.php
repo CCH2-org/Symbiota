@@ -808,7 +808,7 @@ class OccurrenceIndividual extends Manager{
 		$returnArr = Array();
 		$sql = 'SELECT c.clid, c.name, c.access, v.voucherID
 			FROM fmchecklists c INNER JOIN fmchklsttaxalink cl ON c.clid = cl.clid
-			INNER JOIN fmvouchers v ON c.clTaxaID = v.clTaxaID
+			INNER JOIN fmvouchers v ON cl.clTaxaID = v.clTaxaID
 			WHERE v.occid = '.$this->occid.' ';
 		if(array_key_exists("ClAdmin",$USER_RIGHTS)){
 			$sql .= 'AND (c.access = "public" OR c.clid IN('.implode(',',$USER_RIGHTS['ClAdmin']).')) ';
@@ -822,7 +822,7 @@ class OccurrenceIndividual extends Manager{
 		if($rs){
 			while($r = $rs->fetch_object()){
 				$nameStr = $r->name;
-				if($row->access == 'private') $nameStr .= ' (private status)';
+				if($r->access == 'private') $nameStr .= ' (private status)';
 				$returnArr[$r->clid]['name'] = $nameStr;
 				$returnArr[$r->clid]['voucherID'] = $r->voucherID;
 			}
@@ -847,7 +847,7 @@ class OccurrenceIndividual extends Manager{
 	private function getClTaxaID($clid, $tid, $morphoSpecies = ''){
 		$clTaxaID = 0;
 		if(is_numeric($clid) && is_numeric($tid)){
-			$sql = 'SELECT clTaxaID FROM fmchklsttaxalink WHERE (clid = ? AND tid = ? AND morphosp = ?';
+			$sql = 'SELECT clTaxaID FROM fmchklsttaxalink WHERE clid = ? AND tid = ? AND morphospecies = ?';
 			if($stmt = $this->conn->prepare($sql)) {
 				$stmt->bind_param('iis', $clid, $tid, $morphoSpecies);
 				$stmt->execute();

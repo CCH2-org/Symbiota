@@ -58,11 +58,13 @@ $clMetaArr = $clManager->getClMetadata();
 		var tabIndex = <?php echo $tabIndex; ?>;
 		var footprintwktExists = <?php echo ($clManager->getClFootprintWkt()?'true':'false') ?>;
 	</script>
-	<script type="text/javascript" src="../js/symb/checklists.voucheradmin.js?ver=1"></script>
+	<script type="text/javascript" src="../js/symb/checklists.voucheradmin.js?ver=2"></script>
 	<style type="text/css">
 		li{ margin:5px; }
 		.family-div{ font-weight: bold; }
 		.taxa-block{ margin: 10px; text-decoration: italic; }
+		.taxon-input{ width: 200px; }
+		.styledtable{ font-family:Arial; font-size:12px; }
 	</style>
 </head>
 <body>

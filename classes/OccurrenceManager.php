@@ -495,7 +495,7 @@ class OccurrenceManager extends OccurrenceTaxaManager {
 	protected function getTableJoins($sqlWhere){
 		$sqlJoin = '';
 		if(array_key_exists('clid',$this->searchTermArr) && $this->searchTermArr['clid']){
-			if(strpos($sqlWhere,'clt.clid')){
+			if(strpos($sqlWhere,'ctl.clid')){
 				$sqlJoin .= 'INNER JOIN fmvouchers v ON o.occid = v.occid INNER JOIN fmchklsttaxalink ctl ON v.clTaxaID = ctl.clTaxaID ';
 			}
 			else{

@@ -194,7 +194,7 @@ class ChecklistVoucherAdmin extends Manager {
 		$sql = 'UPDATE fmchecklists c SET c.dynamicsql = '.($jsonArr?'"'.$this->cleanInStr(json_encode($jsonArr)).'"':'NULL').' WHERE (c.clid = '.$this->clid.')';
 		//echo $sql; exit;
 		if(!$this->conn->query($sql)){
-			$statusStr = 'ERROR: unable to create or modify search statement ('.$this->conn->error.')';
+			$this->errorMessage = 'ERROR: unable to create or modify search statement ('.$this->conn->error.')';
 		}
 	}
 
@@ -360,8 +360,10 @@ class ChecklistVoucherAdmin extends Manager {
 			$this->errorMessage = 'voucherAlreadyLinked';
 			return false;
 		}
-		if(!is_numeric($taxa)) $this->getTid($taxa);
-		if($clTaxaID = $this->getClTaxaID($taxa, $morphoSpecies)){
+		if(!is_numeric($taxa)) $taxa = $this->getTid($taxa);
+		$clTaxaID = $this->getClTaxaID($taxa, $morphoSpecies);
+		if(!$clTaxaID) $clTaxaID = $this->insertChecklistTaxaLink($taxa);
+		if($clTaxaID){
 			$status = $this->insertVoucher($clTaxaID, $occid);
 		}
 		return $status;
@@ -377,7 +379,7 @@ class ChecklistVoucherAdmin extends Manager {
 				if($useCurrentTaxon) $tid = $this->getTidAccepted($tid);
 				if(!in_array($tid, $tidsUsed)){
 					//Add name to checklist
-					$clTaxaID = $this->insertChecklistTaxaLink($tid, $this->clid);
+					$clTaxaID = $this->insertChecklistTaxaLink($tid);
 					$tidsUsed[] = $tid;
 					if($clTaxaID && $linkVouchers){
 						$this->insertVoucher($clTaxaID, $occid);
@@ -439,8 +441,9 @@ class ChecklistVoucherAdmin extends Manager {
 	}
 
 	//Data mod functions
-	protected function insertChecklistTaxaLink($tid, $clid, $morpho = ''){
+	protected function insertChecklistTaxaLink($tid, $clid = null, $morpho = ''){
 		$status = false;
+		if(!$clid) $clid = $this->clid;
 		if(is_numeric($tid) && is_numeric($clid)){
 			$sql = 'INSERT INTO fmchklsttaxalink(tid,clid,morphospecies) VALUES(?,?,?)';
 			if($stmt = $this->conn->prepare($sql)) {
@@ -466,7 +469,7 @@ class ChecklistVoucherAdmin extends Manager {
 			if($stmt = $this->conn->prepare($sql)) {
 				$stmt->bind_param('iiss', $clTaxaID, $occid, $editorNotes, $notes);
 				$stmt->execute();
-				if($stmt->affected_rows && !$stmt->error){
+				if($stmt->affected_rows){
 					$status = $stmt->insert_id;
 				}
 				elseif($stmt->error) $this->errorMessage = 'ERROR inserting voucher: '.$stmt->error;
@@ -496,15 +499,17 @@ class ChecklistVoucherAdmin extends Manager {
 	protected function getClTaxaID($tid, $morphoSpecies = ''){
 		$clTaxaID = 0;
 		if(is_numeric($tid)){
-			$sql = 'SELECT clTaxaID FROM fmchklsttaxalink WHERE (clid = ? AND tid = ? AND morphosp = ?';
+			$sql = 'SELECT clTaxaID FROM fmchklsttaxalink WHERE clid = ? AND tid = ? AND morphospecies = ?';
 			if($stmt = $this->conn->prepare($sql)) {
-				$stmt->bind_param('iis', $this->clid, $tid, $morphoSpecies);
-				$stmt->execute();
-				$stmt->bind_result($clTaxaID);
-				$stmt->fetch();
-				$stmt->close();
+				if($stmt->bind_param('iis', $this->clid, $tid, $morphoSpecies)){
+					$stmt->execute();
+					$stmt->bind_result($clTaxaID);
+					$stmt->fetch();
+					$stmt->close();
+				}
+				else $this->errorMessage = 'ERROR binding params for getClTaxaID: '.$this->conn->error;
 			}
-			else $this->errorMessage = 'ERROR preparing statement for getSciname: '.$this->conn->error;
+			else $this->errorMessage = 'ERROR preparing statement for getClTaxaID: '.$this->conn->error;
 		}
 		return $clTaxaID;
 	}
