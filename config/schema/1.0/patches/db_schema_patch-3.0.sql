@@ -166,9 +166,11 @@ DROP TABLE IF EXISTS `fmchklsttaxastatus`;
 
 DROP TABLE IF EXISTS `fmcltaxacomments`;
 
+UPDATE fmchklsttaxalink SET morphospecies = '' WHERE morphospecies IS NULL;
+
 ALTER TABLE `fmchklsttaxalink` 
   ADD COLUMN `clTaxaID` INT UNSIGNED NOT NULL AUTO_INCREMENT FIRST,
-  CHANGE COLUMN `morphospecies` `morphospecies` VARCHAR(45) NULL DEFAULT '' ,
+  CHANGE COLUMN `morphospecies` `morphospecies` VARCHAR(45) NOT NULL DEFAULT '' ,
   DROP PRIMARY KEY,
   ADD PRIMARY KEY (`clTaxaID`),
   ADD UNIQUE INDEX `UQ_chklsttaxalink` (`CLID` ASC, `TID` ASC, `morphospecies` ASC);
@@ -186,18 +188,29 @@ ALTER TABLE `fmchklsttaxalink`
   CHANGE COLUMN `internalnotes` `internalNotes` VARCHAR(250) NULL DEFAULT NULL ,
   CHANGE COLUMN `InitialTimeStamp` `initialTimestamp` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP() ;
 
-
 ALTER TABLE `fmvouchers` 
   DROP PRIMARY KEY;
 
 ALTER TABLE `fmvouchers` 
-  ADD COLUMN `clVoucherID` INT UNSIGNED NOT NULL AUTO_INCREMENT FIRST,
-  ADD PRIMARY KEY (`clVoucherID`);
+  ADD COLUMN `voucherID` INT UNSIGNED NOT NULL AUTO_INCREMENT FIRST,
+  ADD PRIMARY KEY (`voucherID`);
 
 ALTER TABLE `fmvouchers` 
-  ADD COLUMN `clTaxaID` INT UNSIGNED NULL AFTER `clVoucherID`,
+  ADD COLUMN `clTaxaID` INT UNSIGNED NULL AFTER `voucherID`,
   ADD INDEX `FK_fmvouchers_occ_idx` (`occid` ASC),
   ADD INDEX `FK_fmvouchers_tidclid_idx` (`clTaxaID` ASC);
+
+ALTER TABLE `fmvouchers` 
+  ADD UNIQUE INDEX `UQ_fmvouchers_clTaxaID_occid` (`clTaxaID` ASC, `occid` ASC);
+
+UPDATE IGNORE fmvouchers v INNER JOIN fmchklsttaxalink c ON v.clid = c.clid AND v.tid = c.tid
+  SET v.clTaxaID = c.clTaxaID
+  WHERE v.clTaxaID IS NULL;
+
+#Fix if following statement falis: DELETE FROM fmvouchers WHERE clTaxaID IS NULL;
+ALTER TABLE `fmvouchers` 
+  CHANGE COLUMN `clTaxaID` `clTaxaID` INT(10) UNSIGNED NOT NULL ,
+  CHANGE COLUMN `CLID` `CLID` INT(10) UNSIGNED NULL ;
 
 ALTER TABLE `fmvouchers` 
   ADD CONSTRAINT `FK_fmvouchers_occ`  FOREIGN KEY (`occid`)  REFERENCES `omoccurrences` (`occid`)  ON DELETE CASCADE  ON UPDATE CASCADE,
@@ -746,10 +759,9 @@ ALTER TABLE `omoccurrences`
 
 
 
-#DROP TABLE IF EXISTS `portaloccurrences`;
-#DROP TABLE IF EXISTS `portalpublications`;
-#DROP TABLE IF EXISTS `portalindex`;
-
+#DROP TABLE IF EXISTS `portaloccurrences`
+#DROP TABLE IF EXISTS `portalpublications`
+#DROP TABLE IF EXISTS `portalindex`
 CREATE TABLE `portalindex` (
   `portalID` int(11) NOT NULL AUTO_INCREMENT,
   `portalName` varchar(150) NOT NULL,
@@ -851,15 +863,14 @@ ALTER TABLE `taxa`
 
 # Following statement is the default unique index in the taxa table to support a multi-kingdom portal 
 # If UNIQUE INDEX fails, run following query below to identify duplicate records. Duplicates can be deleted, or you can apply the alternate index that supports the existance of homonyms 
-# Duplicate check: SELECT sciname, rankID, kingdomName, count(*) as cnt FROM taxa GROUP BY sciname, rankID, kingdomName HAVING cnt > 1;
+# Duplicate check: SELECT sciname, rankID, kingdomName, count(*) as cnt FROM taxa GROUP BY sciname, rankID, kingdomName HAVING cnt > 1
 ALTER TABLE `taxa` 
   ADD UNIQUE INDEX `sciname_unique` (`sciName` ASC, `rankId` ASC, `kingdomName` ASC);
 
 # Alternate UNIQUE INDEX that support single kingdom homonyms. Above index supports cross-kingdom homonyms
-#  ADD UNIQUE INDEX `sciname_unique` (`sciName` ASC, `author` ASC, `rankId` ASC, `kingdomName` ASC);
-  
+#  ADD UNIQUE INDEX `sciname_unique` (`sciName` ASC, `author` ASC, `rankId` ASC, `kingdomName` ASC)
 # Alternate more restrictive UNIQUE INDEX that can be used for a single kingdom portal. Cross-kingdom homonyms are not supported
-#  ADD UNIQUE INDEX `sciname_unique` (`sciName` ASC, `rankId` ASC);
+#  ADD UNIQUE INDEX `sciname_unique` (`sciName` ASC, `rankId` ASC)
   
 ALTER TABLE `taxstatus` 
   CHANGE COLUMN `taxonomicSource` `taxonomicSource` VARCHAR(500) NULL DEFAULT NULL;
@@ -911,7 +922,7 @@ ALTER TABLE `taxadescrblock`
 ALTER TABLE `taxadescrblock` 
   ADD CONSTRAINT `FK_taxadescrblock_tdProfileID`  FOREIGN KEY (`tdProfileID`)  REFERENCES `taxadescrprofile` (`tdProfileID`)  ON UPDATE CASCADE  ON DELETE CASCADE;
 
-# Test query if following UNIQUE INDEX fails: SELECT url, tid, count(*) as cnt FROM taxalinks GROUP BY url, tid HAVING cnt > 1;
+# Test query if following UNIQUE INDEX fails: SELECT url, tid, count(*) as cnt FROM taxalinks GROUP BY url, tid HAVING cnt > 1
 ALTER TABLE `taxalinks` 
   ADD INDEX `FK_taxaLinks_tid` (`tid` ASC),
   ADD UNIQUE INDEX `UQ_taxaLinks_tid_url` (`tid` ASC, `url` ASC);
@@ -1060,12 +1071,12 @@ ALTER TABLE `ommaterialsample`
 
 # If following ALTER TABLE statement fails, run query below to identify records with duplicate material sample catalogNumbers for a given occurrence record. 
 # Catalog numbers need to be unique for each occurrence, thus duplicate records need to be removed.  
-# FIX: SELECT occid, catalogNumber, count(*) as cnt FROM ommaterialsample WHERE catalogNumber IS NOT NULL GROUP BY occid, catalogNumber HAVING cnt > 1;
+# FIX: SELECT occid, catalogNumber, count(*) as cnt FROM ommaterialsample WHERE catalogNumber IS NOT NULL GROUP BY occid, catalogNumber HAVING cnt > 1
 ALTER TABLE `ommaterialsample`
   ADD UNIQUE INDEX `UQ_ommatsample_catNum` (`occid`, `catalogNumber`);
 
 # If following ALTER TABLE statement fails, run query below to identify records with duplicate material sample guid values for a given occurrence record. GUIDs need to be unique for each occurrence. The duplicate records need to be removed.  
-# FIX: SELECT occid, guid, count(*) as cnt FROM ommaterialsample WHERE guid IS NOT NULL GROUP BY occid, guid HAVING cnt > 1;
+# FIX: SELECT occid, guid, count(*) as cnt FROM ommaterialsample WHERE guid IS NOT NULL GROUP BY occid, guid HAVING cnt > 1
 ALTER TABLE `ommaterialsample`
   ADD UNIQUE INDEX `UQ_ommatsample_guid` (`occid`, `guid`);
 

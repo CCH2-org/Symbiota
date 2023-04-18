@@ -485,7 +485,7 @@ CREATE TABLE `fmchklsttaxalink` (
   `clTaxaID` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `tid` int(10) unsigned NOT NULL,
   `clid` int(10) unsigned NOT NULL,
-  `morphoSpecies` varchar(45) DEFAULT '',
+  `morphoSpecies` varchar(45) NOT NULL DEFAULT '',
   `familyOverride` varchar(50) DEFAULT NULL,
   `habitat` varchar(250) DEFAULT NULL,
   `abundance` varchar(50) DEFAULT NULL,
@@ -570,18 +570,17 @@ CREATE TABLE `fmprojects` (
 --
 
 CREATE TABLE `fmvouchers` (
-  `clVoucherID` int(10) unsigned NOT NULL AUTO_INCREMENT,
-  `clTaxaID` int(10) unsigned DEFAULT NULL,
-  `TID` int(10) unsigned DEFAULT NULL,
-  `CLID` int(10) unsigned NOT NULL,
+  `voucherID` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `clTaxaID` int(10) unsigned NOT NULL,
   `occid` int(10) unsigned NOT NULL,
-  `editornotes` varchar(50) DEFAULT NULL,
+  `editorNotes` varchar(50) DEFAULT NULL,
   `preferredImage` int(11) DEFAULT 0,
-  `Notes` varchar(250) DEFAULT NULL,
-  `InitialTimeStamp` timestamp NOT NULL DEFAULT current_timestamp(),
-  PRIMARY KEY (`clVoucherID`),
+  `notes` varchar(250) DEFAULT NULL,
+  `initialTimestamp` timestamp NOT NULL DEFAULT current_timestamp(),
+  PRIMARY KEY (`voucherID`),
   KEY `FK_fmvouchers_occ_idx` (`occid`),
   KEY `FK_fmvouchers_tidclid_idx` (`clTaxaID`),
+  UNIQUE INDEX `UQ_fmvouchers_clTaxaID_occid` (`clTaxaID` ASC, `occid` ASC),
   CONSTRAINT `FK_fmvouchers_occ` FOREIGN KEY (`occid`) REFERENCES `omoccurrences` (`occid`) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT `FK_fmvouchers_tidclid` FOREIGN KEY (`clTaxaID`) REFERENCES `fmchklsttaxalink` (`clTaxaID`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB;

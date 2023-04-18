@@ -806,7 +806,10 @@ class OccurrenceIndividual extends Manager{
 	public function getVoucherChecklists(){
 		global $USER_RIGHTS;
 		$returnArr = Array();
-		$sql = 'SELECT c.name, c.clid, c.access, v.notes FROM fmchecklists c INNER JOIN fmvouchers v ON c.clid = v.clid WHERE v.occid = '.$this->occid.' ';
+		$sql = 'SELECT c.clid, c.name, c.access, v.voucherID
+			FROM fmchecklists c INNER JOIN fmchklsttaxalink cl ON c.clid = cl.clid
+			INNER JOIN fmvouchers v ON c.clTaxaID = v.clTaxaID
+			WHERE v.occid = '.$this->occid.' ';
 		if(array_key_exists("ClAdmin",$USER_RIGHTS)){
 			$sql .= 'AND (c.access = "public" OR c.clid IN('.implode(',',$USER_RIGHTS['ClAdmin']).')) ';
 		}
@@ -817,10 +820,11 @@ class OccurrenceIndividual extends Manager{
 		//echo $sql;
 		$rs = $this->conn->query($sql);
 		if($rs){
-			while($row = $rs->fetch_object()){
-				$nameStr = $row->name;
+			while($r = $rs->fetch_object()){
+				$nameStr = $r->name;
 				if($row->access == 'private') $nameStr .= ' (private status)';
-				$returnArr[$row->clid] = $nameStr;
+				$returnArr[$r->clid]['name'] = $nameStr;
+				$returnArr[$r->clid]['voucherID'] = $r->voucherID;
 			}
 			$rs->free();
 		}
@@ -831,27 +835,57 @@ class OccurrenceIndividual extends Manager{
 	}
 
 	public function linkVoucher($postArr){
-		$status = true;
-		if(!$this->occid) return false;
-		if(!is_numeric($postArr['vclid'])) return false;
-		if($postArr['vtid'] && !is_numeric($postArr['vtid'])) return false;
-		$con = MySQLiConnectionFactory::getCon("write");
-		$sql = 'INSERT INTO fmvouchers(occid,clid,tid,notes,editornotes) '.
-			'VALUES('.$this->occid.','.$postArr['vclid'].','.($postArr['vtid']?$postArr['vtid']:'NULL').','.
-			($postArr['vnotes']?'"'.$this->cleanInStr($postArr['vnotes']).'"':'NULL').','.
-			($postArr['veditnotes']?'"'.$this->cleanInStr($postArr['veditnotes']).'"':'NULL').')';
-		if(!$con->query($sql)){
-			$this->errorMessage = 'ERROR linking voucher to checklist, err msg: '.$con->error;
-			$status = false;
+		$status = false;
+		if($this->occid){
+			if($clTaxaID = $this->getClTaxaID($postArr['vclid'], $postArr['vtid'])){
+				$status = $this->insertVoucher($clTaxaID, $this->occid, $postArr['veditnotes'], $postArr['vnotes']);
+			}
 		}
-		$con->close();
 		return $status;
 	}
 
-	public function deleteVoucher($occid,$clid){
+	private function getClTaxaID($clid, $tid, $morphoSpecies = ''){
+		$clTaxaID = 0;
+		if(is_numeric($clid) && is_numeric($tid)){
+			$sql = 'SELECT clTaxaID FROM fmchklsttaxalink WHERE (clid = ? AND tid = ? AND morphosp = ?';
+			if($stmt = $this->conn->prepare($sql)) {
+				$stmt->bind_param('iis', $clid, $tid, $morphoSpecies);
+				$stmt->execute();
+				$stmt->bind_result($clTaxaID);
+				$stmt->fetch();
+				$stmt->close();
+			}
+			else $this->errorMessage = 'ERROR preparing statement for getSciname: '.$this->conn->error;
+		}
+		return $clTaxaID;
+	}
+
+	private function insertVoucher($clTaxaID, $occid, $editorNotes = null, $notes = null){
+		$status = false;
+		if(is_numeric($clTaxaID) && is_numeric($occid)){
+			if($editorNotes == '') $editorNotes = null;
+			if($notes == '') $notes = null;
+			$con = MySQLiConnectionFactory::getCon("write");
+			$sql = 'INSERT INTO fmvouchers(clTaxaID, occid, editorNotes, notes) VALUES (?,?,?,?)';
+			if($stmt = $con->prepare($sql)) {
+				$stmt->bind_param('iiss', $clTaxaID, $occid, $editorNotes, $notes);
+				$stmt->execute();
+				if($stmt->affected_rows && !$stmt->error){
+					$status = $stmt->insert_id;
+				}
+				elseif($stmt->error) $this->errorMessage = 'ERROR inserting voucher: '.$stmt->error;
+				$stmt->close();
+			}
+			else $this->errorMessage = 'ERROR preparing statement for voucher insert: '.$this->conn->error;
+			if(!($con === null)) $con->close();
+		}
+		return $status;
+	}
+
+	public function deleteVoucher($voucherID){
 		$status = true;
-		if(is_numeric($occid) && is_numeric($clid)){
-			$sql = 'DELETE FROM fmvouchers WHERE (occid = '.$occid.') AND (clid = '.$clid.') ';
+		if(is_numeric($voucherID)){
+			$sql = 'DELETE FROM fmvouchers WHERE (voucherID = '.$voucherID.') ';
  			$con = MySQLiConnectionFactory::getCon("write");
 			if(!$con->query($sql)){
 				$this->errorMessage = 'ERROR loading '.$con->error;

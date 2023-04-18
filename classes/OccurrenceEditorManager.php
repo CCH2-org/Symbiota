@@ -1863,19 +1863,6 @@ class OccurrenceEditorManager {
 		return $statusStr;
 	}
 
-	//Checklist voucher functions
-	public function getVoucherChecklists(){
-		$retArr = array();
-		$sql = 'SELECT c.clid, c.name FROM fmchecklists c INNER JOIN fmvouchers v ON c.clid = v.clid WHERE v.occid = '.$this->occid;
-		$rs = $this->conn->query($sql);
-		while($r = $rs->fetch_object()){
-			$retArr[$r->clid] = $r->name;
-		}
-		$rs->free();
-		asort($retArr);
-		return $retArr;
-	}
-
 	public function linkChecklistVoucher($clid,$tid){
 		global $LANG;
 		$status = '';

@@ -20,7 +20,7 @@ class DwcArchiverOccurrence extends Manager{
 	}
 
 	public function getOccurrenceArr(){
-		if($this->schemaType == 'pensoft') $this->occurDefArr['fields']['Taxon_Local_ID'] = 'v.tid AS Taxon_Local_ID';
+		if($this->schemaType == 'pensoft') $this->occurDefArr['fields']['Taxon_Local_ID'] = 'ctl.tid AS Taxon_Local_ID';
 		else $this->occurDefArr['fields']['id'] = 'o.occid';
 		$this->occurDefArr['terms']['institutionCode'] = 'http://rs.tdwg.org/dwc/terms/institutionCode';
 		$this->occurDefArr['fields']['institutionCode'] = 'IFNULL(o.institutionCode,c.institutionCode) AS institutionCode';

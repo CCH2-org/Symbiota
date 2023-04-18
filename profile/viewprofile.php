@@ -6,8 +6,8 @@ include_once($SERVER_ROOT.'/classes/Person.php');
 header('Content-Type: text/html; charset=' . $CHARSET);
 
 $action = array_key_exists('action', $_REQUEST) ? htmlspecialchars($_REQUEST['action'], HTML_SPECIAL_CHARS_FLAGS) : '';
-$userId = array_key_exists('userid', $_REQUEST) ? filter_var($_REQUEST['userid'], FILTER_VALIDATE_INT) : 0;
-$tabIndex = array_key_exists('tabindex',$_REQUEST) ? filter_var($_REQUEST['tabindex'], FILTER_VALIDATE_INT) : 0;
+$userId = array_key_exists('userid', $_REQUEST) ? filter_var($_REQUEST['userid'], FILTER_SANITIZE_NUMBER_INT) : 0;
+$tabIndex = array_key_exists('tabindex',$_REQUEST) ? filter_var($_REQUEST['tabindex'], FILTER_SANITIZE_NUMBER_INT) : 0;
 
 //Sanitation
 if($action && !preg_match('/^[a-zA-Z0-9\s_]+$/',$action)) $action = '';

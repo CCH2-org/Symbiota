@@ -519,7 +519,7 @@ class OccurrenceDownload{
 	private function setTableJoins($sqlWhere){
 		$sqlJoin = '';
 		if(strpos($sqlWhere,'e.taxauthid')) $sqlJoin .= 'INNER JOIN taxaenumtree e ON o.tidinterpreted = e.tid ';
-		if(strpos($sqlWhere,'v.clid')) $sqlJoin .= 'INNER JOIN fmvouchers v ON o.occid = v.occid ';
+		if(strpos($sqlWhere,'ctl.clid')) $sqlJoin .= 'INNER JOIN fmvouchers v ON o.occid = v.occid INNER JOIN fmchklsttaxalink ctl ON v.clTaxaID = ctl.clTaxaID ';
 		if(strpos($sqlWhere,'p.point')) $sqlJoin .= 'INNER JOIN omoccurpoints p ON o.occid = p.occid ';
 		if(strpos($sqlWhere,'MATCH(f.recordedby)') || strpos($sqlWhere,'MATCH(f.locality)')){
 			$sqlJoin .= 'INNER JOIN omoccurrencesfulltext f ON o.occid = f.occid ';
