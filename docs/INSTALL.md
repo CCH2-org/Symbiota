@@ -28,7 +28,7 @@
       - From MySQL commandline: SOURCE <BaseFolderPath>/config/schema/3.0/db_schema-3.0.sql
    4. If needed, run database patch scripts to bring database up to current structure 
       - Make sure to run the scripts in the correct order e.g. db_schema_patch-3.1.sql, db_schema_patch-3.2.sql, etc.
-      - From MySQL commandline: SOURCE /BaseFolderPath/config/schema/3.0/patches/db_schema_patch-1.1.sql
+      - From MySQL commandline: SOURCE /BaseFolderPath/config/schema/3.0/patches/db_schema_patch-3.x.sql
 3. Configure the Symbiota Portal - modify following configuration files; running /config/setup.sh will create the following required files and permissions
    1. Symbiota configuration
       - rename /config/symbini_template.php to /config/symbini.php.

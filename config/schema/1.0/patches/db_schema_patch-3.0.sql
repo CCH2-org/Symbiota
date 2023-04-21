@@ -1,5 +1,20 @@
 INSERT IGNORE INTO schemaversion (versionnumber) values ("3.0");
 
+CREATE TABLE `adminconfig` (
+  `configID` INT NOT NULL AUTO_INCREMENT,
+  `category` VARCHAR(45) NULL,
+  `attributeName` VARCHAR(45) NOT NULL,
+  `attributeValue` VARCHAR(1000) NOT NULL,
+  `notes` VARCHAR(45) NULL,
+  `modifiedUid` INT UNSIGNED NULL,
+  `modifiedTimestamp` DATETIME NULL,
+  `initialTimestamp` TIMESTAMP NOT NULL DEFAULT current_timestamp,
+  PRIMARY KEY (`configID`),
+  INDEX `FK_adminConfig_uid_idx` (`modifiedUid` ASC),
+  UNIQUE INDEX `UQ_adminconfig_name` (`attributeName` ASC),
+  CONSTRAINT `FK_adminConfig_uid`  FOREIGN KEY (`modifiedUid`)  REFERENCES `users` (`uid`)  ON DELETE RESTRICT  ON UPDATE RESTRICT
+);
+
 ALTER TABLE `agents` 
   CHANGE COLUMN `taxonomicgroups` `taxonomicGroups` VARCHAR(900) NULL DEFAULT NULL ,
   CHANGE COLUMN `collectionsat` `collectionsAt` VARCHAR(900) NULL DEFAULT NULL ,

@@ -1,6 +1,26 @@
 SET FOREIGN_KEY_CHECKS=0;
 
 --
+-- Table structure for table `adminconfig`
+--
+
+CREATE TABLE `adminconfig` (
+  `configID` INT NOT NULL AUTO_INCREMENT,
+  `category` VARCHAR(45) NULL,
+  `attributeName` VARCHAR(45) NOT NULL,
+  `attributeValue` VARCHAR(1000) NOT NULL,
+  `notes` VARCHAR(45) NULL,
+  `modifiedUid` INT UNSIGNED NULL,
+  `modifiedTimestamp` DATETIME NULL,
+  `initialTimestamp` TIMESTAMP NOT NULL DEFAULT current_timestamp,
+  PRIMARY KEY (`configID`),
+  INDEX `FK_adminConfig_uid_idx` (`modifiedUid` ASC),
+  UNIQUE INDEX `UQ_adminconfig_name` (`attributeName` ASC),
+  CONSTRAINT `FK_adminConfig_uid`  FOREIGN KEY (`modifiedUid`)  REFERENCES `users` (`uid`)  ON DELETE RESTRICT  ON UPDATE RESTRICT
+);
+
+    
+--
 -- Table structure for table `adminlanguages`
 --
 
