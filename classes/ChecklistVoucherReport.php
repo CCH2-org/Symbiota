@@ -17,7 +17,7 @@ class ChecklistVoucherReport extends ChecklistVoucherAdmin {
 	public function getVoucherCnt(){
 		$vCnt = 0;
 		if($this->clid){
-			$sql = 'SELECT count(*) AS vcnt FROM fmvouchers WHERE (clid = '.$this->clid.')';
+			$sql = 'SELECT count(v.voucherID) AS vcnt FROM fmvouchers v INNER JOIN fmchklsttaxalink c ON v.clTaxaID = c.clTaxaID WHERE (c.clid = '.$this->clid.')';
 			$rs = $this->conn->query($sql);
 			while($r = $rs->fetch_object()){
 				$vCnt = $r->vcnt;
