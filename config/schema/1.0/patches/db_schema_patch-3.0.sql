@@ -842,10 +842,16 @@ CREATE TABLE `portaloccurrences` (
 ALTER TABLE `specprocessorprojects` 
   ADD COLUMN `customStoredProcedure` VARCHAR(45) NULL AFTER `source`,
   ADD COLUMN `createdByUid` INT UNSIGNED NULL AFTER `lastrundate`,
+  ADD COLUMN `processingCode` INT NULL AFTER `customStoredProcedure`,
+  ADD COLUMN `dynamicProperties` TEXT NULL AFTER `lastRunDate`,
+  CHANGE COLUMN `projecttype` `projectType` VARCHAR(45) NULL DEFAULT NULL,
+  CHANGE COLUMN `speckeyretrieval` `specKeyRetrieval` VARCHAR(45) NULL DEFAULT NULL,
+  CHANGE COLUMN `lastrundate` `lastRunDate` DATE NULL DEFAULT NULL,
   ADD INDEX `FK_specprocprojects_uid_idx` (`createdByUid` ASC);
 
 ALTER TABLE `specprocessorprojects`
   ADD CONSTRAINT `FK_specprocprojects_uid`  FOREIGN KEY (`createdByUid`)  REFERENCES `users` (`uid`)  ON DELETE SET NULL  ON UPDATE CASCADE;
+
 
 ALTER TABLE `taxa` 
   CHANGE COLUMN `TID` `tid` INT(10) UNSIGNED NOT NULL AUTO_INCREMENT ,
@@ -880,12 +886,13 @@ ALTER TABLE `taxa`
 # If UNIQUE INDEX fails, run following query below to identify duplicate records. Duplicates can be deleted, or you can apply the alternate index that supports the existance of homonyms 
 # Duplicate check: SELECT sciname, rankID, kingdomName, count(*) as cnt FROM taxa GROUP BY sciname, rankID, kingdomName HAVING cnt > 1
 ALTER TABLE `taxa` 
-  ADD UNIQUE INDEX `sciname_unique` (`sciName` ASC, `rankId` ASC, `kingdomName` ASC);
+  ADD UNIQUE INDEX `UQ_taxa_sciname` (`sciName` ASC, `rankId` ASC, `kingdomName` ASC);
 
-# Alternate UNIQUE INDEX that support single kingdom homonyms. Above index supports cross-kingdom homonyms
-#  ADD UNIQUE INDEX `sciname_unique` (`sciName` ASC, `author` ASC, `rankId` ASC, `kingdomName` ASC)
+# The default UNIQUE INDEX applied above supports cross-kingdom homonyms
+# Alternate UNIQUE INDEX that support homonyms within a single kingdom (not recommended) 
+#  ADD UNIQUE INDEX `UQ_taxa_sciname` (`sciName` ASC, `author` ASC, `rankId` ASC, `kingdomName` ASC)
 # Alternate more restrictive UNIQUE INDEX that can be used for a single kingdom portal. Cross-kingdom homonyms are not supported
-#  ADD UNIQUE INDEX `sciname_unique` (`sciName` ASC, `rankId` ASC)
+#  ADD UNIQUE INDEX `UQ_taxa_sciname` (`sciName` ASC, `rankId` ASC)
   
 ALTER TABLE `taxstatus` 
   CHANGE COLUMN `taxonomicSource` `taxonomicSource` VARCHAR(500) NULL DEFAULT NULL;

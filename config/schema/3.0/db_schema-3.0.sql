@@ -312,11 +312,11 @@ CREATE TABLE `configpageattributes` (
 CREATE TABLE `ctcontrolvocab` (
   `cvID` int(11) NOT NULL AUTO_INCREMENT,
   `collid` int(10) unsigned DEFAULT NULL,
-  `title` varchar(45) DEFAULT NULL,
+  `title` varchar(45) DEFAULT NOT NULL,
   `definition` varchar(250) DEFAULT NULL,
   `authors` varchar(150) DEFAULT NULL,
-  `tableName` varchar(45) DEFAULT NULL,
-  `fieldName` varchar(45) DEFAULT NULL,
+  `tableName` varchar(45) DEFAULT NOT NULL,
+  `fieldName` varchar(45) DEFAULT NOT NULL,
   `resourceUrl` varchar(150) DEFAULT NULL,
   `ontologyClass` varchar(150) DEFAULT NULL,
   `ontologyUrl` varchar(150) DEFAULT NULL,
@@ -331,6 +331,7 @@ CREATE TABLE `ctcontrolvocab` (
   KEY `FK_ctControlVocab_createUid_idx` (`createdUid`),
   KEY `FK_ctControlVocab_modUid_idx` (`modifiedUid`),
   KEY `FK_ctControlVocab_collid_idx` (`collid`),
+  UNIQUE INDEX `UQ_ctControlVocab` (`title` ASC, `tableName` ASC, `fieldName` ASC),
   CONSTRAINT `FK_ctControlVocab_collid` FOREIGN KEY (`collid`) REFERENCES `omcollections` (`CollID`) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT `FK_ctControlVocab_createUid` FOREIGN KEY (`createdUid`) REFERENCES `users` (`uid`) ON DELETE SET NULL ON UPDATE CASCADE,
   CONSTRAINT `FK_ctControlVocab_modUid` FOREIGN KEY (`modifiedUid`) REFERENCES `users` (`uid`) ON DELETE SET NULL ON UPDATE CASCADE
@@ -2729,7 +2730,7 @@ CREATE TABLE `specprocessorprojects` (
   `specKeyPattern` varchar(45) DEFAULT NULL,
   `patternReplace` varchar(45) DEFAULT NULL,
   `replaceStr` varchar(45) DEFAULT NULL,
-  `speckeyretrieval` varchar(45) DEFAULT NULL,
+  `specKeyRetrieval` varchar(45) DEFAULT NULL,
   `coordX1` int(10) unsigned DEFAULT NULL,
   `coordX2` int(10) unsigned DEFAULT NULL,
   `coordY1` int(10) unsigned DEFAULT NULL,
@@ -2740,12 +2741,14 @@ CREATE TABLE `specprocessorprojects` (
   `webPixWidth` int(10) unsigned DEFAULT 1200,
   `tnPixWidth` int(10) unsigned DEFAULT 130,
   `lgPixWidth` int(10) unsigned DEFAULT 2400,
-  `jpgcompression` int(11) DEFAULT 70,
+  `jpgCompression` int(11) DEFAULT 70,
   `createTnImg` int(10) unsigned DEFAULT 1,
   `createLgImg` int(10) unsigned DEFAULT 1,
   `source` varchar(45) DEFAULT NULL,
   `customStoredProcedure` varchar(45) DEFAULT NULL,
-  `lastrundate` date DEFAULT NULL,
+  `processingCode` int(10) DEFAULT NULL,
+  `lastRunDate` date DEFAULT NULL,
+  `dynamicProperties` text DEFAULT NULL,
   `createdByUid` int(10) unsigned DEFAULT NULL,
   `initialTimestamp` timestamp NOT NULL DEFAULT current_timestamp(),
   PRIMARY KEY (`spprid`),
@@ -2927,8 +2930,8 @@ CREATE TABLE `specprocstatus` (
 
 CREATE TABLE `taxa` (
   `tid` int(10) unsigned NOT NULL AUTO_INCREMENT,
-  `kingdomName` varchar(45) DEFAULT NULL,
-  `rankID` smallint(5) unsigned DEFAULT NULL,
+  `kingdomName` varchar(45) DEFAULT '',
+  `rankID` smallint(5) unsigned DEFAULT 0,
   `sciName` varchar(250) NOT NULL,
   `unitInd1` varchar(1) DEFAULT NULL,
   `unitName1` varchar(50) NOT NULL,
@@ -2952,7 +2955,7 @@ CREATE TABLE `taxa` (
   `modifiedTimeStamp` datetime DEFAULT NULL,
   `InitialTimeStamp` timestamp NOT NULL DEFAULT current_timestamp(),
   PRIMARY KEY (`tid`),
-  UNIQUE KEY `sciname_unique` (`sciName`,`rankID`),
+  UNIQUE KEY `UQ_taxa_sciname` (`sciName`, `rankID`, `kingdomName` ASC),
   KEY `rankid_index` (`rankID`),
   KEY `unitname1_index` (`unitName1`,`unitName2`) USING BTREE,
   KEY `FK_taxa_uid_idx` (`modifiedUid`),
@@ -2961,6 +2964,12 @@ CREATE TABLE `taxa` (
   KEY `idx_taxacreated` (`InitialTimeStamp`),
   CONSTRAINT `FK_taxa_uid` FOREIGN KEY (`modifiedUid`) REFERENCES `users` (`uid`) ON DELETE NO ACTION
 ) ENGINE=InnoDB;
+
+# The default UNIQUE INDEX applied above supports cross-kingdom homonyms
+# Run following statement to create a UNIQUE INDEX that supports homonyms within a single kingdom (not recommended)
+# ALTER TABLE `taxa` DROP INDEX `UQ_taxa_sciname`, ADD UNIQUE INDEX `UQ_taxa_sciname` (`sciName` ASC, `author` ASC, `rankID` ASC, `kingdomName` ASC);
+# Run following statement to create a UNIQUE INDEX that restricts homonyms, which is ideal for single kingdom portals and best method to avoid dupicate names 
+# ALTER TABLE `taxa` DROP INDEX `UQ_taxa_sciname`, ADD UNIQUE INDEX `UQ_taxa_sciname` (`sciName` ASC, `rankID` ASC);
 
 
 --
