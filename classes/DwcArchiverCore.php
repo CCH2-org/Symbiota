@@ -511,8 +511,8 @@ class DwcArchiverCore extends Manager{
 								break;
 							default:
 								if (isset($occurTermArr[$key])) {
-									$ns = RdfUtility::namespaceAbbrev($occurTermArr[$key]);
-									$returnvalue .= $separator . "   " . $ns . " \"$value\"";
+									//$ns = RdfUtility::namespaceAbbrev($occurTermArr[$key]);
+									//$returnvalue .= $separator . "   " . $ns . " \"$value\"";
 								}
 						}
 					}
@@ -648,9 +648,9 @@ class DwcArchiverCore extends Manager{
 								break;
 							default:
 								if (isset($occurTermArr[$key])) {
-									$ns = RdfUtility::namespaceAbbrev($occurTermArr[$key]);
-									$elem = $newDoc->createElement($ns);
-									$elem->appendChild($newDoc->createTextNode($value));
+									//$ns = RdfUtility::namespaceAbbrev($occurTermArr[$key]);
+									//$elem = $newDoc->createElement($ns);
+									//$elem->appendChild($newDoc->createTextNode($value));
 								}
 						}
 						if ($elem != null) {
