@@ -1400,13 +1400,11 @@ class OccurrenceEditorManager {
 				//Archive complete occurrence record
 				$archiveArr['dateDeleted'] = date('r').' by '.$USER_DISPLAY_NAME;
 				$archiveObj = json_encode($archiveArr);
-				$sqlArchive = 'UPDATE omoccurarchive '.
-					'SET archivestatus = 1, archiveobj = "'.$this->cleanInStr($this->encodeStrTargeted($archiveObj,'utf8',$CHARSET)).'", '.
-					'catalogNumber = '.(isset($archiveArr['catalogNumber']) && $archiveArr['catalogNumber']?'"'.$this->cleanInStr($archiveArr['catalogNumber']).'"':'NULL').', '.
-					'occurrenceID = '.(isset($archiveArr['occurrenceID']) && $archiveArr['occurrenceID']?'"'.$this->cleanInStr($archiveArr['occurrenceID']).'"':'NULL').', '.
-					'recordID = '.(isset($archiveArr['recordID']) && $archiveArr['recordID']?'"'.$this->cleanInStr($archiveArr['recordID']).'"':'NULL').' '.
-					'WHERE (occid = '.$delOccid.')';
-				//echo $sqlArchive;
+				$sqlArchive = 'INSERT INTO omoccurarchive(archiveobj, occid, catalogNumber, occurrenceID, recordID) '.
+					'VALUES ("'.$this->cleanInStr($this->encodeStrTargeted($archiveObj,'utf8',$CHARSET)).'", '.$delOccid.','.
+					(isset($archiveArr['catalogNumber']) && $archiveArr['catalogNumber']?'"'.$this->cleanInStr($archiveArr['catalogNumber']).'"':'NULL').', '.
+					(isset($archiveArr['occurrenceID']) && $archiveArr['occurrenceID']?'"'.$this->cleanInStr($archiveArr['occurrenceID']).'"':'NULL').', '.
+					(isset($archiveArr['recordID']) && $archiveArr['recordID']?'"'.$this->cleanInStr($archiveArr['recordID']).'"':'NULL').')';
 				$this->conn->query($sqlArchive);
 			}
 
