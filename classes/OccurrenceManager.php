@@ -612,6 +612,7 @@ class OccurrenceManager extends OccurrenceTaxaManager {
 		//Returns a search variable string
 		$retStr = '';
 		foreach($this->searchTermArr as $k => $v){
+			if(is_array($v)) $v = implode(',', $v);
 			$retStr .= '&'.$k.'='.urlencode($v);
 		}
 		if(isset($this->taxaArr['search'])){

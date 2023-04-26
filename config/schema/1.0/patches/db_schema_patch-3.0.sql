@@ -5,6 +5,7 @@ CREATE TABLE `adminconfig` (
   `category` VARCHAR(45) NULL,
   `attributeName` VARCHAR(45) NOT NULL,
   `attributeValue` VARCHAR(1000) NOT NULL,
+  `dynamicProperties` text DEFAULT NULL,
   `notes` VARCHAR(45) NULL,
   `modifiedUid` INT UNSIGNED NULL,
   `modifiedTimestamp` DATETIME NULL,
@@ -840,10 +841,9 @@ CREATE TABLE `portaloccurrences` (
 
 
 ALTER TABLE `specprocessorprojects` 
-  ADD COLUMN `customStoredProcedure` VARCHAR(45) NULL AFTER `source`,
-  ADD COLUMN `createdByUid` INT UNSIGNED NULL AFTER `lastrundate`,
-  ADD COLUMN `processingCode` INT NULL AFTER `customStoredProcedure`,
-  ADD COLUMN `dynamicProperties` TEXT NULL AFTER `lastRunDate`,
+  ADD COLUMN `additionalOptions` TEXT NULL AFTER `createLgImg`,
+  ADD COLUMN `createdByUid` INT UNSIGNED NULL AFTER `lastRunDate`,
+  ADD COLUMN `processingCode` INT NULL AFTER `source`,
   CHANGE COLUMN `projecttype` `projectType` VARCHAR(45) NULL DEFAULT NULL,
   CHANGE COLUMN `speckeyretrieval` `specKeyRetrieval` VARCHAR(45) NULL DEFAULT NULL,
   CHANGE COLUMN `lastrundate` `lastRunDate` DATE NULL DEFAULT NULL,
@@ -890,9 +890,9 @@ ALTER TABLE `taxa`
 
 # The default UNIQUE INDEX applied above supports cross-kingdom homonyms
 # Alternate UNIQUE INDEX that support homonyms within a single kingdom (not recommended) 
-#  ADD UNIQUE INDEX `UQ_taxa_sciname` (`sciName` ASC, `author` ASC, `rankId` ASC, `kingdomName` ASC)
+#  ALTER TABLE `taxa` ADD UNIQUE INDEX `UQ_taxa_sciname` (`sciName` ASC, `author` ASC, `rankId` ASC, `kingdomName` ASC)
 # Alternate more restrictive UNIQUE INDEX that can be used for a single kingdom portal. Cross-kingdom homonyms are not supported
-#  ADD UNIQUE INDEX `UQ_taxa_sciname` (`sciName` ASC, `rankId` ASC)
+#  ALTER TABLE `taxa` ADD UNIQUE INDEX `UQ_taxa_sciname` (`sciName` ASC, `rankId` ASC)
   
 ALTER TABLE `taxstatus` 
   CHANGE COLUMN `taxonomicSource` `taxonomicSource` VARCHAR(500) NULL DEFAULT NULL;

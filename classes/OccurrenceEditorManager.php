@@ -285,7 +285,7 @@ class OccurrenceEditorManager {
 							$this->otherCatNumIsNum = true;
 							if(substr($v,0,1) == '0'){
 								//Add value with left padded zeros removed
-								$ocnInFrag[] = ltrim($vStr,0);
+								$ocnInFrag[] = ltrim($v,0);
 							}
 						}
 					}

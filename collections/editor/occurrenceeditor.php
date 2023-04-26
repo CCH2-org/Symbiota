@@ -46,6 +46,9 @@ $statusStr = '';
 $navStr = '';
 
 $isEditor = 0;
+$LOCALITY_AUTO_LOOKUP = 1;
+$CATNUM_DUPE_CHECK = true;
+$OTHER_CATNUM_DUPE_CHECK = true;
 if($SYMB_UID){
 	//Set variables
 	$occManager->setOccId($occId);
@@ -100,11 +103,8 @@ if($SYMB_UID){
 			include('includes/config/crowdSourceVar.php');
 		}
 	}
-	$LOCALITY_AUTO_LOOKUP = 1;
 	if(defined('LOCALITYAUTOLOOKUP') && !LOCALITYAUTOLOOKUP) $LOCALITY_AUTO_LOOKUP = LOCALITYAUTOLOOKUP;
-	$CATNUM_DUPE_CHECK = true;
 	if(defined('CATNUMDUPECHECK') && !CATNUMDUPECHECK) $CATNUM_DUPE_CHECK = false;
-	$OTHER_CATNUM_DUPE_CHECK = true;
 	if(defined('OTHERCATNUMDUPECHECK') && !OTHERCATNUMDUPECHECK) $OTHER_CATNUM_DUPE_CHECK = false;
 	$DUPE_SEARCH = true;
 	if(defined('DUPESEARCH') && !DUPESEARCH) $DUPE_SEARCH = false;

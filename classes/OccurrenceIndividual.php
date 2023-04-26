@@ -749,9 +749,11 @@ class OccurrenceIndividual extends Manager{
 				$retArr[$k]['edits'][$r->appliedstatus][$r->ocedid]['old'] = $r->fieldvalueold;
 				$retArr[$k]['edits'][$r->appliedstatus][$r->ocedid]['new'] = $r->fieldvaluenew;
 				$currentCode = 0;
-				$fName = $this->occArr[strtolower($r->fieldname)];
-				if($fName == $r->fieldvaluenew) $currentCode = 1;
-				elseif($fName == $r->fieldvalueold) $currentCode = 2;
+				if(isset($this->occArr[strtolower($r->fieldname)])){
+					$fName = $this->occArr[strtolower($r->fieldname)];
+					if($fName == $r->fieldvaluenew) $currentCode = 1;
+					elseif($fName == $r->fieldvalueold) $currentCode = 2;
+				}
 				$retArr[$k]['edits'][$r->appliedstatus][$r->ocedid]['current'] = $currentCode;
 			}
 			$rs->free();
