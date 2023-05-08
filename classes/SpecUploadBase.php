@@ -646,8 +646,8 @@ class SpecUploadBase extends SpecUpload{
 		$this->conn->query($sql);
 
 		$sql = 'UPDATE uploadspectemp u '.
-			'SET u.endDayOfYear = DAYOFYEAR(u.LatestDateCollected) '.
-			'WHERE u.collid IN('.$this->collId.') AND u.endDayOfYear IS NULL AND u.LatestDateCollected IS NOT NULL';
+			'SET u.endDayOfYear = DAYOFYEAR(u.eventDate2) '.
+			'WHERE u.collid IN('.$this->collId.') AND u.endDayOfYear IS NULL AND u.eventDate2 IS NOT NULL';
 		$this->conn->query($sql);
 
 		$sql = 'UPDATE IGNORE uploadspectemp u '.

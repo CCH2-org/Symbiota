@@ -2544,7 +2544,7 @@ class OccurrenceEditorManager {
 		return $newStr;
 	}
 
-	private function cleanRawFragment($str){
+	protected function cleanRawFragment($str){
 		$newStr = trim($str);
 		$newStr = $this->encodeStr($newStr);
 		$newStr = $this->conn->real_escape_string($newStr);

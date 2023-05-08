@@ -88,7 +88,7 @@ class OccurrenceManager extends OccurrenceTaxaManager {
 			}
 			//$this->displaySearchArr[] = $this->voucherManager->getQueryVariableStr();
 		}
-		elseif(array_key_exists('clid',$this->searchTermArr) && is_numeric($this->searchTermArr['clid'])){
+		elseif(array_key_exists('clid',$this->searchTermArr) && preg_match('/^[0-9,]+$/', $this->searchTermArr['clid'])){
 			if(isset($this->searchTermArr["cltype"]) && $this->searchTermArr["cltype"] == 'all'){
 				$sqlWhere .= 'AND (cl.clid IN('.$this->searchTermArr['clid'].')) ';
 			}
