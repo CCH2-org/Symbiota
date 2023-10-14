@@ -371,7 +371,7 @@ class OccurrenceTaxaManager {
 	}
 
 	public function cleanOutStr($str){
-		if(!is_string($str)) $str = '';
+		if(!is_string($str) && !is_numeric($str) && !is_bool($str)) $str = '';
 		if(strpos($str, '=') !== false) $str = '';
 		return htmlspecialchars($str);
 	}
