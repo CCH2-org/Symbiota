@@ -1,0 +1,208 @@
+<?php
+include_once('Manager.php');
+include_once('OccurrenceUtilities.php');
+include_once('UuidFactory.php');
+
+class OmAssociations extends Manager{
+
+	private $assocID = null;
+	private $occid = null;
+	private $schemaMap = array();
+	private $parameterArr = array();
+	private $typeStr = '';
+
+	public function __construct($conn){
+		parent::__construct(null, 'write', $conn);
+		$this->schemaMap = array('associationType' => 's', 'occidAssociate' => 'i', 'relationship' => 's', 'relationshipID' => 's', 'subType' => 's', 'identifier' => 's',
+			'basisOfRecord' => 's', 'resourceUrl' => 's', 'verbatimSciname' => 's', 'tid' => 'i', 'locationOnHost' => 's', 'conditionOfAssociate' => 's', 'establishedDate' => 's',
+			'imageMapJSON' => 's', 'dynamicProperties' => 's', 'notes' => 's', 'accordingTo' => 's', 'sourceIdentifier' => 's', 'recordID' => 's');
+	}
+
+	public function __destruct(){
+		parent::__destruct();
+	}
+
+	public function getAssociationArr($filterArr = null){
+		$retArr = array();
+		$uidArr = array();
+		$sql = 'SELECT assocID, occid, '.implode(', ', array_keys($this->schemaMap)).', modifiedUid, modifiedTimestamp, createdUid, initialTimestamp FROM omoccurassociations WHERE ';
+		if($this->assocID) $sql .= '(assocID = '.$this->assocID.') ';
+		elseif($this->occid) $sql .= '(occid = '.$this->occid.') ';
+		foreach($filterArr as $field => $cond){
+			$sql .= 'AND '.$field.' = "'.$this->cleanInStr($cond).'" ';
+		}
+		if($rs = $this->conn->query($sql)){
+			while($r = $rs->fetch_assoc()){
+				$retArr[$r['assocID']] = $r;
+				if(isset($r['createdUid'])) $uidArr[$r['createdUid']] = $r['createdUid'];
+				if(isset($r['modifiedUid'])) $uidArr[$r['modifiedUid']] = $r['modifiedUid'];
+			}
+			$rs->free();
+		}
+		if($uidArr){
+			//Add user names for modified and created by
+			$sql = 'SELECT uid, firstname, lastname, username FROM users WHERE uid IN('.implode(',', $uidArr).')';
+			if($rs = $this->conn->query($sql)){
+				while($r = $rs->fetch_object()){
+					$uidArr[$r->uid] = $r->lastname . ($r->firstname ? ', ' . $r->firstname : '');
+				}
+				$rs->free();
+			}
+			foreach($retArr as $assocID => $assocArr){
+				if($assocArr['createdUid'] && array_key_exists($assocArr['createdUid'], $uidArr)) $retArr[$assocID]['createdBy'] = $uidArr[$assocArr['createdUid']];
+				if($assocArr['modifiedUid'] && array_key_exists($assocArr['modifiedUid'], $uidArr)) $retArr[$assocID]['modifiedBy'] = $uidArr[$assocArr['modifiedUid']];
+			}
+		}
+		return $retArr;
+	}
+
+	public function insertAssociation($inputArr){
+		$status = false;
+		if($this->occid){
+			$occidAssociate = false;
+			if(isset($inputArr['object-catalogNumber']) && $inputArr['object-catalogNumber']){
+				$occidAssociate = $this->getOccidAsscoiate($inputArr['object-catalogNumber'], 'catalogNumber');
+			}
+			elseif(isset($inputArr['object-occurrenceID']) && $inputArr['object-occurrenceID']){
+				$occidAssociate = $this->getOccidAsscoiate($inputArr['object-occurrenceID'], 'occurrenceID');
+			}
+			if($occidAssociate) $inputArr['occidAssociate'] = $occidAssociate;
+			elseif($occidAssociate === 0){
+				$this->errorMessage = 'Unable to locate internal association record';
+				return false;
+			}
+			if(!isset($inputArr['createdUid'])) $inputArr['createdUid'] = $GLOBALS['SYMB_UID'];
+			$sql = 'INSERT INTO omoccurassociations(occid, recordID';
+			$sqlValues = '?, ?, ';
+			$paramArr = array($this->occid);
+			$paramArr[] = UuidFactory::getUuidV4();
+			$this->typeStr = 'is';
+			$this->setParameterArr($inputArr);
+			foreach($this->parameterArr as $fieldName => $value){
+				$sql .= ', '.$fieldName;
+				$sqlValues .= '?, ';
+				$paramArr[] = $value;
+			}
+			$sql .= ') VALUES('.trim($sqlValues, ', ').') ';
+			if($stmt = $this->conn->prepare($sql)){
+				$stmt->bind_param($this->typeStr, ...$paramArr);
+				if($stmt->execute()){
+					if($stmt->affected_rows || !$stmt->error){
+						$this->assocID = $stmt->insert_id;
+						$status = true;
+					}
+					else $this->errorMessage = 'ERROR inserting omoccurassociations record (2): '.$stmt->error;
+				}
+				else $this->errorMessage = 'ERROR inserting omoccurassociations record (1): '.$stmt->error;
+				$stmt->close();
+			}
+			else $this->errorMessage = 'ERROR preparing statement for omoccurassociations insert: '.$this->conn->error;
+		}
+		return $status;
+	}
+
+	public function updateAssociation($inputArr){
+		$status = false;
+		if($this->assocID && $this->conn){
+			$occidAssociate = false;
+			if(isset($inputArr['object-catalogNumber']) && $inputArr['object-catalogNumber']){
+				$occidAssociate = $this->getOccidAsscoiate($inputArr['object-catalogNumber'], 'catalogNumber');
+			}
+			elseif(isset($inputArr['object-occurrenceID']) && $inputArr['object-occurrenceID']){
+				$occidAssociate = $this->getOccidAsscoiate($inputArr['object-occurrenceID'], 'occurrenceID');
+			}
+			if($occidAssociate) $inputArr['occidAssociate'] = $occidAssociate;
+			elseif($occidAssociate === 0){
+				$this->errorMessage = 'Unable to locate internal association record';
+				return false;
+			}
+			$this->setParameterArr($inputArr);
+			$paramArr = array();
+			$sqlFrag = '';
+			foreach($this->parameterArr as $fieldName => $value){
+				$sqlFrag .= $fieldName . ' = ?, ';
+				$paramArr[] = $value;
+			}
+			$paramArr[] = $this->assocID;
+			$this->typeStr .= 'i';
+			$sql = 'UPDATE omoccurassociations SET '.trim($sqlFrag, ', ').' WHERE (assocID = ?)';
+			if($stmt = $this->conn->prepare($sql)) {
+				$stmt->bind_param($this->typeStr, ...$paramArr);
+				$stmt->execute();
+				if($stmt->affected_rows || !$stmt->error) $status = true;
+				else $this->errorMessage = 'ERROR updating omoccurassociations record: '.$stmt->error;
+				$stmt->close();
+			}
+			else $this->errorMessage = 'ERROR preparing statement for updating omoccurassociations: '.$this->conn->error;
+		}
+		return $status;
+	}
+
+	private function setParameterArr($inputArr){
+		foreach($this->schemaMap as $field => $type){
+			$postField = '';
+			if(isset($inputArr[$field])) $postField = $field;
+			elseif(isset($inputArr[strtolower($field)])) $postField = strtolower($field);
+			if($postField){
+				$value = trim($inputArr[$postField]);
+				if($value){
+					if(strtolower($postField) == 'establisheddate') $value = OccurrenceUtilities::formatDate($value);
+					if(strtolower($postField) == 'modifieduid') $value = OccurrenceUtilities::verifyUser($value, $this->conn);
+					if(strtolower($postField) == 'createduid') $value = OccurrenceUtilities::verifyUser($value, $this->conn);
+				}
+				else $value = null;
+				$this->parameterArr[$field] = $value;
+				$this->typeStr .= $type;
+			}
+		}
+		if(isset($inputArr['occid']) && $inputArr['occid'] && !$this->occid) $this->occid = $inputArr['occid'];
+	}
+
+	public function deleteAssociation(){
+		if($this->assocID){
+			$sql = 'DELETE FROM omoccurassociations WHERE assocID = '.$this->assocID;
+			if($this->conn->query($sql)){
+				return true;
+			}
+			else{
+				$this->errorMessage = 'ERROR deleting omoccurassociations record: '.$this->conn->error;
+				return false;
+			}
+		}
+	}
+
+	private function getOccidAsscoiate($identifier, $target){
+		$occid = 0;
+		if($identifier){
+			$sql = 'SELECT occid FROM omoccurrences WHERE occurrenceID = ? OR recordID = ?';
+			if($target == 'catalogNumber') $sql = 'SELECT occid FROM omoccurrences WHERE catalogNumber = ?';
+			if($stmt = $this->conn->prepare($sql)){
+				if($target == 'catalogNumber') $stmt->bind_param('s', $identifier);
+				else $stmt->bind_param('ss', $identifier, $identifier);
+				$stmt->execute();
+				$stmt->bind_result($occid);
+				$stmt->fetch();
+				$stmt->close();
+			}
+		}
+		return $occid;
+	}
+
+	//Setters and getters
+	public function setAssocID($id){
+		if(is_numeric($id)) $this->assocID = $id;
+	}
+
+	public function getAssocID(){
+		return $this->assocID;
+	}
+
+	public function setOccid($id){
+		if(is_numeric($id)) $this->occid = $id;
+	}
+
+	public function getSchemaMap(){
+		return $this->schemaMap;
+	}
+}
+?>
