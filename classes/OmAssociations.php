@@ -67,7 +67,7 @@ class OmAssociations extends Manager{
 				$occidAssociate = $this->getOccidAsscoiate($inputArr['object-occurrenceID'], 'occurrenceID');
 			}
 			if($occidAssociate) $inputArr['occidAssociate'] = $occidAssociate;
-			elseif($occidAssociate === 0){
+			elseif($occidAssociate !== false){
 				$this->errorMessage = 'Unable to locate internal association record';
 				return false;
 			}
@@ -112,7 +112,7 @@ class OmAssociations extends Manager{
 				$occidAssociate = $this->getOccidAsscoiate($inputArr['object-occurrenceID'], 'occurrenceID');
 			}
 			if($occidAssociate) $inputArr['occidAssociate'] = $occidAssociate;
-			elseif($occidAssociate === 0){
+			elseif($occidAssociate !== false){
 				$this->errorMessage = 'Unable to locate internal association record';
 				return false;
 			}
@@ -173,6 +173,7 @@ class OmAssociations extends Manager{
 
 	private function getOccidAsscoiate($identifier, $target){
 		$occid = 0;
+		$identifier = trim($identifier);
 		if($identifier){
 			$sql = 'SELECT occid FROM omoccurrences WHERE occurrenceID = ? OR recordID = ?';
 			if($target == 'catalogNumber') $sql = 'SELECT occid FROM omoccurrences WHERE catalogNumber = ?';
