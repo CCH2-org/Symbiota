@@ -152,4 +152,6 @@ $LANG['CHECKING'] = 'Vérification des archives';
 $LANG['RESTORE_RECORD'] = 'Restore Record';
 $LANG['RECORD_DELETED'] = 'Enregistrement supprimé';
 $LANG['VALUE'] = 'Valeur';
+$LANG['LAT_LNG'] = 'Latitude/Longitude';
 ?>
+
