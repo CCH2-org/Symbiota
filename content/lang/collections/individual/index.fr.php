@@ -154,3 +154,4 @@ $LANG['RECORD_DELETED'] = 'Enregistrement supprimé';
 $LANG['VALUE'] = 'Valeur';
 $LANG['LAT_LNG'] = 'Latitude/Longitude';
 ?>
+
