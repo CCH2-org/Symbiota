@@ -9,11 +9,11 @@ include_once('Encryption.php');
 
 class ProfileManager extends Manager{
 
-	private $rememberMe = false;
-	private $uid;
-	private $userName;
-	private $displayName;
-	private $token;
+	protected $rememberMe = false;
+	protected $uid;
+	protected $userName;
+	protected $displayName;
+	protected $token;
 
 	public function __construct($connType = 'readonly'){
 		parent::__construct(null, $connType);
@@ -23,7 +23,7 @@ class ProfileManager extends Manager{
  		parent::__destruct();
 	}
 
-	private function resetConnection(){
+	protected function resetConnection(){
 		$this->conn = MySQLiConnectionFactory::getCon('write');
 	}
 
@@ -124,7 +124,7 @@ class ProfileManager extends Manager{
 		return $status;
 	}
 
-	private function setTokenCookie(){
+	protected function setTokenCookie(){
 		$tokenArr = Array();
 		if(!$this->token){
 			$this->createToken();
@@ -308,7 +308,7 @@ class ProfileManager extends Manager{
 		return $newPassword;
 	}
 
-	public function register($postArr){
+	public function register($postArr, $adminRegister = false){
 		$status = false;
 
 		$firstName = strip_tags($postArr['firstname']);
@@ -336,8 +336,10 @@ class ProfileManager extends Manager{
 			if($stmt->affected_rows){
 				$this->uid = $stmt->insert_id;
 				$this->displayName = $firstName;
-				$this->reset();
-				$this->authenticate($pwd);
+				if(!$adminRegister){
+					$this->reset();
+					$this->authenticate($pwd);
+				}
 				$status = true;
 			}
 			elseif($stmt->error) $this->errorMessage = 'ERROR inserting new user: '.$stmt->error;
@@ -476,7 +478,7 @@ class ProfileManager extends Manager{
 		return $status;
 	}
 
-	private function setUserRights(){
+	protected function setUserRights(){
 		if($this->uid){
 			$userRights = array();
 			$sql = 'SELECT role, tablepk FROM userroles WHERE (uid = ?) ';
@@ -496,7 +498,7 @@ class ProfileManager extends Manager{
 		}
 	}
 
-	private function setUserParams(){
+	protected function setUserParams(){
 		global $PARAMS_ARR;
 		$_SESSION['userparams']['un'] = $this->userName;
 		$_SESSION['userparams']['dn'] = $this->displayName;
@@ -1100,7 +1102,7 @@ class ProfileManager extends Manager{
 			$dynPropStr = $fetchedObj->dynamicProperties;
 		}
 		$respns->free();
-		if($dynPropStr){
+		if(isset($dynPropStr)){
 			if($dynPropArr = json_decode($dynPropStr, true)){
 				$returnVal = $dynPropArr;
 			}

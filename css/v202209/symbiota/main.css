@@ -386,11 +386,6 @@ hr {
   border: 2px outset #808080;
 }
 
-.profile-login {
-  margin: 20px;
-  width: 350px;
-}
-
 .profile-legend {
   font-weight: bold;
 }
@@ -924,4 +919,44 @@ hr {
 
 .full-width-pcnt {
   width: 100%;
+}
+
+/* alert box from https://www.w3schools.com/howto/howto_js_alert.asp */
+/* The alert message box */
+.alert {
+  max-width: 30%;
+  padding: 20px;
+  background-color: green; /* Red */
+  color: white;
+  margin-bottom: 15px;
+}
+
+/* The close button */
+.closebtn {
+  margin-left: 15px;
+  color: white;
+  font-weight: bold;
+  float: right;
+  font-size: 22px;
+  line-height: 20px;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+/* When moving the mouse over the close button */
+.closebtn:hover {
+  color: black;
+}
+
+.justify-center-full-screen {
+  display: flex;
+  justify-content: center;
+  width: 100vw;
+}
+
+.flex-item-login {
+  width: 100%;
+  max-width: 350px;
+  margin-left: auto;
+  margin-right: auto;
 }
