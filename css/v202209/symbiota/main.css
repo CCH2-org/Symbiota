@@ -902,6 +902,14 @@ hr {
   font-weight: bold;
 }
 
+.float-right {
+  float: right;
+}
+
+.margin-left-20 {
+  margin-left: 20px;
+}
+
 .voucher-admin-header {
   font-size: 2em;
   font-weight: bold;
@@ -910,6 +918,10 @@ hr {
 
 .left-breathing-room-rel-lg {
   margin-left: 2em;
+}
+
+.smaller-header {
+  font-size: 2rem;
 }
 
 .ui-autocomplete {
@@ -959,4 +971,9 @@ hr {
   max-width: 350px;
   margin-left: auto;
   margin-right: auto;
+}
+
+button.no-margin-left,
+div.no-margin-left {
+  margin-left: 0;
 }

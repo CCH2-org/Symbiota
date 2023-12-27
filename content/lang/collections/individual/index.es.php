@@ -155,4 +155,6 @@ $LANG['RESTORE_RECORD'] = 'Restore Record';
 $LANG['RECORD_DELETED'] = 'Registro eliminado';
 $LANG['VALUE'] = 'Valor';
 $LANG['LAT_LNG'] = 'Latitud/Longitud';
+$LANG['FULL_RECORD_DETAILS'] = 'Detalles Completos del Registro';
+$LANG['SKIP_NAV'] = 'Saltar Navegación';
 ?>
