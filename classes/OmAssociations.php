@@ -55,7 +55,7 @@ class OmAssociations extends Manager{
 		}
 		if($uidArr){
 			//Add user names for modified and created by
-			$sql = 'SELECT uid, CONCAT_WS(", ",lastname, firstname) as fullname FROM users WHERE uid IN('.implode(',', $uidArr).')';
+			$sql = 'SELECT uid, CONCAT_WS(", ",lastname, firstname) as fullname FROM users WHERE uid IN(' . implode(',', array_keys($uidArr)) . ')';
 			if($rs = $this->conn->query($sql)){
 				while($r = $rs->fetch_object()){
 					$uidArr[$r->uid]['n'] = $r->fullname;
