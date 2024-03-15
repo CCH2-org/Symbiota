@@ -1,5 +1,3 @@
-<!DOCTYPE html>
-
 <?php
 include_once('../../config/symbini.php');
 include_once($SERVER_ROOT.'/classes/OccurrenceCleaner.php');
@@ -75,6 +73,7 @@ if($action && $isEditor){
 	}
 }
 ?>
+<!DOCTYPE html>
 <html lang="<?php echo $LANG_TAG ?>">
 <head>
 	<meta http-equiv="Content-Type" content="text/html; charset=<?php echo $CHARSET; ?>">
@@ -183,7 +182,7 @@ if($action && $isEditor){
 										<form name="countrycleanform" method="post" action="politicalunits.php" onsubmit="return verifyCountryCleanForm(this)">
 											<b><?php echo $countryName; ?></b>
 											<?php echo ' <span title="'.$LANG['NUMBER_SPECIMENS'].'">('.$countryCnt.')</span>'; ?>
-											<a href="../editor/occurrenceeditor.php?q_catalognumber=&occindex=0&q_customfield1=country&q_customtype1=EQUALS&q_customvalue1=<?php echo htmlspecialchars(urlencode($countryName), HTML_SPECIAL_CHARS_FLAGS) . '&collid=' . htmlspecialchars($collid, HTML_SPECIAL_CHARS_FLAGS); ?>" target="_blank"><img src="../../images/edit.png" style="width:13px" /></a>
+											<a href="../editor/occurrenceeditor.php?q_catalognumber=&occindex=0&q_customfield1=country&q_customtype1=EQUALS&q_customvalue1=<?php echo htmlspecialchars(urlencode($countryName), HTML_SPECIAL_CHARS_FLAGS) . '&collid=' . htmlspecialchars($collid, HTML_SPECIAL_CHARS_FLAGS); ?>" target="_blank"><img src="../../images/edit.png" style="width:1.2em" /></a>
 											<select name="newcountry" style="width:200px;">
 												<option value=""><?php echo $LANG['REPLACE_WITH']; ?>...</option>
 													<option value="">-------------------------</option>
@@ -223,7 +222,7 @@ if($action && $isEditor){
 										<form name="nullcountryform" method="post" action="politicalunits.php" onsubmit="return verifyNullCountryForm(this)">
 											<b><?php echo $stateName; ?></b>
 											<?php echo ' <span title="Number of Specimens">('.$stateCnt.')</span>'; ?>
-											<a href="../editor/occurrenceeditor.php?q_catalognumber=&occindex=0&q_customfield1=country&q_customtype1=NULL&q_customfield2=stateProvince&q_customtype2=EQUALS&q_customvalue2=<?php echo htmlspecialchars(urlencode($stateName), HTML_SPECIAL_CHARS_FLAGS) . '&collid=' . htmlspecialchars($collid, HTML_SPECIAL_CHARS_FLAGS); ?>" target="_blank"><img src="../../images/edit.png" style="width:13px" /></a>
+											<a href="../editor/occurrenceeditor.php?q_catalognumber=&occindex=0&q_customfield1=country&q_customtype1=NULL&q_customfield2=stateProvince&q_customtype2=EQUALS&q_customvalue2=<?php echo htmlspecialchars(urlencode($stateName), HTML_SPECIAL_CHARS_FLAGS) . '&collid=' . htmlspecialchars($collid, HTML_SPECIAL_CHARS_FLAGS); ?>" target="_blank"><img src="../../images/edit.png" style="width:1.2em" /></a>
 											<select name="country" style="width:200px;">
 												<option value=""><?php echo $LANG['ASSIGN_COUNTRY']; ?>...</option>
 												<option value="">-------------------------</option>
@@ -265,7 +264,7 @@ if($action && $isEditor){
 											<form name="statecleanform" method="post" action="politicalunits.php" onsubmit="return verifyStateCleanForm(this)">
 												<b><?php echo $stateName; ?></b>
 												<?php echo ' <span title="Number of Specimens">('.$stateCnt.')</span>'; ?>
-												<a href="../editor/occurrenceeditor.php?q_catalognumber=&occindex=0&q_customfield1=stateProvince&q_customtype1=EQUALS&q_customvalue1=<?php echo htmlspecialchars(urlencode($stateName), HTML_SPECIAL_CHARS_FLAGS) . '&collid=' . htmlspecialchars($collid, HTML_SPECIAL_CHARS_FLAGS); ?>" target="_blank"><img src="../../images/edit.png" style="width:13px" /></a>
+												<a href="../editor/occurrenceeditor.php?q_catalognumber=&occindex=0&q_customfield1=stateProvince&q_customtype1=EQUALS&q_customvalue1=<?php echo htmlspecialchars(urlencode($stateName), HTML_SPECIAL_CHARS_FLAGS) . '&collid=' . htmlspecialchars($collid, HTML_SPECIAL_CHARS_FLAGS); ?>" target="_blank"><img src="../../images/edit.png" style="width:1.2em" /></a>
 												<?php
 												if(array_key_exists($countryValue,$goodStateArr)){
 													?>
@@ -316,7 +315,7 @@ if($action && $isEditor){
 											<form name="nullstateform" method="post" action="politicalunits.php" onsubmit="return verifyNullStateForm(this)">
 												<b><?php echo $countyName; ?></b>
 												<?php echo ' <span title="Number of Specimens">('.$countyCnt.')</span>'; ?>
-												<a href="../editor/occurrenceeditor.php?q_catalognumber=&occindex=0&q_customfield1=stateProvince&q_customtype1=NULL&q_customfield2=county&q_customtype2=EQUALS&q_customvalue2=<?php echo htmlspecialchars(urlencode($countyName), HTML_SPECIAL_CHARS_FLAGS) . '&collid=' . htmlspecialchars($collid, HTML_SPECIAL_CHARS_FLAGS); ?>" target="_blank"><img src="../../images/edit.png" style="width:13px" /></a>
+												<a href="../editor/occurrenceeditor.php?q_catalognumber=&occindex=0&q_customfield1=stateProvince&q_customtype1=NULL&q_customfield2=county&q_customtype2=EQUALS&q_customvalue2=<?php echo htmlspecialchars(urlencode($countyName), HTML_SPECIAL_CHARS_FLAGS) . '&collid=' . htmlspecialchars($collid, HTML_SPECIAL_CHARS_FLAGS); ?>" target="_blank"><img src="../../images/edit.png" style="width:1.2em" /></a>
 												<?php
 												if(array_key_exists($countryName,$goodStateArr)){
 													?>
@@ -372,7 +371,7 @@ if($action && $isEditor){
 												<form name="countycleanform" method="post" action="politicalunits.php" onsubmit="return verifyCountyCleanForm(this)">
 													<b><?php echo $countyName; ?></b>
 													<?php echo ' <span title="Number of Specimens">('.$countyCnt.')</span>'; ?>
-													<a href="../editor/occurrenceeditor.php?q_catalognumber=&occindex=0&q_customfield1=county&q_customtype1=EQUALS&q_customvalue1=<?php echo htmlspecialchars(urlencode($countyName), HTML_SPECIAL_CHARS_FLAGS) . '&collid=' . htmlspecialchars($collid, HTML_SPECIAL_CHARS_FLAGS); ?>" target="_blank"><img src="../../images/edit.png" style="width:13px" /></a>
+													<a href="../editor/occurrenceeditor.php?q_catalognumber=&occindex=0&q_customfield1=county&q_customtype1=EQUALS&q_customvalue1=<?php echo htmlspecialchars(urlencode($countyName), HTML_SPECIAL_CHARS_FLAGS) . '&collid=' . htmlspecialchars($collid, HTML_SPECIAL_CHARS_FLAGS); ?>" target="_blank"><img src="../../images/edit.png" style="width:1.2em" /></a>
 													<?php
 													if(array_key_exists($stateTestStr,$goodCountyArr)){
 														?>
@@ -428,7 +427,7 @@ if($action && $isEditor){
 												<form name="nullstateform" method="post" action="politicalunits.php" onsubmit="return verifyNullCountyForm(this)">
 													<b><?php echo $localityName; ?></b>
 													<?php echo ' <span title="Number of Specimens">('.$localityCnt.')</span>'; ?>
-													<a href="../editor/occurrenceeditor.php?q_catalognumber=&occindex=0&q_customfield1=county&q_customtype1=NULL&q_customfield2=locality&q_customtype2=EQUALS&q_customvalue2=<?php echo htmlspecialchars(urlencode($localityName), HTML_SPECIAL_CHARS_FLAGS) . '&collid=' . htmlspecialchars($collid, HTML_SPECIAL_CHARS_FLAGS); ?>" target="_blank"><img src="../../images/edit.png" style="width:13px" /></a>
+													<a href="../editor/occurrenceeditor.php?q_catalognumber=&occindex=0&q_customfield1=county&q_customtype1=NULL&q_customfield2=locality&q_customtype2=EQUALS&q_customvalue2=<?php echo htmlspecialchars(urlencode($localityName), HTML_SPECIAL_CHARS_FLAGS) . '&collid=' . htmlspecialchars($collid, HTML_SPECIAL_CHARS_FLAGS); ?>" target="_blank"><img src="../../images/edit.png" style="width:1.2em" /></a>
 													<?php
 													if(array_key_exists($stateTestStr,$goodCountyArr)){
 														?>

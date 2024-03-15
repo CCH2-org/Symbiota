@@ -1,5 +1,3 @@
-<!DOCTYPE html>
-
 <?php
 include_once('../../config/symbini.php');
 include_once($SERVER_ROOT.'/classes/OccurrenceEditReview.php');
@@ -96,15 +94,16 @@ if($subCnt < $recCnt) $navStr .= '<a href="' . htmlspecialchars($navPageBase, HT
 else $navStr .= '&gt;&gt;';
 $navStr .= '</div>';
 ?>
+<!DOCTYPE html>
 <html lang="<?php echo $LANG_TAG ?>">
 	<head>
 		<title><?php echo $LANG['EDIT_REVIEWER']; ?></title>
-		<link href="<?php echo htmlspecialchars($CSS_BASE_PATH, HTML_SPECIAL_CHARS_FLAGS); ?>/jquery-ui.css" type="text/css" rel="stylesheet">
+		<link href="<?php echo $CSS_BASE_PATH; ?>/jquery-ui.css" type="text/css" rel="stylesheet">
 		<?php
 		include_once($SERVER_ROOT.'/includes/head.php');
 		?>
-		<script src="<?php echo $CLIENT_ROOT; ?>/js/jquery.js" type="text/javascript"></script>
-		<script src="<?php echo $CLIENT_ROOT; ?>/js/jquery-ui.js" type="text/javascript"></script>
+		<script src="<?php echo $CLIENT_ROOT; ?>/js/jquery-3.7.1.min.js" type="text/javascript"></script>
+		<script src="<?php echo $CLIENT_ROOT; ?>/js/jquery-ui.min.js" type="text/javascript"></script>
 		<script>
 			function validateFilterForm(f){
 				if(f.startdate.value > f.enddate.value){
@@ -356,9 +355,9 @@ $navStr .= '</div>';
 					<?php
 					echo '<div style="clear:both">'.$navStr.'</div>';
 					?>
-					<table class="styledtable" style="font-family:Arial;font-size:1.25rem;" aria-label="<?php echo (isset($LANG['TABLE']) ? $LANG['TABLE'] : 'Table of Records'); ?>" aria-describedby="table-desc">
-						<caption id="table-desc" class="bottom-breathing-room-relative top-breathing-room-rel">
-							<?php echo (isset($LANG['TABLE_DESC']) ? $LANG['TABLE_DESC'] : 'The table contains Record Id, Catalog Number, Review Status, Applied Status, Editor Name, Timestamp, Field Name, Old Value, and New Value for each entry'); ?>
+					<table class="styledtable" style="font-family:Arial;font-size:1.25rem;" aria-label="<?php echo (isset($LANG['TABLE']) ? $LANG['TABLE'] : 'Table of Records'); ?>" aria-labeledby="table-desc">
+						<caption id="table-desc" class="bottom-breathing-room-relative top-breathing-room-rel skip-link">
+							<?php echo $LANG['TABLE_DESC']; ?>
 						</caption>
 						<tr>
 							<th> <input name='selectall' type="checkbox" onclick="selectAllId(this)" aria-label="<?php echo (isset($LANG['SELECT_ALL']) ? $LANG['SELECT_ALL'] : 'Select/Unselect All'); ?>" /></th>

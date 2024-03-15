@@ -1,5 +1,3 @@
-<!DOCTYPE html>
-
 <?php
 //TODO: add code to automatically select hide locality details when taxon/state match name on list
 include_once('../../config/symbini.php');
@@ -45,11 +43,12 @@ if($collMap){
 }
 $clArr = $obsManager->getChecklists();
 ?>
+<!DOCTYPE html>
 <html lang="<?php echo $LANG_TAG ?>">
 <head>
 	<meta http-equiv="Content-Type" content="text/html; charset=<?php echo $CHARSET; ?>">
 	<title><?php echo $DEFAULT_TITLE.' '.$LANG['OBS_SUBMIT']; ?></title>
-	<link href="<?php echo htmlspecialchars($CSS_BASE_PATH, HTML_SPECIAL_CHARS_FLAGS); ?>/jquery-ui.css" type="text/css" rel="stylesheet">
+	<link href="<?php echo $CSS_BASE_PATH; ?>/jquery-ui.css" type="text/css" rel="stylesheet">
 	<?php
 	include_once($SERVER_ROOT.'/includes/head.php');
 	?>
@@ -64,8 +63,8 @@ $clArr = $obsManager->getChecklists();
 		echo 'var maxUpload = '.$maxUpload.";\n";
 		?>
 	</script>
-	<script src="../../js/jquery.js" type="text/javascript"></script>
-	<script src="../../js/jquery-ui.js" type="text/javascript"></script>
+	<script src="<?php echo $CLIENT_ROOT; ?>/js/jquery-3.7.1.min.js" type="text/javascript"></script>
+	<script src="<?php echo $CLIENT_ROOT; ?>/js/jquery-ui.min.js" type="text/javascript"></script>
 	<script src="../../js/symb/collections.coordinateValidation.js?ver=1" type="text/javascript"></script>
 	<script src="../../js/symb/collections.editor.observations.js?ver=1" type="text/javascript"></script>
 	<style>
@@ -216,7 +215,7 @@ $clArr = $obsManager->getChecklists();
 								<label for="eventdate"><?php echo $LANG['DATE']; ?>:</label>
 								<input type="text" id="eventdate" name="eventdate" style="width:120px;" onchange="verifyDate(this);" title="format: yyyy-mm-dd" required />
 								<a href="#" style="margin:15px 0px 0px 5px;" onclick="toggle('obsextradiv');return false" title="<?php echo (isset($LANG['IEDIT_BTN']) ? $LANG['EDIT_BTN'] : 'Display additional fields'); ?>" aria-label="<?php echo (isset($LANG['IEDIT_BTN']) ? $LANG['EDIT_BTN'] : 'Display additional fields'); ?>">
-									<img src="../../images/editplus.png" style="width:15px;" alt="<?php echo (isset($LANG['IMG_EDIT']) ? $LANG['IMG_EDIT'] : 'Display additional fields image'); ?>"/>
+									<img src="../../images/editplus.png" style="width:1.5em;" alt="<?php echo (isset($LANG['IMG_EDIT']) ? $LANG['IMG_EDIT'] : 'Display additional fields image'); ?>"/>
 								</a>
 							</div>
 						</div>
@@ -281,7 +280,7 @@ $clArr = $obsManager->getChecklists();
 							</div>
 							<div style="margin-top:10px; margin-left:3px; margin-bottom:10px" >
 								<a onclick="openMappingAid('obsform','decimallatitude','decimallongitude');return false;">
-									<img src="../../images/world.png" style="width:15px;" title="Coordinate Map Aid" alt="<?php echo (isset($LANG['IMG_GLOBE']) ? $LANG['IMG_GLOBE'] : 'A small image of the globe'); ?>" />
+									<img src="../../images/world.png" style="width:1.3em;" title="Coordinate Map Aid" alt="<?php echo (isset($LANG['IMG_GLOBE']) ? $LANG['IMG_GLOBE'] : 'A small image of the globe'); ?>" />
 								</a>
 								<button id="dmsButton" type="button" onclick="toggle('dmsdiv');"><?php echo $LANG['DMS']; ?></button>
 							</div>

@@ -36,12 +36,12 @@ if($isEditor && $action){
 <html>
 <head>
 	<title><?php echo $DEFAULT_TITLE; ?> Identification Character Editor</title>
-	<link href="<?php echo htmlspecialchars($CSS_BASE_PATH, HTML_SPECIAL_CHARS_FLAGS); ?>/jquery-ui.css" type="text/css" rel="stylesheet">
+	<link href="<?php echo $CSS_BASE_PATH; ?>/jquery-ui.css" type="text/css" rel="stylesheet">
 	<?php
 	include_once($SERVER_ROOT.'/includes/head.php');
 	?>
-	<script type="text/javascript" src="<?php echo $CLIENT_ROOT; ?>/js/jquery.js"></script>
-	<script type="text/javascript" src="<?php echo $CLIENT_ROOT; ?>/js/jquery-ui.js"></script>
+	<script type="text/javascript" src="<?php echo $CLIENT_ROOT; ?>/js/jquery-3.7.1.min.js"></script>
+	<script type="text/javascript" src="<?php echo $CLIENT_ROOT; ?>/js/jquery-ui.min.js"></script>
 	<script type="text/javascript">
 		var dataChanged = false;
 		var headingDivOpen = true;
@@ -113,8 +113,8 @@ if($isEditor && $action){
 					if(!$charValue){
 						echo '<fieldset>';
 						echo '<legend style="font-weight:bold;font-size:120%;color:#990000;">';
-						echo '<span id="minus-'.$headingID.'" onclick="toggle(\''.$headingID.'\')" style="display:none;"><img src="../../images/minus_sm.png"></span> ';
-						echo '<span id="plus-'.$headingID.'" onclick="toggle(\''.$headingID.'\')"><img src="../../images/plus_sm.png"></span> ';
+						echo '<span id="minus-'.$headingID.'" onclick="toggle(\''.$headingID.'\')" style="display:none;"><img src="../../images/minus.png" style="width:1em;" ></span> ';
+						echo '<span id="plus-'.$headingID.'" onclick="toggle(\''.$headingID.'\')"><img src="../../images/plus.png" style="width:1em;" ></span> ';
 						echo $heading.'</legend>';
 					}
 					echo '<div class="headingDiv" id="'.$headingID.'" style="text-indent:1em;">';

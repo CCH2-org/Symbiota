@@ -72,13 +72,13 @@ if($imgArr){
 	}
 	?>
 	<title><?php echo $DEFAULT_TITLE." Image Details: #".$imgId; ?></title>
-	<link href="<?php echo htmlspecialchars($CSS_BASE_PATH, HTML_SPECIAL_CHARS_FLAGS); ?>/jquery-ui.css" type="text/css" rel="stylesheet">
+	<link href="<?php echo $CSS_BASE_PATH; ?>/jquery-ui.css" type="text/css" rel="stylesheet">
 	<?php
 	include_once($SERVER_ROOT.'/includes/head.php');
 	include_once($SERVER_ROOT.'/includes/googleanalytics.php');
 	?>
-	<script src="../js/jquery.js" type="text/javascript"></script>
-	<script src="../js/jquery-ui.js" type="text/javascript"></script>
+	<script src="<?php echo $CLIENT_ROOT; ?>/js/jquery-3.7.1.min.js" type="text/javascript"></script>
+	<script src="<?php echo $CLIENT_ROOT; ?>/js/jquery-ui.min.js" type="text/javascript"></script>
 	<script src="../js/symb/shared.js" type="text/javascript"></script>
 	<script>
 		var clientRoot = "<?php echo $CLIENT_ROOT; ?>";
@@ -149,7 +149,7 @@ if($imgArr){
 					?>
 					<div style="float:right;margin-right:15px;" title="Go to Taxon Profile editing page">
 						<a href="../taxa/profile/tpeditor.php?tid=<?php echo htmlspecialchars($imgArr['tid'], HTML_SPECIAL_CHARS_FLAGS); ?>&tabindex=1" target="_blank">
-							<img src="../images/edit.png" style="border:0px;" /><span style="font-size:70%">TP</span>
+							<img src="../images/edit.png" style="width:1.3em;border:0px;" /><span style="font-size:70%">TP</span>
 						</a>
 					</div>
 					<?php
@@ -158,7 +158,7 @@ if($imgArr){
 					?>
 					<div style="float:right;margin-right:15px;" title="Must have editing privileges for this collection managing image">
 						<a href="../collections/editor/occurrenceeditor.php?occid=<?php echo htmlspecialchars($imgArr['occid'], HTML_SPECIAL_CHARS_FLAGS); ?>&tabtarget=2" target="_blank">
-							<img src="../images/edit.png" style="border:0px;" /><span style="font-size:70%">SPEC</span>
+							<img src="../images/edit.png" style="width:1.3em;border:0px;" /><span style="font-size:70%">SPEC</span>
 						</a>
 					</div>
 					<?php
@@ -168,7 +168,7 @@ if($imgArr){
 						?>
 						<div style="float:right;margin-right:15px;">
 							<a href="#" onclick="toggle('imageedit');return false" title="Edit Image">
-								<img src="../images/edit.png" style="border:0px;" /><span style="font-size:70%">IMG</span>
+								<img src="../images/edit.png" style="width:1.3em;border:0px;" /><span style="font-size:70%">IMG</span>
 							</a>
 						</div>
 						<?php
@@ -223,7 +223,7 @@ if($imgArr){
 								</select>
 								* Users registered within system
 								<a href="#" onclick="toggle('iepor');return false;" title="Display photographer override field">
-									<img src="../images/editplus.png" style="border:0px;width:12px;" />
+									<img src="../images/editplus.png" style="border:0px;width:1.5em;" />
 								</a>
 							</div>
 							<div id="iepor" style="margin-top:2px;display:<?php echo ($imgArr["photographer"]?'block':'none'); ?>;">

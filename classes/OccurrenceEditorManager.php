@@ -36,10 +36,11 @@ class OccurrenceEditorManager {
 			'institutioncode' => 's', 'collectioncode' => 's', 'eventid' => 's',
 			'family' => 's', 'sciname' => 's', 'tidinterpreted' => 'n', 'scientificnameauthorship' => 's', 'identifiedby' => 's', 'dateidentified' => 's',
 			'identificationreferences' => 's', 'identificationremarks' => 's', 'taxonremarks' => 's', 'identificationqualifier' => 's', 'typestatus' => 's',
-			'recordedby' => 's', 'recordnumber' => 's', 'associatedcollectors' => 's', 'eventdate' => 'd', 'eventdate2' => 'd', 'year' => 'n', 'month' => 'n', 'day' => 'n', 'startdayofyear' => 'n',
-			'enddayofyear' => 'n', 'verbatimeventdate' => 's', 'habitat' => 's', 'substrate' => 's', 'fieldnumber' => 's', 'occurrenceremarks' => 's', 'datageneralizations' => 's',
-			'associatedtaxa' => 's', 'verbatimattributes' => 's', 'dynamicproperties' => 's', 'reproductivecondition' => 's', 'cultivationstatus' => 's', 'establishmentmeans' => 's',
+			'recordedby' => 's', 'recordnumber' => 's', 'associatedcollectors' => 's', 'eventdate' => 'd', 'eventdate2' => 'd',
+			'verbatimeventdate' => 's', 'habitat' => 's', 'substrate' => 's', 'fieldnumber' => 's', 'occurrenceremarks' => 's', 'datageneralizations' => 's',
+			'associatedtaxa' => 's', 'verbatimattributes' => 's', 'behavior' => 's', 'vitality' => 's', 'dynamicproperties' => 's', 'reproductivecondition' => 's', 'cultivationstatus' => 's', 'establishmentmeans' => 's',
 			'lifestage' => 's', 'sex' => 's', 'individualcount' => 's', 'samplingprotocol' => 's', 'preparations' => 's',
+			'continent' => 's', 'waterbody' => 's', 'islandgroup' => 's', 'island' => 's', 'countrycode' => 's',
 			'country' => 's', 'stateprovince' => 's', 'county' => 's', 'municipality' => 's', 'locationid' => 's', 'locality' => 's', 'localitysecurity' => 'n', 'localitysecurityreason' => 's',
 			'locationremarks' => 'n', 'decimallatitude' => 'n', 'decimallongitude' => 'n', 'geodeticdatum' => 's', 'coordinateuncertaintyinmeters' => 'n', 'verbatimcoordinates' => 's',
 			'footprintwkt' => 's', 'georeferencedby' => 's', 'georeferenceprotocol' => 's', 'georeferencesources' => 's', 'georeferenceverificationstatus' => 's',
@@ -527,21 +528,21 @@ class OccurrenceEditorManager {
 
 	private function setCustomSqlFragment($customField, $customTerm, $customValue, $cao, $cop, $ccp){
 		$sqlFrag = '';
-		if($customTerm == 'NULL'){
+		if($customTerm == 'IS_NULL'){
 			$sqlFrag .= $cao.($cop?' '.$cop:'').' ('.$customField.' IS NULL) '.($ccp?$ccp.' ':'');
 		}
-		elseif($customTerm == 'NOTNULL'){
+		elseif($customTerm == 'NOT_NULL'){
 			$sqlFrag .= $cao.($cop?' '.$cop:'').' ('.$customField.' IS NOT NULL) '.($ccp?$ccp.' ':'');
 		}
 		elseif($customTerm == 'NOT_EQUALS'){
 			if(!is_numeric($customValue)) $customValue = '"'.$customValue.'"';
 			$sqlFrag .= $cao.($cop?' '.$cop:'').' (('.$customField.' != '.$customValue.') OR ('.$customField.' IS NULL)) '.($ccp?$ccp.' ':'');
 		}
-		elseif($customTerm == 'GREATER'){
+		elseif($customTerm == 'GREATER_THAN'){
 			if(!is_numeric($customValue)) $customValue = '"'.$customValue.'"';
 			$sqlFrag .= $cao.($cop?' '.$cop:'').' ('.$customField.' > '.$customValue.') '.($ccp?$ccp.' ':'');
 		}
-		elseif($customTerm == 'LESS'){
+		elseif($customTerm == 'LESS_THAN'){
 			if(!is_numeric($customValue)) $customValue = '"'.$customValue.'"';
 			$sqlFrag .= $cao.($cop?' '.$cop:'').' ('.$customField.' < '.$customValue.') '.($ccp?$ccp.' ':'');
 		}
@@ -551,7 +552,7 @@ class OccurrenceEditorManager {
 		elseif($customTerm == 'NOT_LIKE' && $customValue){
 			$sqlFrag .= $cao.($cop?' '.$cop:'').' (('.$customField.' NOT LIKE "%'.trim($customValue,'%').'%") OR ('.$customField.' IS NULL)) '.($ccp?$ccp.' ':'');
 		}
-		elseif($customTerm == 'STARTS' && $customValue){
+		elseif($customTerm == 'STARTS_WITH' && $customValue){
 			$sqlFrag .= $cao.($cop?' '.$cop:'').' ('.$customField.' LIKE "'.trim($customValue,'%').'%") '.($ccp?$ccp.' ':'');
 		}
 		elseif($customValue){
@@ -1815,8 +1816,8 @@ class OccurrenceEditorManager {
 	}
 
 	public function carryOverValues($fArr){
-		$locArr = Array('recordedby','associatedcollectors','eventdate','eventdate2','verbatimeventdate','month','day','year',
-			'startdayofyear','enddayofyear','country','stateprovince','county','municipality','locationid','locality','decimallatitude','decimallongitude',
+		$locArr = Array('recordedby','associatedcollectors','eventdate','eventdate2','verbatimeventdate',
+			'country','stateprovince','county','municipality','locationid','locality','decimallatitude','decimallongitude',
 			'verbatimcoordinates','coordinateuncertaintyinmeters','footprintwkt','geodeticdatum','georeferencedby','georeferenceprotocol',
 			'georeferencesources','georeferenceverificationstatus','georeferenceremarks',
 			'minimumelevationinmeters','maximumelevationinmeters','verbatimelevation','minimumdepthinmeters','maximumdepthinmeters','verbatimdepth',
@@ -2090,18 +2091,19 @@ class OccurrenceEditorManager {
 				$imageMap[$row->imgid]['url'] = $row->url;
 				$imageMap[$row->imgid]['tnurl'] = $row->thumbnailurl;
 				$imageMap[$row->imgid]['origurl'] = $row->originalurl;
-				$imageMap[$row->imgid]['caption'] = $this->cleanOutStr($row->caption);
-				$imageMap[$row->imgid]['photographer'] = $this->cleanOutStr($row->photographer);
+				$imageMap[$row->imgid]['caption'] = $row->caption;
+				$imageMap[$row->imgid]['photographer'] = $row->photographer;
 				$imageMap[$row->imgid]['photographeruid'] = $row->photographeruid;
 				$imageMap[$row->imgid]['sourceurl'] = $row->sourceurl;
-				$imageMap[$row->imgid]['copyright'] = $this->cleanOutStr($row->copyright);
-				$imageMap[$row->imgid]['notes'] = $this->cleanOutStr($row->notes);
+				$imageMap[$row->imgid]['copyright'] = $row->copyright;
+				$imageMap[$row->imgid]['notes'] = $row->notes;
 				$imageMap[$row->imgid]['occid'] = $row->occid;
-				$imageMap[$row->imgid]['username'] = $this->cleanOutStr($row->username);
+				$imageMap[$row->imgid]['username'] = $row->username;
 				$imageMap[$row->imgid]['sort'] = $row->sortoccurrence;
 			}
 			$result->free();
 		}
+		$this->cleanOutArr($imageMap);
 		return $imageMap;
 	}
 
@@ -2511,12 +2513,9 @@ class OccurrenceEditorManager {
 	}
 
 	protected function cleanOutStr($str){
-		$newStr = $str;
-		if($newStr){
-			$newStr = str_replace('"',"&quot;",$str);
-			$newStr = str_replace("'","&apos;",$newStr);
-		}
-		return $newStr;
+		if(!is_string($str) && !is_numeric($str) && !is_bool($str)) $str = '';
+		$str = htmlspecialchars($str, HTML_SPECIAL_CHARS_FLAGS);
+		return $str;
 	}
 
 	protected function cleanInStr($str){

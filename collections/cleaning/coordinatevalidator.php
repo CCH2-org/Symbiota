@@ -35,9 +35,9 @@ if($IS_ADMIN) $isEditor = 1;
 	<?php
 	include_once($SERVER_ROOT.'/includes/head.php');
 	?>
-	<script src="../../js/jquery-3.2.1.min.js" type="text/javascript"></script>
-	<script src="../../js/jquery-ui/jquery-ui.min.js" type="text/javascript"></script>
-	<link href="../../js/jquery-ui/jquery-ui.min.css" type="text/css" rel="Stylesheet" />
+	<link href="<?php echo $CSS_BASE_PATH; ?>/jquery-ui.css" type="text/css" rel="stylesheet">
+	<script src="<?php echo $CLIENT_ROOT; ?>/js/jquery-3.7.1.min.js" type="text/javascript"></script>
+	<script src="<?php echo $CLIENT_ROOT; ?>/js/jquery-ui.min.js" type="text/javascript"></script>
 	<script>
 		function selectAllCollections(cb,classNameStr){
 			boxesChecked = true;
@@ -162,7 +162,7 @@ if($IS_ADMIN) $isEditor = 1;
 						echo '<tr>';
 						echo '<td>';
 						echo $country;
-						echo ' <a href="../list.php?db=all&country=' . htmlspecialchars($country, HTML_SPECIAL_CHARS_FLAGS) . '" target="_blank"><img src="../../images/list.png" style="width:12px" /></a>';
+						echo ' <a href="../list.php?db=all&country=' . htmlspecialchars($country, HTML_SPECIAL_CHARS_FLAGS) . '" target="_blank"><img src="../../images/list.png" style="width:1.2em" /></a>';
 						echo '</td>';
 						echo '<td>'.number_format($cnt).'</td>';
 						echo '<td>';

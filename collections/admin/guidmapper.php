@@ -1,5 +1,3 @@
-<!DOCTYPE html>
-
 <?php
 include_once('../../config/symbini.php');
 include_once($SERVER_ROOT.'/classes/UuidFactory.php');
@@ -19,6 +17,7 @@ if($IS_ADMIN || array_key_exists("CollAdmin",$USER_RIGHTS) && in_array($collId,$
 
 $uuidManager = new UuidFactory();
 ?>
+<!DOCTYPE html>
 <html lang="<?php echo $LANG_TAG ?>">
 <head>
 	<meta http-equiv="Content-Type" content="text/html; charset=<?php echo $CHARSET; ?>">
@@ -70,6 +69,11 @@ $uuidManager = new UuidFactory();
 $displayLeftMenu = (isset($admin_guidmapperMenu)?$admin_guidmapperMenu:"true");
 include($SERVER_ROOT.'/includes/header.php');
 ?>
+<div class="navpath">
+	<a href="../../index.php"><?php echo htmlspecialchars($LANG['HOME'], HTML_SPECIAL_CHARS_FLAGS); ?></a> &gt;&gt;
+	<a href="../misc/collprofiles.php?collid=<?php echo htmlspecialchars($collId, HTML_SPECIAL_CHARS_FLAGS); ?>&emode=1"><?php echo htmlspecialchars($LANG['COL_MGMNT'], HTML_SPECIAL_CHARS_FLAGS); ?></a> &gt;&gt;
+	<b><?php echo $LANG['UID_MAP']; ?></b>
+</div>
 <!-- This is inner text! -->
 <div id="innertext">
 	<?php

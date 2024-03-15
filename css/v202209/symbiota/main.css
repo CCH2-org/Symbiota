@@ -354,32 +354,6 @@ hr {
   font-weight: bold;
 }
 
-.gridlike-form {
-  margin: 15px;
-  display: flex;
-  flex-direction: column;
-}
-
-.gridlike-form-no-margin {
-  display: flex;
-  flex-direction: column;
-}
-
-.gridlike-form-row {
-  flex: 1;
-  display: flex;
-  align-items: center;
-  gap: 10px;
-}
-
-.gridlike-form-row-label {
-  width: 100px;
-}
-
-.gridlike-form-row-input {
-  width: 40%;
-}
-
 .bottom-breathing-room-relative {
   margin-bottom: 1rem;
 }
@@ -449,11 +423,6 @@ hr {
   margin-bottom: 0.75rem;
 }
 
-.img-add {
-  border: 0px;
-  width: 15px;
-}
-
 .load-button {
   margin-top: 0.75rem;
 }
@@ -492,11 +461,6 @@ hr {
 
 .search-bar-extraShort {
   width: 5rem;
-}
-
-.fieldset-size {
-  padding: 10px;
-  max-width: 500px;
 }
 
 .max-width-fit-75 {
@@ -855,7 +819,6 @@ hr {
   font-weight: bold;
 }
 
-
 .tr-center {
   text-align: center;
 }
@@ -934,4 +897,10 @@ hr {
 button.no-margin-left,
 div.no-margin-left {
   margin-left: 0;
+}
+
+.table-scroll {
+  display: block;
+  white-space: nowrap;
+  overflow-x: scroll;
 }

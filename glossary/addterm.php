@@ -58,12 +58,12 @@ if($isEditor){
 <html>
 <head>
 	<title><?php echo $DEFAULT_TITLE.' '.(isset($LANG['GLOSSARY'])?$LANG['GLOSSARY']:'Glossary').' - '.(isset($LANG['ADD_TERM'])?$LANG['ADD_TERM']:'Add New Term'); ?> </title>
-	<link href="<?php echo htmlspecialchars($CSS_BASE_PATH, HTML_SPECIAL_CHARS_FLAGS); ?>/jquery-ui.css" type="text/css" rel="stylesheet">
+	<link href="<?php echo $CSS_BASE_PATH; ?>/jquery-ui.css" type="text/css" rel="stylesheet">
 	<?php
 	include_once($SERVER_ROOT.'/includes/head.php');
 	?>
-	<script type="text/javascript" src="../js/jquery.js"></script>
-	<script type="text/javascript" src="../js/jquery-ui.js"></script>
+	<script src="<?php echo $CLIENT_ROOT; ?>/js/jquery-3.7.1.min.js" type="text/javascript"></script>
+	<script src="<?php echo $CLIENT_ROOT; ?>/js/jquery-ui.min.js" type="text/javascript"></script>
 	<script type="text/javascript">
 		$(document).ready(function() {
 			<?php
@@ -161,7 +161,7 @@ if($isEditor){
 									}
 									?>
 								</select>
-								<a href="#" onclick="toggle('addLangDiv');return false;"><img src="../images/add.png" /></a>&nbsp;&nbsp;
+								<a href="#" onclick="toggle('addLangDiv');return false;"><img src="../images/add.png" style="width:1.5em" /></a>&nbsp;&nbsp;
 							</div>
 							<div id="addLangDiv" style="float:left;display:none">
 								<input name="newlang" type="text" maxlength="45" style="width:200px;" />

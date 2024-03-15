@@ -1,5 +1,3 @@
-<!DOCTYPE html>
-
 <?php
 include_once('../config/symbini.php');
 include_once($SERVER_ROOT.'/classes/UserTaxonomy.php');
@@ -38,15 +36,16 @@ if($isEditor){
 }
 $editorArr = $utManager->getTaxonomyEditors();
 ?>
+<!DOCTYPE html>
 <html lang="<?php echo $LANG_TAG ?>">
 <head>
 	<title><?php echo (isset($LANG['TAX_PERMISSIONS'])?$LANG['TAX_PERMISSIONS']:'Taxonomic Interest User permissions'); ?></title>
-	<link href="<?php echo htmlspecialchars($CSS_BASE_PATH, HTML_SPECIAL_CHARS_FLAGS); ?>/jquery-ui.css" type="text/css" rel="stylesheet">
+	<link href="<?php echo $CSS_BASE_PATH; ?>/jquery-ui.css" type="text/css" rel="stylesheet">
 	<?php
 	include_once($SERVER_ROOT.'/includes/head.php');
 	?>
-	<script type="text/javascript" src="../js/jquery.js"></script>
-	<script type="text/javascript" src="../js/jquery-ui.js"></script>
+	<script src="<?php echo $CLIENT_ROOT; ?>/js/jquery-3.7.1.min.js" type="text/javascript"></script>
+	<script src="<?php echo $CLIENT_ROOT; ?>/js/jquery-ui.min.js" type="text/javascript"></script>
 	<script>
 		$(document).ready(function() {
 			$( "#taxoninput" ).autocomplete({
@@ -112,7 +111,7 @@ $editorArr = $utManager->getTaxonomyEditors();
 			<h2><?php echo (isset($LANG['TAX_PERMISSIONS'])?$LANG['TAX_PERMISSIONS']:'Taxonomic Interest User permissions'); ?></h2>
 			<div style="float:right;" title="Add a new taxonomic relationship">
 				<a href="#" onclick="toggle('addUserDiv')">
-					<img style='border:0px;width:15px;' src='../images/add.png' alt='<?php echo (isset($LANG['ADD'])?$LANG['ADD']:'Add Button'); ?>'/>
+					<img style='border:0px;width:1.3em;' src='../images/add.png' alt='<?php echo (isset($LANG['ADD'])?$LANG['ADD']:'Add Button'); ?>'/>
 				</a>
 			</div>
 			<div id="addUserDiv" style="display:none;">
@@ -178,7 +177,7 @@ $editorArr = $utManager->getTaxonomyEditors();
 						$confirmStr = (isset($LANG['REMOVE_LINKS'])?$LANG['REMOVE_LINKS']:'Are you sure you want to remove all taxonomy links for this user?');
 						$titleStr = (isset($LANG['DELETE_LINKS'])?$LANG['DELETE_LINKS']:'Delete all taxonomic relationships for this user');
 						echo '<a href="usertaxonomymanager.php?delutid=all&deluid=' . htmlspecialchars($uid, HTML_SPECIAL_CHARS_FLAGS) . '&es=' . htmlspecialchars($editorStatus, HTML_SPECIAL_CHARS_FLAGS) . '" onclick="return confirm(\'' . htmlspecialchars($confirmStr, HTML_SPECIAL_CHARS_FLAGS) . '\'" title="' . htmlspecialchars($titleStr, HTML_SPECIAL_CHARS_FLAGS) . '">';
-						echo '<img src="../images/drop.png" style="width:12px;" alt="' . (isset($LANG['DELETE_LINKS']) ? $LANG['DELETE_LINKS'] : 'Delete all taxonomic relationships for this user') . '" />';
+						echo '<img src="../images/drop.png" style="width:1.3em;" alt="' . (isset($LANG['DELETE_LINKS']) ? $LANG['DELETE_LINKS'] : 'Delete all taxonomic relationships for this user') . '" />';
 						echo '</a>';
 						foreach($uArr as $utid => $utArr){
 							echo '<li style="margin-left:15px;">'.$utArr['sciname'];
@@ -187,7 +186,7 @@ $editorArr = $utManager->getTaxonomyEditors();
 							$confirmStr2 = (isset($LANG['REMOVE_ONE_LINK'])?$LANG['REMOVE_ONE_LINK']:'Are you sure you want to remove this taxonomy link for this user?');
 							$titleStr2 = (isset($LANG['DELETE_A_LINK'])?$LANG['DELETE_A_LINK']:'Delete this user taxonomic relationship');
 							echo '<a href="usertaxonomymanager.php?delutid=' . htmlspecialchars($utid, HTML_SPECIAL_CHARS_FLAGS) . '" onclick="return confirm(\'' . htmlspecialchars($confirmStr2, HTML_SPECIAL_CHARS_FLAGS) . '\'" title="' . htmlspecialchars($titleStr2, HTML_SPECIAL_CHARS_FLAGS) . '">';
-							echo '<img src="../images/drop.png" style="width:12px; alt="' . (isset($LANG['DELETE_LINKS']) ? $LANG['DELETE_LINKS'] : 'Delete all taxonomic relationships for this user') . '" />';
+							echo '<img src="../images/drop.png" style="width:1.3em; alt="' . (isset($LANG['DELETE_LINKS']) ? $LANG['DELETE_LINKS'] : 'Delete all taxonomic relationships for this user') . '" />';
 							echo '</a>';
 							echo '</li>';
 						}

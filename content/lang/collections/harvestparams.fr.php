@@ -54,6 +54,8 @@ $LANG['TITLE_TEXT_4'] = 'Date de fin de plage; laisser vide si vous recherchez u
 $LANG['SPECIMEN_HEADER'] = 'Critères de Échantillon';
 $LANG['CATALOG_NUMBER'] = 'Numéro de Catalogue';
 $LANG['INCLUDE_OTHER_CATNUM'] = "Inclure d'autres numéros de catalogue et GUIDes";
+$LANG['MATERIAL_SAMPLE_TYPE'] = 'Limiter aux Material Sample';
+$LANG['ALL_MATERIAL_SAMPLE'] = 'Tous les enregistrements contenant des échantillons de matériaux';
 $LANG['TYPE'] = 'Limiter aux Spécimens Types';
 $LANG['HAS_IMAGE'] = 'Limiter aux Spécimens avec des Images';
 $LANG['HAS_GENETIC'] = 'Limiter aux Spécimens avec des Données Génétiques';
@@ -65,4 +67,5 @@ $LANG['TYPE_TAXON'] = 'Tapez le taxon';
 $LANG['SELECT_TAXON_TYPE'] = 'Sélectionnez le type de taxon';
 $LANG['DIRECTION'] = 'Direction';
 $LANG['DISTANCE_UNIT'] = 'Unité de distance';
+$LANG['MATERIAL_SAMPLE'] = 'Échantillon de Matériel';
 ?>

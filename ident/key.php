@@ -64,8 +64,8 @@ if($chars){
 	include_once($SERVER_ROOT.'/includes/googleanalytics.php');
 	?>
 	<link href="../css/alerts.css" type="text/css" rel="stylesheet" />
-	<script src="../js/jquery.js" type="text/javascript"></script>
-	<script src="../js/jquery-ui.js" type="text/javascript"></script>
+	<script src="<?php echo $CLIENT_ROOT; ?>/js/jquery-3.7.1.min.js" type="text/javascript"></script>
+	<script src="<?php echo $CLIENT_ROOT; ?>/js/jquery-ui.min.js" type="text/javascript"></script>
 	<script src="../js/symb/ident.key.js" type="text/javascript"></script>
 	<script type="text/javascript">
 		$( function() {
@@ -262,7 +262,7 @@ echo '</div>';
 		if($clid && $isEditor){
 			?>
 			<div style="float:right;margin:15px;" title="<?php echo htmlspecialchars($LANG['EDIT_CHAR_MATRIX'], HTML_SPECIAL_CHARS_FLAGS); ?>">
-				<a href="tools/matrixeditor.php?clid=<?php echo htmlspecialchars($clid, HTML_SPECIAL_CHARS_FLAGS); ?>"><img class="editimg" src="../images/edit.png" /><span style="font-size:70%;">CM</span></a>
+				<a href="tools/matrixeditor.php?clid=<?php echo htmlspecialchars($clid, HTML_SPECIAL_CHARS_FLAGS); ?>"><img class="editimg" src="../images/edit.png" style="width:1.2em" /><span style="font-size:70%;">CM</span></a>
 			</div>
 			<?php
 		}
@@ -300,7 +300,7 @@ echo '</div>';
 					if($displayCommon) echo ($displayImages?'<br/>':(isset($taxonArr['v'])?' - ':'')) . '<span class="vern-span">' . (isset($taxonArr['v'])?$taxonArr['v']:'&nbsp;') . '</span>';
 					if($isEditor && !$displayImages){
 						echo '<a href="#" onclick="openEditorPopup('.$tid.')">';
-						echo '<img class="editimg" src="../images/edit.png" title="' . $LANG['EDITMORP'] . '" />';
+						echo '<img class="editimg" src="../images/edit.png" style="width:1.2em" title="' . $LANG['EDITMORP'] . '" />';
 						echo '</a>';
 					}
 					echo '</div>';

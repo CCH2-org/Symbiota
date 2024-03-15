@@ -1,5 +1,3 @@
-<!DOCTYPE html>
-
 <?php
 include_once('../config/symbini.php');
 include_once($SERVER_ROOT.'/content/lang/collections/sharedterms.'.$LANG_TAG.'.php');
@@ -21,6 +19,7 @@ $obsArr = (isset($collList['obs'])?$collList['obs']:null);
 
 $otherCatArr = $collManager->getOccurVoucherProjects();
 ?>
+<!DOCTYPE html>
 <html lang="<?php echo $LANG_TAG ?>">
 	<head>
 		<meta http-equiv="Content-Type" content="text/html; charset=<?php echo $CHARSET;?>">
@@ -31,9 +30,9 @@ $otherCatArr = $collManager->getOccurVoucherProjects();
 		?>
 		<link href="<?php echo htmlspecialchars($CSS_BASE_PATH, HTML_SPECIAL_CHARS_FLAGS); ?>/symbiota/collections/listdisplay.css" type="text/css" rel="stylesheet" />
 		<link href="<?php echo htmlspecialchars($CSS_BASE_PATH, HTML_SPECIAL_CHARS_FLAGS); ?>/symbiota/collections/sharedCollectionStyling.css" type="text/css" rel="stylesheet" />
-		<script src="../js/jquery-3.2.1.min.js" type="text/javascript"></script>
-		<script src="../js/jquery-ui/jquery-ui.min.js" type="text/javascript"></script>
-		<link href="../js/jquery-ui/jquery-ui.min.css" type="text/css" rel="Stylesheet" />
+		<link href="<?php echo $CSS_BASE_PATH; ?>/jquery-ui.css" type="text/css" rel="stylesheet">
+		<script src="<?php echo $CLIENT_ROOT; ?>/js/jquery-3.7.1.min.js" type="text/javascript"></script>
+		<script src="<?php echo $CLIENT_ROOT; ?>/js/jquery-ui.min.js" type="text/javascript"></script>
 		<script src="../js/symb/collections.index.js?ver=20171215" type="text/javascript"></script>
 		<script type="text/javascript">
 			$(document).ready(function() {
@@ -174,8 +173,8 @@ $otherCatArr = $collManager->getOccurVoucherProjects();
 									<div>
 										<a href="#" onclick="togglePid('<?php echo htmlspecialchars($pid, HTML_SPECIAL_CHARS_FLAGS); ?>');return false;">
 											<div class="condense-expand-button-set">
-												<img id="plus-<?php echo $pid; ?>" alt="plus sign to expand menu" src="../../images/plus_sm.png" style="display: none;" />
-												<img id="minus-<?php echo $pid; ?>" alt="minus sign to condense menu" src="../../images/minus_sm.png" />
+												<img id="plus-<?php echo $pid; ?>" alt="plus sign to expand menu" src="../../images/plus.png" style="display: none;" />
+												<img id="minus-<?php echo $pid; ?>" alt="minus sign to condense menu" src="../../images/minus.png" />
 												<p id="pid-ptext-<?php echo $pid; ?>" style="<?php echo (($DEFAULTCATID && $DEFAULTCATID != $catid) ? '' : 'display:none;') ?>">
 													<?php echo $LANG['EXPAND'] ?>
 												</p>

@@ -1,12 +1,13 @@
 <?php
 include_once('../config/symbini.php');
 include_once($SERVER_ROOT.'/classes/ChecklistManager.php');
-@include_once($SERVER_ROOT.'/content/lang/checklists/checklistmap.'.$LANG_TAG.'.php');
+if($LANG_TAG != 'en' && file_exists($SERVER_ROOT.'/content/lang/checklists/checklistmap.' . $LANG_TAG . '.php')) include_once($SERVER_ROOT . '/content/lang/checklists/checklistmap.' . $LANG_TAG . '.php');
+else include_once($SERVER_ROOT.'/content/lang/checklists/checklistmap.en.php');
 header('Content-Type: text/html; charset='.$CHARSET);
 
 $clid = filter_var($_REQUEST['clid'], FILTER_SANITIZE_NUMBER_INT);
-$thesFilter = array_key_exists('thesfilter',$_REQUEST)?filter_var($_REQUEST['thesfilter'], FILTER_SANITIZE_NUMBER_INT):1;
-$taxonFilter = array_key_exists('taxonfilter',$_REQUEST)?filter_var($_REQUEST['taxonfilter'], FILTER_SANITIZE_STRING):'';
+$thesFilter = array_key_exists('thesfilter', $_REQUEST) ? filter_var($_REQUEST['thesfilter'], FILTER_SANITIZE_NUMBER_INT) : 1;
+$taxonFilter = array_key_exists('taxonfilter', $_REQUEST) ? $_REQUEST['taxonfilter'] : '';
 
 if(!$thesFilter) $thesFilter = 1;
 
@@ -35,7 +36,7 @@ $metaJson = json_encode($clMeta);
 ?>
 <html>
 <head>
-	<title><?php echo $DEFAULT_TITLE.' - '.(isset($LANG['COORD_MAP'])?$LANG['COORD_MAP']:'Checklist Coordinate Map'); ?></title>
+	<title><?php echo $DEFAULT_TITLE . ' - ' . $LANG['COORD_MAP']; ?></title>
 	<?php
 	include_once($SERVER_ROOT.'/includes/googleanalytics.php');
 	include_once($SERVER_ROOT.'/includes/leafletMap.php');
@@ -60,9 +61,9 @@ $metaJson = json_encode($clMeta);
          map = new LeafletMap("map_canvas", dmOptions);
          const leafletSmallPin = img => L.icon({
             iconUrl: img,
-            iconSize:     [12, 20], 
-            iconAnchor:   [6, 20], 
-            popupAnchor:  [0, -12], 
+            iconSize:     [12, 20],
+            iconAnchor:   [6, 20],
+            popupAnchor:  [0, -12],
             tooltipAnchor:  [0, -12]
          });
 
@@ -139,7 +140,7 @@ $metaJson = json_encode($clMeta);
                });
             bounds.extend(marker.getPosition());
 
-            google.maps.event.addListener(marker, 'click', function() { 
+            google.maps.event.addListener(marker, 'click', function() {
                openIndPU(coord.occid)
             })
          }
@@ -160,7 +161,7 @@ $metaJson = json_encode($clMeta);
                      let marker = new google.maps.Marker({
                         position: new google.maps.LatLng(occur.geojson.coordinates[1], occur.geojson.coordinates[0]),
                         title: occur.uri,
-                        title: "iNaturalist-" + occur.id, 
+                        title: "iNaturalist-" + occur.id,
                         icon: inatIcon,
                         map: map.mapLayer,
                         zIndex: google.maps.Marker.MAX_ZINDEX
@@ -187,7 +188,7 @@ $metaJson = json_encode($clMeta);
           }
       }
 
-		// Note Need to Throttle to < 100 requests per minute as per iNaturalist API guidelines 
+		// Note Need to Throttle to < 100 requests per minute as per iNaturalist API guidelines
       async function getInatProjectOccurrences(inat_proj_id) {
 
          let url = `https://api.inaturalist.org/v1/observations?project_id=${inat_proj_id}&geo=true&mappable=true&per_page=200`;
@@ -243,10 +244,10 @@ $metaJson = json_encode($clMeta);
 	if(!$coordArr){
 		?>
 		<div style='font-size:120%;font-weight:bold;'>
-			<?php echo (isset($LANG['NO_COORDS'])?$LANG['NO_COORDS']:'Your query apparently does not contain any records with coordinates that can be mapped'); ?>.
+			<?php echo $LANG['NO_COORDS']; ?>.
 		</div>
 		<div style="margin:15px;">
-			<?php echo (isset($LANG['MAYBE_RARE'])?$LANG['MAYBE_RARE']:'It may be that the vouchers have rare/threatened status that require the locality coordinates be hidden'); ?>.
+			<?php echo $LANG['MAYBE_RARE']; ?>.
 		</div>
 		<?php
 	}

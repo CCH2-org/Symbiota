@@ -31,12 +31,12 @@ $genusAnswer = strtok($scinameAnswer, " ");
 <html>
 <head>
 	<title><?php echo $ootdTitle; ?></title>
-	<link href="<?php echo htmlspecialchars($CSS_BASE_PATH, HTML_SPECIAL_CHARS_FLAGS); ?>/jquery-ui.css" type="text/css" rel="stylesheet">
+	<link href="<?php echo $CSS_BASE_PATH; ?>/jquery-ui.css" type="text/css" rel="stylesheet">
 	<?php
 	include_once($SERVER_ROOT.'/includes/head.php');
 	?>
-	<script src="../../js/jquery.js" type="text/javascript"></script>
-	<script src="../../js/jquery-ui.js" type="text/javascript"></script>
+	<script src="<?php echo $CLIENT_ROOT; ?>/js/jquery-3.7.1.min.js" type="text/javascript"></script>
+	<script src="<?php echo $CLIENT_ROOT; ?>/js/jquery-ui.min.js" type="text/javascript"></script>
 	<script type="text/javascript">
 		var clientRoot = "<?php echo $CLIENT_ROOT; ?>";
 		var giveUp = false;
@@ -126,7 +126,7 @@ $genusAnswer = strtok($scinameAnswer, " ");
 					<div style="margin-left:auto;margin-right:auto;font-size:18px;text-align:center;margin-top:20px;margin-bottom:20px;" >
 						<b>Name that <?php echo $ootdType; ?>!</b>
 						<a id="gameinfo" href="#" onclick="return false" title="How to Play?">
-							<img src="../../images/games/ootd/qmark.png" style="height:20px;"/>
+							<img src="../../images/qmark.png" style="width:2em;"/>
 						</a>
 						<div id="gameinfodialog" title="How to Play">
 							Look at the picture, and see if you can figure out what the <?php echo $ootdType; ?> is. If you get completely stumped, you can

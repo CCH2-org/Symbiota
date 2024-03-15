@@ -28,8 +28,8 @@ elseif(array_key_exists('CollEditor',$USER_RIGHTS) && in_array($collid,$USER_RIG
 $materialSampleArr = $materialSampleManager->getMaterialSampleArr();
 $controlTermArr = $materialSampleManager->getMSTypeControlValues();
 ?>
-<script src="<?php echo $CLIENT_ROOT; ?>/js/jquery.js" type="text/javascript"></script>
-<script src="<?php echo $CLIENT_ROOT; ?>/js/jquery-ui.js" type="text/javascript"></script>
+<script src="<?php echo $CLIENT_ROOT; ?>/js/jquery-3.7.1.min.js" type="text/javascript"></script>
+<script src="<?php echo $CLIENT_ROOT; ?>/js/jquery-ui.min.js" type="text/javascript"></script>
 <script>
 	var collid = <?php echo $collid; ?>;
 	$(document).ready(function() {
@@ -61,7 +61,7 @@ $controlTermArr = $materialSampleManager->getMSTypeControlValues();
 </style>
 <div style="width:795px;">
 	<div class="edit-control">
-		<span><a href="#" onclick="$('#formDiv-0').toggle()"><img src="../../images/add.png" /></a></span>
+		<span><a href="#" onclick="$('#formDiv-0').toggle()"><img src="../../images/add.png" style="width:1.5em;" /></a></span>
 	</div>
 	<!--
 	<div style="margin: 20px;">
@@ -79,7 +79,7 @@ $controlTermArr = $materialSampleManager->getMSTypeControlValues();
 				echo '<fieldset><legend>' . $LANG['MAT_SAMP'] . '</legend>';
 				?>
 				<div class="edit-control">
-					<span><a href="#" onclick="$('#formDiv-<?php echo $matSampleID; ?>').toggle()"><img src="../../images/edit.png" /></a></span>
+					<span><a href="#" onclick="$('#formDiv-<?php echo $matSampleID; ?>').toggle()"><img src="../../images/edit.png" style="width:1.2em;" /></a></span>
 				</div>
 				<?php
 			}

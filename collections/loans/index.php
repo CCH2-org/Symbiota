@@ -52,12 +52,12 @@ if($isEditor){
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=<?php echo $CHARSET;?>">
 	<title><?php echo $DEFAULT_TITLE . ' ' . $LANG['LOAN_MANAGE']; ?></title>
-	<link href="<?php echo htmlspecialchars($CSS_BASE_PATH, HTML_SPECIAL_CHARS_FLAGS); ?>/jquery-ui.css" type="text/css" rel="stylesheet">
+	<link href="<?php echo $CSS_BASE_PATH; ?>/jquery-ui.css" type="text/css" rel="stylesheet">
 	<?php
 	include_once($SERVER_ROOT . '/includes/head.php');
 	?>
-	<script type="text/javascript" src="../../js/jquery.js"></script>
-	<script type="text/javascript" src="../../js/jquery-ui.js"></script>
+	<script src="<?php echo $CLIENT_ROOT; ?>/js/jquery-3.7.1.min.js" type="text/javascript"></script>
+	<script src="<?php echo $CLIENT_ROOT; ?>/js/jquery-ui.min.js" type="text/javascript"></script>
 	<script type="text/javascript">
 		var tabIndex = <?php echo $tabIndex; ?>;
 
@@ -239,7 +239,7 @@ if($isEditor){
 						?>
 						<div id="loanoutToggle" style="float:right;margin:10px;">
 							<a href="#" onclick="displayNewLoanOut();">
-								<img src="../../images/add.png" alt="<?php echo $LANG['CREATE_NEW_LOAN']; ?>" />
+								<img src="../../images/add.png" style="width:1.5em;" title="<?php echo $LANG['CREATE_NEW_LOAN']; ?>" alt="<?php echo $LANG['CREATE_NEW_LOAN']; ?>" />
 							</a>
 						</div>
 						<?php
@@ -280,7 +280,7 @@ if($isEditor){
 									</span>
 									<span>
 										<a href="../misc/institutioneditor.php?emode=1" target="_blank" title="<?php echo $LANG['ADD_NEW_INST']; ?>">
-											<img src="../../images/add.png" style="width:15px;" />
+											<img src="../../images/add.png" style="width:1.2em;" />
 										</a>
 									</span>
 								</div>
@@ -314,7 +314,7 @@ if($isEditor){
 								}
 
 								echo '<li>';
-								echo '<a href="outgoing.php?collid=' . htmlspecialchars($targetCollid, HTML_SPECIAL_CHARS_FLAGS) . '&loanid=' . htmlspecialchars($k, HTML_SPECIAL_CHARS_FLAGS) . '">' . htmlspecialchars($loanArr['loanidentifierown'], HTML_SPECIAL_CHARS_FLAGS) . ' <img src="../../images/edit.png" style="width:12px" /></a> ';
+								echo '<a href="outgoing.php?collid=' . htmlspecialchars($targetCollid, HTML_SPECIAL_CHARS_FLAGS) . '&loanid=' . htmlspecialchars($k, HTML_SPECIAL_CHARS_FLAGS) . '">' . htmlspecialchars($loanArr['loanidentifierown'], HTML_SPECIAL_CHARS_FLAGS) . ' <img src="../../images/edit.png" style="width:1.2em" /></a> ';
 								if(isset($loanArr['isexternal'])) echo '<span style="color:orange">' . $LANG['EXTERNAL_COLL'] . '</span>';
 								echo ': ' . ($loanArr['institutioncode'] ? $loanArr['institutioncode'] : ($loanArr['institutionname'] ? $loanArr['institutionname'] : '[no name]'));
 								echo ' (' . $loanArr['forwhom'] . ') - ' . ($loanArr['dateclosed']? $LANG['CLOSED'] . ': ' . $loanArr['dateclosed']:'<b>' . $LANG['OPEN'] . '</b>');
@@ -361,7 +361,7 @@ if($isEditor){
 					?>
 					<div id="loaninToggle" style="float:right;margin:10px;">
 						<a href="#" onclick="displayNewLoanIn();">
-							<img src="../../images/add.png" alt="Create New Loan" />
+							<img src="../../images/add.png" style="width:1.5em;" title="<?php echo $LANG['CREATE_NEW_LOAN']; ?>" alt="<?php echo $LANG['CREATE_NEW_LOAN']; ?>" />
 						</a>
 					</div>
 					<div id="newloanindiv" style="display:<?php echo (($loanInList || $loansOnWay || $searchTerm)?'none':'block'); ?>;">
@@ -400,7 +400,7 @@ if($isEditor){
 									</span>
 									<span>
 										<a href="../misc/institutioneditor.php?emode=1" target="_blank" title="<?php echo $LANG['ADD_NEW_INST']; ?>">
-											<img src="../../images/add.png" style="width:15px;" />
+											<img src="../../images/add.png" style="width:1.2em;" />
 										</a>
 									</span>
 								</div>
@@ -429,7 +429,7 @@ if($isEditor){
 									$due = ' (<span class="' . ($overdue?'important':'') . '">' . $LANG['DUE'] . ': ' . $loanArr['datedue'] . '</span>)';
 								}
 								echo '<li>';
-								echo '<a href="incoming.php?collid=' . htmlspecialchars($collid, HTML_SPECIAL_CHARS_FLAGS) . '&loanid=' . htmlspecialchars($k, HTML_SPECIAL_CHARS_FLAGS) . '">' . htmlspecialchars($loanArr['loanidentifierborr'], HTML_SPECIAL_CHARS_FLAGS) . ' <img src="../../images/edit.png" style="width:12px" /></a>: ';
+								echo '<a href="incoming.php?collid=' . htmlspecialchars($collid, HTML_SPECIAL_CHARS_FLAGS) . '&loanid=' . htmlspecialchars($k, HTML_SPECIAL_CHARS_FLAGS) . '">' . htmlspecialchars($loanArr['loanidentifierborr'], HTML_SPECIAL_CHARS_FLAGS) . ' <img src="../../images/edit.png" style="width:1.2em" /></a>: ';
 								echo ($loanArr['institutioncode'] ? $loanArr['institutioncode'] : ($loanArr['institutionname'] ? $loanArr['institutionname'] : '[' . $LANG['NO_NAME'] . ']'));
 								echo ' (' . $loanArr['forwhom'] . ') - ' . ($loanArr['dateclosed'] ? $LANG['CLOSED'] . ': ' . $loanArr['dateclosed'] : '<b>' . $LANG['OPEN'] . '</b>');
 								echo ($loanArr['dateclosed'] ? '' : ($loanArr['datedue'] ? $due : ''));

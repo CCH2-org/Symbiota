@@ -1,5 +1,6 @@
 var imgAssocCleared = false;
 var voucherAssocCleared = false;
+var localitySecurityIsDefault = false;
 
 $(document).ready(function() {
 	
@@ -89,7 +90,9 @@ $(document).ready(function() {
 			$( "#tidinterpreted" ).val("");
 			$( 'input[name=scientificnameauthorship]' ).val("");
 			$( 'input[name=family]' ).val("");
-			$( 'input[name=localitysecurity]' ).prop('checked', false);
+			if($("input[name=localitysecurityreason]").val() == ""){
+				$("select[name=localitysecurity]").val(0);
+			}
 			fieldChanged('sciname');
 			fieldChanged('tidinterpreted');
 			fieldChanged('scientificnameauthorship');
@@ -204,7 +207,6 @@ $(document).ready(function() {
 		}
 	},{autoFocus: true});
 
-
 	$("#catalognumber").keydown(function(evt){
 		var evt  = (evt) ? evt : ((event) ? event : null);
 		if(evt.keyCode == 13) return false;
@@ -254,8 +256,9 @@ function verifyFullFormSciName(){
 				$( 'select[name=confidenceranking]' ).val(8);
 			}
 			*/
-			if(data.status == 1){
-				$( 'input[name=localitysecurity]' ).prop('checked', true);
+			if(data.status == 1 && !$("input[name=cultivationstatus]").prop('checked')){
+				$("select[name=localitysecurity]").val(1);
+				securityChanged(document.fullform);
 			}
 			else{
 				if(data.tid){
@@ -305,8 +308,9 @@ function localitySecurityCheck(){
 			dataType: "json",
 			data: { tid: tidIn, state: stateIn }
 		}).done(function( data ) {
-			if(data == "1"){
-				$( 'input[name=localitysecurity]' ).prop('checked', true);
+			if(data == "1" && !$("input[name=cultivationstatus]").prop('checked')){
+				$("select[name=localitysecurity]").val(1);
+				securityChanged(document.fullform);
 			}
 		});
 	}
@@ -330,6 +334,17 @@ function fieldChanged(fieldName){
 		document.fullform.editedfields.value = document.fullform.editedfields.value + fieldName + ";";
 	}
 	catch(ex){
+	}
+	if(fieldName == 'cultivationstatus'){
+		if($("input[name=cultivationstatus]").prop('checked')){
+			if($("select[name=localitysecurity]").val() == 1 && $("input[name=localitysecurityreason]").val() == ""){
+				localitySecurityIsDefault = true;
+				$("select[name=localitysecurity]").val(0);
+			}
+		}
+		else if(localitySecurityIsDefault){
+			$("select[name=localitysecurity]").val(1);
+		}
 	}
 }
 
@@ -662,26 +677,6 @@ function verifyFullForm(f){
 		alert("Event date is invalid");
 		return false;
 	}
-	if(!isNumeric(f.year.value)){
-		alert("Collection year field must be numeric only");
-		return false;
-	}
-	if(!isNumeric(f.month.value)){
-		alert("Collection month field must be numeric only");
-		return false;
-	}
-	if(!isNumeric(f.day.value)){
-		alert("Collection day field must be numeric only");
-		return false;
-	}
-	if(!isNumeric(f.startdayofyear.value)){
-		alert("Start day of year field must be numeric only");
-		return false;
-	}
-	if(!isNumeric(f.enddayofyear.value)){
-		alert("End day of year field must be numeric only");
-		return false;
-	}
 	if(f.ometid && ((f.ometid.value != "" && f.exsnumber.value == "") || (f.ometid.value == "" && f.exsnumber.value != ""))){
 		alert("You must have both an exsiccati title and number, or neither. If there is no number, s.n. can be entered.");
 		return false;
@@ -916,6 +911,17 @@ function displayDeleteSubmit(){
 }
 
 function eventDateChanged(eventDateInput){
+	validateDate(eventDateInput);
+	fieldChanged('eventdate');
+	if(!eventDateInput.form.recordnumber.value && eventDateInput.form.recordedby.value) autoDupeSearch();
+}
+
+function eventDate2Changed(eventDateInput){
+	validateDate(eventDateInput);
+	fieldChanged('eventdate2');
+}
+
+function validateDate(eventDateInput){
 	var dateStr = eventDateInput.value;
 	if(dateStr != ""){
 		var dateArr = parseDate(dateStr);
@@ -962,45 +968,9 @@ function eventDateChanged(eventDateInput){
 				dStr = "0" + dStr;
 			}
 			eventDateInput.value = dateArr['y'] + "-" + mStr + "-" + dStr;
-			if(dateArr['y'] > 0) distributeEventDate(dateArr['y'],dateArr['m'],dateArr['d']);
 		}
 	}
-	else{
-		distributeEventDate("","","");
-	}
-	fieldChanged('eventdate');
-	if(!eventDateInput.form.recordnumber.value && eventDateInput.form.recordedby.value) autoDupeSearch();
 	return true;
-}
-
-function distributeEventDate(y, m, d){
-	var f = document.fullform;
-	if(y == "0000") y = "";
-	f.year.value = y;
-	fieldChanged("year");
-
-	if(m == "00") m = "";
-	f.month.value = m;
-	fieldChanged("month");
-
-	if(d == "00") d = "";
-	f.day.value = d;
-	fieldChanged("day");
-
-	f.startdayofyear.value = "";
-	f.enddayofyear.value = "";
-	try{
-		if(m > 0 && d > 0){
-			eDate = new Date(y,m-1,d);
-			if(eDate instanceof Date && eDate != "Invalid Date"){
-				var onejan = new Date(y,0,1);
-				f.startdayofyear.value = Math.ceil((eDate - onejan) / 86400000) + 1;
-				fieldChanged("startdayofyear");
-			}
-		}
-	}
-	catch(e){
-	}
 }
 
 function verbatimEventDateChanged(vedObj){
@@ -1025,19 +995,6 @@ function verbatimEventDateChanged(vedObj){
 				dStr = "0" + dStr;
 			}
 			f.eventdate.value = startDateArr['y'] + "-" + mStr + "-" + dStr;
-			distributeEventDate(startDateArr['y'],mStr,dStr);
-		}
-		var endDate = vedValue.substring(vedValue.indexOf(" to ")+4);
-		var endDateArr = parseDate(endDate);
-		try{
-			var eDate = new Date(endDateArr["y"],endDateArr["m"]-1,endDateArr["d"]);
-			if(eDate instanceof Date && eDate != "Invalid Date"){
-				var onejan = new Date(endDateArr["y"],0,1);
-				f.enddayofyear.value = Math.ceil((eDate - onejan) / 86400000) + 1;
-				fieldChanged("enddayofyear");
-			}
-		}
-		catch(e){
 		}
 	}
 }
@@ -1206,6 +1163,17 @@ function openOccurrenceSearch(target) {
 	if (occWindow.opener == null) occWindow.opener = self;
 }
 
+function securityChangedByUser(f){
+	securityChanged(f);
+	if(f.localitysecurity.value == 1){
+		f.lockLocalitySecurity.checked = true;
+	}
+	else{
+		f.lockLocalitySecurity.checked = false;
+	}
+	securityLockChanged(f.lockLocalitySecurity);
+}
+
 function securityChanged(f){
 	fieldChanged('localitysecurity');
 	$("#locsecreason").show();
@@ -1223,12 +1191,15 @@ function localitySecurityReasonChanged(){
 
 function securityLockChanged(cb){
 	if(cb.checked == true){
-		if($("input[name=localitysecurityreason]").val() == '') $("input[name=localitysecurityreason]").val("[Security Setting Locked]");
+		if($("input[name=localitysecurityreason]").val() == ''){
+			$("input[name=localitysecurityreason]").val("[Security Setting Locked]");
+			fieldChanged('localitysecurityreason');
+		} 
 	}
 	else{
 		$("input[name=localitysecurityreason]").val("")
+		fieldChanged('localitysecurityreason');
 	}
-	fieldChanged('localitysecurityreason');
 }
 
 function autoProcessingStatusChanged(selectObj){
@@ -1249,12 +1220,6 @@ function autoDupeChanged(dupeCbObj){
 	}
 	else{
 		document.cookie = "autodupe=;expires=Thu, 01 Jan 1970 00:00:01 GMT;";
-	}
-}
-
-function inputIsNumeric(inputObj, titleStr){
-	if(!isNumeric(inputObj.value)){
-		alert("Input value for " + titleStr + " must be a number value only! " );
 	}
 }
 

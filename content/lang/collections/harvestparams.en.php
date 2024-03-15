@@ -54,6 +54,8 @@ $LANG['TITLE_TEXT_4'] = 'End date of range; leave blank if searching for single 
 $LANG['SPECIMEN_HEADER'] = 'Specimen Criteria';
 $LANG['CATALOG_NUMBER'] = 'Catalog Number';
 $LANG['INCLUDE_OTHER_CATNUM'] = 'Include other catalog numbers and GUIDs';
+$LANG['MATERIAL_SAMPLE_TYPE'] = 'Limit by Material Sample';
+$LANG['ALL_MATERIAL_SAMPLE'] = 'All Records with Material Samples';
 $LANG['TYPE'] = 'Limit to Type Specimens';
 $LANG['HAS_IMAGE'] = 'Limit to Specimens with Images';
 $LANG['HAS_GENETIC'] = 'Limit to Specimens with Genetic Data';
@@ -65,4 +67,5 @@ $LANG['TYPE_TAXON'] = 'Type taxon';
 $LANG['SELECT_TAXON_TYPE'] = 'Select taxon type';
 $LANG['DIRECTION'] = 'Direction';
 $LANG['DISTANCE_UNIT'] = 'Unit of distance';
+$LANG['MATERIAL_SAMPLE'] = 'Material Sample';
 ?>

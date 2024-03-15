@@ -1,5 +1,3 @@
-<!DOCTYPE html>
-
 <?php
 include_once('../../config/symbini.php');
 include_once($SERVER_ROOT.'/classes/DwcArchiverCore.php');
@@ -15,17 +13,18 @@ $searchVar = array_key_exists('searchvar', $_REQUEST) ? $_REQUEST['searchvar'] :
 
 $dwcManager = new DwcArchiverCore();
 ?>
+<!DOCTYPE html>
 <html lang="<?php echo $LANG_TAG ?>">
 <head>
 	<title> <?php echo (isset($LANG['COLL_SEARCH_DWNL']) ? $LANG['COLL_SEARCH_DWNL'] : 'Collections Search Download'); ?> </title>
 	<meta http-equiv="Content-Type" content="text/html; charset=<?php echo $CHARSET; ?>"/>
-	<link href="<?php echo htmlspecialchars($CSS_BASE_PATH, HTML_SPECIAL_CHARS_FLAGS); ?>/jquery-ui.css" type="text/css" rel="stylesheet">
+	<link href="<?php echo $CSS_BASE_PATH; ?>/jquery-ui.css" type="text/css" rel="stylesheet">
 	<?php
 	include_once($SERVER_ROOT.'/includes/head.php');
 	include_once($SERVER_ROOT.'/includes/googleanalytics.php');
 	?>
-	<script src="../../js/jquery.js" type="text/javascript"></script>
-	<script src="../../js/jquery-ui.js" type="text/javascript"></script>
+	<script src="<?php echo $CLIENT_ROOT; ?>/js/jquery-3.7.1.min.js" type="text/javascript"></script>
+	<script src="<?php echo $CLIENT_ROOT; ?>/js/jquery-ui.min.js" type="text/javascript"></script>
 	<script>
 		$(document).ready(function() {
 			var dialogArr = new Array("schemanative","schemadwc");
@@ -129,7 +128,7 @@ $dwcManager = new DwcArchiverCore();
 								<input type="radio" name="schema" id="symbiota-native" value="symbiota" onclick="georefRadioClicked(this)" CHECKED />
 								<label for="symbiota-native">  <?php echo (isset($LANG['SYMB_NATIVE']) ? $LANG['SYMB_NATIVE'] : 'Symbiota Native'); ?>  </label>
 								<a id="schemanativeinfo" aria-label="<?php echo (isset($LANG['MORE_INFO']) ? $LANG['MORE_INFO'] : 'More Information'); ?>" href="#" onclick="return false" title="<?php echo (isset($LANG['MORE_INFO']) ? $LANG['MORE_INFO'] : 'More Information'); ?>">
-									<img src="../../images/info.png" alt=" <?php echo (isset($LANG['IMG_NATIVE_INFO']) ? $LANG['IMG_NATIVE_INFO'] : 'Info icon clarifying that Symbiota native is similar to Darwin Core plus some fields'); ?> " style="width:13px;" />
+									<img src="../../images/info.png" alt=" <?php echo (isset($LANG['IMG_NATIVE_INFO']) ? $LANG['IMG_NATIVE_INFO'] : 'Info icon clarifying that Symbiota native is similar to Darwin Core plus some fields'); ?> " style="width:1.2em;" />
 								</a><br/>
 								<div id="schemanativeinfodialog">
 									<?php echo (isset($LANG['SYMB_NATIVE_INFO']) ? $LANG['SYMB_NATIVE_INFO'] : 'Symbiota native is very similar to Darwin Core except with the addtion of a few fields
@@ -138,7 +137,7 @@ $dwcManager = new DwcArchiverCore();
 								<input type="radio" name="schema" id="darwin-core" value="dwc" onclick="georefRadioClicked(this)" />
 								<label for="darwin-core">  <?php echo (isset($LANG['DARWIN_CORE']) ? $LANG['DARWIN_CORE'] : 'Darwin Core'); ?> </label>
 								<a id="schemadwcinfo" href="#" title="<?php echo (isset($LANG['MORE_INFO']) ? $LANG['MORE_INFO'] : 'More Information'); ?>" aria-label="<?php echo (isset($LANG['MORE_INFO']) ? $LANG['MORE_INFO'] : 'More Information'); ?>">
-									<img src="../../images/info.png" alt=" <?php echo (isset($LANG['IMG_DARWIN_INFO']) ? $LANG['IMG_DARWIN_INFO'] : 'Info icon: DwC is a TDWG endorsed standard for biodata. Link to DwC quick ref guide in the dialog.'); ?>" style="width:13px;" />
+									<img src="../../images/info.png" alt=" <?php echo (isset($LANG['IMG_DARWIN_INFO']) ? $LANG['IMG_DARWIN_INFO'] : 'Info icon: DwC is a TDWG endorsed standard for biodata. Link to DwC quick ref guide in the dialog.'); ?>" style="width:1.2em;" />
 								</a><br/>
 								<div id="schemadwcinfodialog">
 									<?php echo (isset($LANG['DARWIN_GUIDE']) ? $LANG['DARWIN_GUIDE'] : 'Darwin Core (DwC) is a TDWG endorsed exchange standard specifically for biodiversity datasets.

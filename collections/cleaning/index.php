@@ -1,5 +1,3 @@
-<!DOCTYPE html>
-
 <?php
 include_once('../../config/symbini.php');
 include_once($SERVER_ROOT.'/classes/OccurrenceCleaner.php');
@@ -27,6 +25,7 @@ if($collMap['colltype'] == 'General Observations'){
 	$cleanManager->setObsUid($SYMB_UID);
 }
 ?>
+<!DOCTYPE html>
 <html lang="<?php echo $LANG_TAG ?>">
 <head>
 	<meta http-equiv="Content-Type" content="text/html; charset=<?php echo $CHARSET; ?>">
@@ -34,11 +33,6 @@ if($collMap['colltype'] == 'General Observations'){
 	<?php
 	include_once($SERVER_ROOT.'/includes/head.php');
 	?>
-	<style>
-		table.styledtable {  width: 300px }
-		table.styledtable td { white-space: nowrap; }
-		h3 { text-decoration:underline }
-	</style>
 </head>
 <body>
 	<?php
@@ -99,7 +93,7 @@ if($collMap['colltype'] == 'General Observations'){
 			}
 			?>
 
-			<h3> <?php echo (isset($LANG['POLITIC_GEO']) ? $LANG['POLITIC_GEO'] : 'Political Geography') ?> </h3>
+			<h2> <?php echo $LANG['POLITIC_GEO'] ?> </h2>
 			<div style="margin:0px 0px 40px 15px;">
 				<div>
 					<?php echo (isset($LANG['POLITIC_GEO_DESCR']) ? $LANG['POLITIC_GEO_DESCR'] : 'These tools help standardize country, state/province, and county designations.
@@ -123,7 +117,7 @@ if($collMap['colltype'] == 'General Observations'){
 				</section>
 			</div>
 <!--
-			<h3>Specimen Coordinates</h3>
+			<h2>Specimen Coordinates</h2>
 			<div style="margin:0px 0px 40px 15px;">
 				<div>
 					These tools are to aid collection managers in verifying, ranking, and managing coordinate information associated with occurrence records.
@@ -138,7 +132,7 @@ if($collMap['colltype'] == 'General Observations'){
 							<?php
 							if($statsArr['coord']){
 								?>
-								<a href="../editor/occurrencetabledisplay.php?collid=<?php echo htmlspecialchars($collid, HTML_SPECIAL_CHARS_FLAGS); ?>&occindex=0&q_catalognumber=&q_customfield1=decimallatitude&q_customtype1=NOTNULL" style="margin-left:5px;" title="Open Editor" target="_blank">
+								<a href="../editor/occurrencetabledisplay.php?collid=<?= $collid ?>&occindex=0&q_catalognumber=&q_customfield1=decimallatitude&q_customtype1=NOT_NULL" style="margin-left:5px;" title="Open Editor" target="_blank">
 									<img src="../../images/edit.png" style="width:10px" />
 								</a>
 								<?php
@@ -149,7 +143,7 @@ if($collMap['colltype'] == 'General Observations'){
 							<?php
 							if($statsArr['noCoord']){
 								?>
-								<a href="../editor/occurrencetabledisplay.php?collid=<?php echo htmlspecialchars($collid, HTML_SPECIAL_CHARS_FLAGS); ?>&occindex=0&q_catalognumber=&q_customfield1=decimallatitude&q_customtype1=NULL" style="margin-left:5px;" title="Open Editor" target="_blank">
+								<a href="../editor/occurrencetabledisplay.php?collid=<?php echo htmlspecialchars($collid, HTML_SPECIAL_CHARS_FLAGS); ?>&occindex=0&q_catalognumber=&q_customfield1=decimallatitude&q_customtype1=IS_NULL" style="margin-left:5px;" title="Open Editor" target="_blank">
 									<img src="../../images/edit.png" style="width:10px" />
 								</a>
 								<a href="../georef/batchgeoreftool.php?collid=<?php echo htmlspecialchars($collid, HTML_SPECIAL_CHARS_FLAGS); ?>" style="margin-left:5px;" title="Open Batch Georeference Tool" target="_blank">
@@ -163,7 +157,7 @@ if($collMap['colltype'] == 'General Observations'){
 							<?php
 							if($statsArr['noCoord_verbatim']){
 								?>
-								<a href="../editor/occurrencetabledisplay.php?collid=<?php echo htmlspecialchars($collid, HTML_SPECIAL_CHARS_FLAGS); ?>&occindex=0&q_catalognumber=&q_customfield1=decimallatitude&q_customtype1=NULL&q_customfield2=verbatimcoordinates&q_customtype2=NOTNULL" style="margin-left:5px;" title="Open Editor" target="_blank">
+								<a href="../editor/occurrencetabledisplay.php?collid=<?php echo htmlspecialchars($collid, HTML_SPECIAL_CHARS_FLAGS); ?>&occindex=0&q_catalognumber=&q_customfield1=decimallatitude&q_customtype1=IS_NULL&q_customfield2=verbatimcoordinates&q_customtype2=NOT_NULL" style="margin-left:5px;" title="Open Editor" target="_blank">
 									<img src="../../images/edit.png" style="width:10px" />
 								</a>
 								<?php
@@ -188,7 +182,7 @@ if($collMap['colltype'] == 'General Observations'){
 				</fieldset>
 			</div>
  -->
-			<h3> <?php echo (isset($LANG['TAXONOMY']) ? $LANG['TAXONOMY'] : 'Taxonomy') ?> </h3>
+			<h2> <?php echo (isset($LANG['TAXONOMY']) ? $LANG['TAXONOMY'] : 'Taxonomy') ?> </h2>
 			<div style="margin:0px 0px 40px 15px;">
 				<div>
 					<?php echo (isset($LANG['TAXONOMY_DESCR']) ? $LANG['TAXONOMY_DESCR'] : 'These tools are meant to aid in locating and fixing taxonomic errors and inconsistencies.') ?>

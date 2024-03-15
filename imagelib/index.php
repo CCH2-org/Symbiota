@@ -1,4 +1,3 @@
-<!DOCTYPE html>
 <?php
 include_once('../config/symbini.php');
 include_once($SERVER_ROOT.'/classes/ImageLibraryBrowser.php');
@@ -12,6 +11,7 @@ $target = array_key_exists('target', $_REQUEST) ? trim($_REQUEST['target']):'';
 $imgManager = new ImageLibraryBrowser();
 $imgManager->setSearchTerm($taxon);
 ?>
+<!DOCTYPE html>
 <html lang="<?php echo $LANG_TAG ?>">
 <head>
 	<title><?php echo $DEFAULT_TITLE.' '.$LANG['IMG_LIBRARY']; ?></title>
@@ -96,7 +96,7 @@ $imgManager->setSearchTerm($taxon);
 					foreach($taxaList as $key => $value){
 						echo '<div style="margin-left:30px;font-style:italic;">';
 						echo '<a href="#" onclick="openTaxonPopup(' . htmlspecialchars($key, HTML_SPECIAL_CHARS_FLAGS) . ');return false;">' . htmlspecialchars($value, HTML_SPECIAL_CHARS_FLAGS) . '</a> ';
-						echo '<a href="search.php?taxa=' . htmlspecialchars($key, HTML_SPECIAL_CHARS_FLAGS) . '&usethes=1&taxontype=2&submitaction=search" target="_blank"> <img src="../images/image.png" style="width:10px;" /></a> ';
+						echo '<a href="search.php?taxa=' . htmlspecialchars($key, HTML_SPECIAL_CHARS_FLAGS) . '&usethes=1&taxontype=2&submitaction=search" target="_blank"> <img src="../images/image.png" style="width:1.5em;" /></a> ';
 						echo '</div>';
 					}
 				}
