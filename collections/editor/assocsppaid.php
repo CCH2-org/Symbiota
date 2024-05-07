@@ -4,7 +4,8 @@ if($LANG_TAG != 'en' && file_exists($SERVER_ROOT.'/content/lang/collections/edit
 else include_once($SERVER_ROOT.'/content/lang/collections/editor/assocsppaid.en.php');
 header("Content-Type: text/html; charset=".$CHARSET);
 ?>
-<html>
+<!DOCTYPE html>
+<html lang="<?php echo $LANG_TAG ?>">
 <head>
 	<meta http-equiv="Content-Type" content="text/html; charset=<?php echo $CHARSET; ?>">
 	<title><?php echo $LANG['ASSOC_SPP_AID']; ?></title>
@@ -44,6 +45,7 @@ header("Content-Type: text/html; charset=".$CHARSET);
 <body style="background-color:white">
 	<!-- This is inner text! -->
 	<div id="innertext" style="background-color:white;">
+		<h1 class="page-heading screen-reader-only"><?php echo $LANG['ASSOC_SPP_AID']; ?></h1>
 		<fieldset style="width:450px;">
 			<legend><b><?php echo $LANG['ASSOC_SPP_AID']; ?></b></legend>
 			<div style="">

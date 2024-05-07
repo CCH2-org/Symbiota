@@ -36,7 +36,8 @@ if($coorArr && count($coorArr) == 4){
 }
 
 ?>
-<html>
+<!DOCTYPE html>
+<html lang="<?php echo $LANG_TAG ?>">
 	<head>
 		<title>Georeference Clone Tool</title>
 		<?php
@@ -186,6 +187,7 @@ alert("<?php echo isset($LANG['LOCALITY_INVALID_ERROR'])? $LANG['LOCALITY_INVALI
 		/>
 		<!-- This is inner text! -->
 		<div id="innertext">
+			<h1 class="page-heading">Georeference Clone Tool</h1>
 			<fieldset style="padding:10px;">
             <legend><b>
                <?php echo isset($LANG['SEARCH_FORM'])? $LANG['SEARCH_FORM']:'Search Form' ?>

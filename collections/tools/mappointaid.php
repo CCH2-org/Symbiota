@@ -14,7 +14,8 @@ if($MAPPING_BOUNDARIES){
 
 $errMode = array_key_exists("errmode",$_REQUEST)?$_REQUEST["errmode"]:1;
 ?>
-<html>
+<!DOCTYPE html>
+<html lang="<?php echo $LANG_TAG ?>">
 	<head>
 	<title><?php echo $DEFAULT_TITLE; ?> - Point-Radius Aid</title>
 		<meta name="viewport" content="initial-scale=1.0, user-scalable=no" />
@@ -357,8 +358,15 @@ $errMode = array_key_exists("errmode",$_REQUEST)?$_REQUEST["errmode"]:1;
 			}
 		}
 		</script>
+		<style>
+         .screen-reader-only{ 
+            position: absolute;
+            left: -10000px;
+         }
+      </style>
 	</head>
 	<body style="background-color:#ffffff;" onload="initialize()">
+		<h1 class="page-heading screen-reader-only">Point-Radius Aid</h1>
 		<div
 			id="service-container" 
 			class="service-container" 

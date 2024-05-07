@@ -31,7 +31,8 @@ if($isEditor && $action){
 }
 $headingArr = $charManager->getHeadingArr();
 ?>
-<html>
+<!DOCTYPE html>
+<html lang="<?php echo $LANG_TAG ?>">
 <head>
 	<meta http-equiv="Content-Type" content="text/html; charset=<?php echo $CHARSET;?>">
 	<title>Heading Administration</title>
@@ -57,6 +58,7 @@ $headingArr = $charManager->getHeadingArr();
 <body>
 	<!-- This is inner text! -->
 	<div  id="innertext" style="width:700px;padding:15px">
+		<h1 class="page-heading">Heading Administration</h1>
 		<?php
 		if($statusStr){
 			?>

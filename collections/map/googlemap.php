@@ -34,7 +34,8 @@ if(array_key_exists('taxa', $taxaArr)){
 	}
 }
 ?>
-<html>
+<!DOCTYPE html>
+<html lang="<?php echo $LANG_TAG ?>">
 <head>
 	<title><?php echo $DEFAULT_TITLE; ?> - Google Map</title>
 	<?php
@@ -327,6 +328,7 @@ if(array_key_exists('taxa', $taxaArr)){
 	</script>
 </head>
 <body style="width:100%; min-width: 900px" onload="initialize();">
+	<h1 class="page-heading">Google Map</h1>
 	<?php
 	if(!$coordArr){
 		?>

@@ -19,7 +19,8 @@ $dupeManager = new OccurrenceDuplicate();
 $dupArr = $dupeManager->getDupeList($recordedBy, $recordNumber, $eventDate, $catNum, $queryOccid, $currentOccid);
 
 ?>
-<html>
+<!DOCTYPE html>
+<html lang="<?php echo $LANG_TAG ?>">
 <head>
 	<meta http-equiv="Content-Type" content="text/html; charset=<?php echo $CHARSET; ?>">
 	<title><?php echo $DEFAULT_TITLE; ?> <?php echo $LANG['DUPLICATE_LINKER'] ?></title>
@@ -47,6 +48,7 @@ $dupArr = $dupeManager->getDupeList($recordedBy, $recordNumber, $eventDate, $cat
 <body>
 	<!-- inner text -->
 	<div id="innertext">
+		<h1 class="page-heading"><?= $LANG['DUPLICATE_LINKER']; ?></h1>
 		<fieldset style="padding:15px;">
 			<legend><b><?php echo $LANG['LINK_NEW_SPECIMEN'] ?></b></legend>
 			<form name="adddupform" method="post" action="dupelist.php" onsubmit="return validateDupeForm(this)">

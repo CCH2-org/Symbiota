@@ -48,7 +48,8 @@ $toolManager->setCollid($collid);
 $isEditor = false;
 if($IS_ADMIN) $isEditor = true;
 ?>
-<html>
+<!DOCTYPE html>
+<html lang="<?php echo $LANG_TAG ?>">
 <head>
 	<title>Media Tools</title>
 	<meta http-equiv="Content-Type" content="text/html; charset=<?php echo $CHARSET; ?>"/>
@@ -84,6 +85,7 @@ if($IS_ADMIN) $isEditor = true;
 	if($isEditor){
 		?>
 		<div id="innertext">
+			<h1 class="page-heading">Media Tools</h1>
 			<div id="actionDiv">
 				<?php
 				$imgidEnd = 0;

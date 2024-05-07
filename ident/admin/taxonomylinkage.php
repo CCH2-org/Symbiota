@@ -11,7 +11,8 @@ $keyManager->setLangId($langId);
 $keyManager->setCid($cid);
 $tLinks = $keyManager->getTaxonRelevance();
 ?>
-<html>
+<!DOCTYPE html>
+<html lang="<?php echo $LANG_TAG ?>">
 <head>
 	<meta http-equiv="Content-Type" content="text/html; charset=<?php echo $CHARSET;?>">
 	<link href="<?php echo $CSS_BASE_PATH; ?>/jquery-ui.css" type="text/css" rel="stylesheet">
@@ -71,6 +72,7 @@ $tLinks = $keyManager->getTaxonRelevance();
 	</script>
 </head>
 <body>
+	<h1 class="page-heading">Link Character to Taxa</h1>
 	<div id="tlinkdiv" style="margin:15px;">
 		<div style="margin:10px;">
 			<b>Taxonomic relevance of character</b> -

@@ -21,7 +21,8 @@ if($collId){
 	$statArr = $collManager->getYearStatsDataArr($collId,$days);
 }
 ?>
-<html>
+<!DOCTYPE html>
+<html lang="<?php echo $LANG_TAG ?>">
 	<head>
 		<meta name="keywords" content="Natural history collections yearly statistics" />
 		<title><?php echo $DEFAULT_TITLE; ?> Year Statistics</title>
@@ -39,6 +40,7 @@ if($collId){
 		include($SERVER_ROOT.'/includes/header.php');
 		?>
 		<div id="innertext">
+			<h1 class="page-heading">Year Statistics</h1>
 			<fieldset id="yearstatsbox" style="clear:both;margin-top:15px;width:97%;">
 				<legend><b>Month Totals</b></legend>
 				<table class="styledtable" style="font-family:Arial;font-size:12px;width:98%;">

@@ -79,7 +79,8 @@ if($outputMode == 'doc'){
 }
 else{
 	?>
-	<html>
+	<!DOCTYPE html>
+	<html lang="<?php echo $LANG_TAG ?>">
 		<head>
 			<title><?php echo $sourceCode.' '.$invoiceArr['loanidentifierown']; ?> Specimen List</title>
 			<?php
@@ -96,6 +97,7 @@ else{
 			</style>
 		</head>
 		<body style="background-color:#ffffff;">
+			<h1 class="page-heading screen-reader-only"><?php echo $sourceCode.' '.$invoiceArr['loanidentifierown']; ?> Specimen List</h1>
 			<div>
 				<div class="header">
 					List of specimens loaned to: <?php echo $targetCode; ?>

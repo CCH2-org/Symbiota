@@ -16,15 +16,21 @@ if($SYMB_UID){
 	elseif(array_key_exists("CollEditor",$USER_RIGHTS) && in_array($labelManager->getCollid(),$USER_RIGHTS["CollEditor"])) $isEditor = 1;
 }
 ?>
-<html>
+<!DOCTYPE html>
+<html lang="<?php echo $LANG_TAG ?>">
 	<head>
 		<title><?php echo $DEFAULT_TITLE; ?> Labels</title>
 		<style type="text/css">
 			body { background-color:#ffffff;font-family:arial,sans-serif; font-size:10pt; }
 			.barcode { width:220px; height:50px; float:left; padding:10px; text-align:center; }
+			.screen-reader-only {
+				position: absolute;
+				left: -10000px;
+			}
 		</style>
 	</head>
 	<body>
+		<h1 class="page-heading screen-reader-only">Labels</h1>
 		<div>
 			<?php
 			if($action && $isEditor){

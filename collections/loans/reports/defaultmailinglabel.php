@@ -89,7 +89,8 @@ if($outputMode == 'doc'){
 }
 else{
 	?>
-	<html>
+	<!DOCTYPE html>
+	<html lang="<?php echo $LANG_TAG ?>">
 		<head>
 			<title>Mailing Label</title>
 			<?php
@@ -104,6 +105,7 @@ else{
 			</style>
 		</head>
 		<body style="background-color:#ffffff;">
+			<h1 class="page-heading screen-reader-only">Mailing Label</h1>
 			<div>
 				<table style="width:8in;">
 					<tr>

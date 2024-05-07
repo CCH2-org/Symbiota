@@ -70,7 +70,8 @@ if($outputMode == 'doc'){
 }
 else{
 	?>
-	<html>
+	<!DOCTYPE html>
+	<html lang="<?php echo $LANG_TAG ?>">
 		<head>
 			<title>Addressed Envelope</title>
 			<?php
@@ -85,6 +86,7 @@ else{
 			</style>
 		</head>
 		<body style="background-color:#ffffff;">
+			<h1 class="page-heading screen-reader-only">Addressed Envelope</h1>
 			<div>
 				<table>
 					<tr style="height:1in;">

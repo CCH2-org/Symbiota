@@ -36,7 +36,8 @@ if($collMap['colltype'] == 'General Observations' && $obsUid !== 0){
 }
 
 ?>
-<html>
+<!DOCTYPE html>
+<html lang="<?php echo $LANG_TAG ?>">
 <head>
 	<meta http-equiv="Content-Type" content="text/html; charset=<?php echo $CHARSET; ?>">
 	<title><?php echo $DEFAULT_TITLE; ?> <?php echo $LANG['FIELD_STANDARDIZATION'] ?></title>
@@ -51,12 +52,13 @@ if($collMap['colltype'] == 'General Observations' && $obsUid !== 0){
 	?>
 	<div class='navpath'>
 		<a href="../../index.php"><?php echo $LANG['HOME'] ?></a> &gt;&gt;
-		<a href="../misc/collprofiles.php?collid=<?php echo htmlspecialchars($collid, HTML_SPECIAL_CHARS_FLAGS); ?>&emode=1"><?php echo $LANG['COLLECTION_MANAGEMENT'] ?></a> &gt;&gt;
+		<a href="../misc/collprofiles.php?collid=<?php echo htmlspecialchars($collid, ENT_COMPAT | ENT_HTML401 | ENT_SUBSTITUTE); ?>&emode=1"><?php echo $LANG['COLLECTION_MANAGEMENT'] ?></a> &gt;&gt;
 		<b><?php echo $LANG['BATCH_FIELD_TOOLS'] ?></b>
 	</div>
-
+	
 	<!-- inner text -->
 	<div id="innertext">
+		<h1 class="page-heading">Field Standardization</h1>
 		<?php
 		if($statusStr){
 			?>

@@ -31,7 +31,8 @@ else{
 	$lngCenter = -97.380979;
 }
 ?>
-<html>
+<!DOCTYPE html>
+<html lang="<?php echo $LANG_TAG ?>">
 	<head>
 		<title><?php echo $DEFAULT_TITLE; ?> - Coordinate Polygon Aid</title>
 		<meta name="viewport" content="initial-scale=1.0, user-scalable=no" />
@@ -227,8 +228,15 @@ else{
 				return false;
 			}
 		</script>
+		<style>
+			.screen-reader-only {
+				position: absolute;
+				left: -10000px;
+			}
+		</style>
 	</head>
 	<body style="background-color:#ffffff;" onload="initialize()">
+		<h1 class="page-heading screen-reader-only">Coordinate Polygon Aid</h1>
 		<div style="float:right" style="margin-left:20px;">
          <button type="submit" name="addcoords" onclick="updateParentForm()">
             <?php echo isset($LANG['SAVE_N_CLOSE'])? $LANG['SAVE_N_CLOSE'] :'Save and Close'?>

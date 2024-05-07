@@ -67,7 +67,8 @@ if($formSubmit && $isEditor){
 if(!$cid) header('Location: index.php');
 
 ?>
-<html>
+<!DOCTYPE html>
+<html lang="<?php echo $LANG_TAG ?>">
 <head>
   <meta http-equiv="Content-Type" content="text/html; charset=<?php echo $CHARSET;?>">
 	<title>Character Admin</title>
@@ -250,6 +251,7 @@ if(!$cid) header('Location: index.php');
 	</div>
 	<!-- This is inner text! -->
 	<div id="innertext">
+		<h1 class="page-heading">Taxon Character Administration</h1>
 		<?php
 		if($isEditor){
 			if($statusStr){

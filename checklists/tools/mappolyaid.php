@@ -48,7 +48,8 @@ else{
 	$lngCenter = -97.380979;
 }
 ?>
-<html>
+<!DOCTYPE html>
+<html lang="<?php echo $LANG_TAG ?>">
    <head>
 
       <?php
@@ -268,6 +269,7 @@ else{
 		</script>
 	</head>
 	<body style="background-color:#ffffff;" onload="initialize()">
+         <h1 class="page-heading screen-reader-only">Map Polygon Helper</h1>
 		<div id="map_canvas" style="width:100%;height:600px;"></div>
 		<div style="width:100%;">
 			<div id="helptext" style="display:none;margin:5px 0px">
