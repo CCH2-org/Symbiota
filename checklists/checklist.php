@@ -584,7 +584,7 @@ $taxonFilter = htmlspecialchars($taxonFilter, ENT_COMPAT | ENT_HTML401 | ENT_SUB
 							?>
 						</div>
 					</div>
-					<hr />
+					<hr style="margin-right: 2rem"/>
 					<div class="printoff">
 						<?php
 						$taxaLimit = ($showImages?$clManager->getImageLimit():$clManager->getTaxaLimit());
@@ -610,7 +610,7 @@ $taxonFilter = htmlspecialchars($taxonFilter, ENT_COMPAT | ENT_HTML401 | ENT_SUB
 						}
 						?>
 					</div>
-					<hr />
+					<hr style="margin-right: 2rem"/>
 					<?php
 					if($showImages){
 						$prevfam = '';

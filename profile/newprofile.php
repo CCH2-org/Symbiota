@@ -149,9 +149,13 @@ if($action == 'Create Login'){
 		echo '<b>'.(isset($LANG['CREATE_NEW'])?$LANG['CREATE_NEW']:'Create New Profile').'</b>';
 		echo "</div>";
 	}
-	$shouldBeAbleToCreatePublicUser = ($SHOULD_BE_ABLE_TO_CREATE_PUBLIC_USER || $adminRegister) ?? true;
+	$shouldBeAbleToCreatePublicUser = true;
+	if(isset($SHOULD_BE_ABLE_TO_CREATE_PUBLIC_USER) && !$SHOULD_BE_ABLE_TO_CREATE_PUBLIC_USER){
+		$shouldBeAbleToCreatePublicUser = false;
+		if($adminRegister) $shouldBeAbleToCreatePublicUser = true;
+	}
 	if($shouldBeAbleToCreatePublicUser){
-	?>
+		?>
 		<div id="innertext">
 		<?php
 		echo '<h1 class="page-heading">'.(isset($LANG['CREATE_NEW']) ? $LANG['CREATE_NEW'] : 'Create New Profile') . '</h1>';
@@ -276,13 +280,13 @@ if($action == 'Create Login'){
 			</fieldset>
 		</form>
 		</div>
-	<?php
+		<?php
 	} else{
-	?>
+		?>
 		<div id="innertext">
 			<h1><?php echo htmlspecialchars((isset($LANG['IPROFILE_CREATION_DISABLED']) ? $LANG['PROFILE_CREATION_DISABLED'] : 'Public user creation has been disabled on this portal.'), ENT_COMPAT | ENT_HTML401 | ENT_SUBSTITUTE); ?></h1>
 		</div>
-	<?php
+		<?php
 	}
 	include($SERVER_ROOT.'/includes/footer.php');
 	?>
