@@ -142,6 +142,7 @@ $taxonFilter = htmlspecialchars($taxonFilter, ENT_COMPAT | ENT_HTML401 | ENT_SUB
 		}
 		?>
 		#editsppon { display: none; color:green; font-size: 70%; font-weight:bold; padding-bottom: 5px; position: relative; top: -4px; }
+		.moredetails{ clear: both }
 		.normal-font-weight {
 			font-weight: normal;
 		}
