@@ -468,6 +468,8 @@ b {
 
 .welcome-text {
   display: flex;
+  font-size: 1.5rem;
+  font-weight: bold;
   align-items: center;
   margin-left: 1rem;
 }
