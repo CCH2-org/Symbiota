@@ -1,34 +1,24 @@
 <?php
 include_once('config/symbini.php');
-//include_once('content/lang/index.'.$LANG_TAG.'.php');
-header("Content-Type: text/html; charset=".$CHARSET);
+if($LANG_TAG == 'en' || !file_exists($SERVER_ROOT.'/content/lang/index.'.$LANG_TAG.'.php')) include_once($SERVER_ROOT.'/content/lang/index.en.php');
+else include_once($SERVER_ROOT.'/content/lang/index.'.$LANG_TAG.'.php');
+header('Content-Type: text/html; charset=' . $CHARSET);
 ?>
-<html>
+<!DOCTYPE html>
+<html lang="<?php echo $LANG_TAG ?>">
 <head>
-	<title><?php echo $DEFAULT_TITLE; ?> Home</title>
-	<?php
-	include_once($SERVER_ROOT.'/includes/head.php');
-	include_once($SERVER_ROOT.'/includes/googleanalytics.php');
-	?>
-	<link href="<?php echo $CSS_BASE_PATH; ?>/jquery-ui.css" type="text/css" rel="stylesheet">
-	<link href="<?php echo $CSS_BASE_PATH; ?>/quicksearch.css" type="text/css" rel="Stylesheet" />
-	<script src="js/jquery-3.2.1.min.js" type="text/javascript"></script>
-	<script src="js/jquery-ui-1.12.1/jquery-ui.min.js" type="text/javascript"></script>
-	<script type="text/javascript">
-		var clientRoot = "<?php echo $CLIENT_ROOT; ?>";
-	</script>
-	<script src="js/symb/api.taxonomy.taxasuggest.js" type="text/javascript"></script>
-	<script src="<?PHP echo $CLIENT_ROOT; ?>/js/jquery.slides.js"></script>
+        <title><?php echo $DEFAULT_TITLE; ?> Home</title>
+        <?php
+        include_once($SERVER_ROOT . '/includes/head.php');
+        include_once($SERVER_ROOT . '/includes/googleanalytics.php');
+        ?>
 </head>
 <body>
-	<?php
-	include($SERVER_ROOT.'/includes/header.php');
-	?>
-<table id="maintable" cellspacing="0">
-    <tr>
-		<td id='middlecenter'  colspan="3">
-        <!-- This is inner text! -->
-		<div id="innertext">
+        <?php
+        include($SERVER_ROOT . '/includes/header.php');
+        ?>
+        <div class="navpath"></div>
+        <main id="innertext">
 		<div style="float:right;margin-left:15px">
 			<!--
 			<div>
@@ -65,8 +55,8 @@ header("Content-Type: text/html; charset=".$CHARSET);
 		</div>
 			-->
 		</div>
-		<div style="padding: 0px 10px;font-size:120%">
-			<h1 style=>Welcome to the CCH2 data portal</h1>
+		<div style="padding: 0px 10px">
+			<h1>Welcome to the CCH2 data portal</h1>
 			<p>
 				<b>CCH2</b> serves data from specimens housed in member herbaria of the <b>Consortium of California Herbaria (CCH)</b>. This portal has a worldwide scope and a broad taxonomic basis including vascular plants, bryophytes, algae, fungi, and lichens.
 			</p>
@@ -80,34 +70,29 @@ header("Content-Type: text/html; charset=".$CHARSET);
 				The CCH2 portal is managed by UC Berkeley and Cal Poly, San Luis Obispo.
 			</p>
 			<div style="float:right"><img src="images/layout/UC1278733_small.jpg" style="width:200px;margin:0px 90px" /></div>
-			<p>	For more information about the California Consortium of Herbaria (CCH) see:</p>
-			<div style="margin-left:15px"><p><a href="http://ucjeps.berkeley.edu/consortium/about.html" target="_blank">http://ucjeps.berkeley.edu/consortium/about.html</a></p></div>
             <div>
-            <b>Using CCH2 data:</b>
+            <h3>Using CCH2 data:</h3>
             </div>
-			<div style="margin-top:15px;padding: 0px 10px">
+				<p>
 				Please refer to our <a href="http://cch2.org/portal/includes/usagepolicy.php">Data Use Policy</a>. The Consortium of California Herbaria asks that users not redistribute data obtained from this site.
 				However, links or references to this site may be freely posted. If you have any questions about this policy,
-				please contact Jason Alexander (<a href="mailto:jason_alexander@berkeley.edu">jason_alexander@berkeley.edu</a>) or Katie Pearson (<a href="mailto:kdpearso@calpoly.edu">kdpearso@calpoly.edu</a>).
-            </div>
-
-			<div style="margin-top:15px;padding: 0px 0px">
-            <b>More California specimen data may be found at the following portals:</b>
+				please contact Jason Alexander (<a href="mailto:jason_alexander@berkeley.edu">jason_alexander@berkeley.edu</a>) and Katie Pearson (<a href="mailto:kdpearso@asu.edu">kdpearso@asu.edu</a>).
+				</p>
+            			<p>
+				<b>More California specimen data may be found at the following portals:</b>
 				<ul>
-                    <li>Only California vascular plants, linked to the statewide Jepson eFlora project: <a href="http://ucjeps.berkeley.edu/consortium/" target="_blank">CCH1 Portal</a></li>
+                    			<li>Only California vascular plants, linked to the statewide Jepson eFlora project: <a href="http://ucjeps.berkeley.edu/consortium/" target="_blank">CCH1 Portal</a></li>
 					<li>Bryophytes: <a href="https://bryophyteportal.org/portal/" target="_blank">Consortium of North American Bryophyte Herbaria</a></li>
 					<li>Fungi: <a href="http://mycoportal.org" target="_blank">Mycology Collections Portal (MyCoPortal)</a></li>
 					<li>Lichens: <a href="https://lichenportal.org/cnalh/" target="_blank">Consortium of North American Lichen Herbaria</a></li>
 					<li>Macroalgae: <a href="http://macroalgae.org" targert="_blank">Macroalgal Herbarium Consortium</a></li>
 					<li>Pteridophytes: <a href="http://www.pteridoportal.org/portal/" target="_blank">Pteridophyte Collections Consortium</a></li>
 				</ul>
-			</div>
+				</p>
 		</div>
-	    </td>
-	</tr>
-</table>
-	<?php
-	include($SERVER_ROOT.'/includes/footer.php');
-	?>
+ </main>
+        <?php
+        include($SERVER_ROOT . '/includes/footer.php');
+        ?>
 </body>
 </html>
