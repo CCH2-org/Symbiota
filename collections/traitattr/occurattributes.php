@@ -265,7 +265,7 @@ if ($traitID) {
 	}
 	?>
 	<!-- This is inner text! -->
-	<div id="innertext" style="position:relative;">
+	<div role="main" id="innertext" style="position:relative;">
 		<h1 class="page-heading"><?= $LANG['OCC_ATTRIBUTE_BATCH_EDIT']; ?></h1>
 		<?php
 		if ($collid) {

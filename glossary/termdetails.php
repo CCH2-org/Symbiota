@@ -193,7 +193,7 @@ if($glossId){
 	<div class='navpath'>
 		&lt; &lt; <a href='individual.php?glossid=<?= $glossId ?>'><?= $LANG['GOTO_PUBLIC_DISPLAY'] ?></a>
 	</div>
-	<div id="innertext">
+	<div role="main" id="innertext">
 		<h1 class="page-heading"><?= $LANG['G_MGMNT']; ?></h1>
 		<?php
 		if($glossId && $isEditor){

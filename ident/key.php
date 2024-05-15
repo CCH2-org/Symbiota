@@ -184,7 +184,7 @@ echo '<a href="key-v1.php?clid=' . htmlspecialchars($clid, ENT_COMPAT | ENT_HTML
 echo '<b>' . htmlspecialchars($LANG['NEW_ID_KEY'], ENT_COMPAT | ENT_HTML401 | ENT_SUBSTITUTE) . ': ' . htmlspecialchars($dataManager->getClName(), ENT_COMPAT | ENT_HTML401 | ENT_SUBSTITUTE) . '</b>';
 echo '</div>';
 ?>
-<div id="innertext">
+<div role="main" id="innertext">
 	<h1 class="page-heading screen-reader-only">Key</h1>
 	<?php
 	if($clid || $dynClid){

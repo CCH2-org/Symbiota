@@ -90,7 +90,7 @@ $clArr = $obsManager->getChecklists();
 	echo '<b>' . (isset($LANG['OBS_SUB']) ? $LANG['OBS_SUB'] : 'Observation Submission') . '</b>';
 	echo '</div>';
 	?>
-	<div id="innertext">
+	<div role="main" id="innertext">
 		<h1 class="page-heading"><?php echo $collMap['collectionname'] ?? $LANG['NO_COLLECTION']; ?></h1>
 		<?php
 		if($action || (isset($_SERVER['REQUEST_METHOD']) && strtolower($_SERVER['REQUEST_METHOD']) == 'post' && empty($_FILES) && empty($_POST))){

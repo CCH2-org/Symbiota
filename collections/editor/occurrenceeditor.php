@@ -442,6 +442,9 @@ else{
 	<title><?= $DEFAULT_TITLE . ' ' . $LANG['OCCEDITOR'] ?></title>
 	<link href="<?= $CSS_BASE_PATH ?>/jquery-ui.css" type="text/css" rel="stylesheet">
 	<link href="<?= $CSS_BASE_PATH ?>/symbiota/variables.css" type="text/css" rel="stylesheet">
+	<?php
+	include_once($SERVER_ROOT.'/includes/head.php');
+	?>
 
     <?php
     if($crowdSourceMode == 1){
@@ -516,10 +519,13 @@ else{
 	<style type="text/css">
 		fieldset{ padding:15px }
 		fieldset > legend{ font-weight:bold; }
-		.fieldGroup-div{ clear:both; overflow: auto; margin-bottom: 2px; }
-		.field-div{ margin: 2px; }
+		.fieldGroupDiv{ clear:both; margin-bottom: 1rem; overflow: auto}
+		.fieldDiv{ float:left; margin-right: 1rem;}
 		select{ height: 20px; margin-bottom: 2px; }
 		#identifierDiv img{ width:10px; margin-left: 5px; }
+		#innertext{ background-color: white; margin: 0px 10px; }
+
+		.editimg{ width: 15px; }
 		
 		.button-toggle {
 			background-color: transparent; 
@@ -540,7 +546,7 @@ else{
 	</style>
 </head>
 <body>
-	<div id="innertext">
+	<div role="main" id="innertext">
 		<div id="titleDiv">
 			<?php
 			if($collMap) echo '<h1 class="page-heading" style="font-size: 1.5rem;"> Occurrence Editor: ' . $collMap['collectionname'].' ('.$collMap['institutioncode'].($collMap['collectioncode']?':'.$collMap['collectioncode']:'').') </h1>';

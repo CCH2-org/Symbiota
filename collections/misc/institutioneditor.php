@@ -176,7 +176,7 @@ include($SERVER_ROOT.'/includes/header.php');
 	<b><?php echo $LANG['INSTITUTION_EDITOR']; ?></b>
 </div>
 <!-- This is inner text! -->
-<div id="innertext">
+<div role="main" id="innertext">
 	<h1 class="page-heading"><?php echo $LANG['INSTITUTION_EDITOR']; ?></h1>
 	<div id="dialog" title="" style="display: none;">
 		<div id="dialogmsg"></div>

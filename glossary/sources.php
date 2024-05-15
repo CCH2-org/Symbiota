@@ -39,7 +39,7 @@ $sourceArr = $glosManager->getTaxonSources($tid);
 		<b><?php echo (isset($LANG['G_CONTR'])?$LANG['G_CONTR']:'Glossary Contributors'); ?></b>
 	</div>
 	<!-- This is inner text! -->
-	<div id="innertext">
+	<div role="main" id="innertext">
 		<h1 class="page-heading"><?= $LANG['G_SOURCES']; ?></h1>
 		<?php
 		if($editMode){

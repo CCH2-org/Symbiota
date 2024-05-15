@@ -188,7 +188,7 @@ if($isEditor && $action){
 		echo '<b>'.$LANG['TAX_PROF_EDITOR'].'</b>';
 		?>
 	</div>
-	<div id="innertext">
+	<div role="main" id="innertext">
 		<h1 class="page-heading"><?php echo $LANG['TAX_PROF_EDITOR'] .': ' . $tEditor->getSciName(); ?></h1>
 		<?php
 		if($tEditor->getTid()){

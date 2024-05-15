@@ -57,7 +57,7 @@ if($isEditor){
 	<?php
 	if($collid){
 		?>
-		<div id="innertext">
+		<div role="main" id="innertext">
 			<h1 class="page-heading">Image Recycler</h1>
 			<form name="imgdelform" action="imagerecycler.php" method="post" enctype="multipart/form-data" onsubmit="return verifyRecycleForm(this)">
 				<fieldset style="width:90%;">

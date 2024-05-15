@@ -133,7 +133,7 @@ include($SERVER_ROOT.'/includes/header.php');
 	<a href="igsnmapper.php?collid=<?php echo htmlspecialchars($collid, ENT_COMPAT | ENT_HTML401 | ENT_SUBSTITUTE); ?>"> <?php echo $LANG['IGSN_GUID_GEN'] ?></a> &gt;&gt;
 	<b><?php echo $LANG['IGSN_MANAGE'] ?></b>
 </div>
-<div id="innertext">
+<div role="main" id="innertext">
 	<h1 class="page-heading"><?= $LANG['IGSN_MANAGE']; ?></h1>
 	<?php
 	if($isEditor && $collid){

@@ -78,7 +78,7 @@ if($isEditor){
 		<a href="exchange.php?exchangeid=<?php echo htmlspecialchars($exchangeId, ENT_COMPAT | ENT_HTML401 | ENT_SUBSTITUTE); ?>&collid=<?php echo htmlspecialchars($collid, ENT_COMPAT | ENT_HTML401 | ENT_SUBSTITUTE); ?>"><b><?php echo $LANG['EXCHANGE_MNG']; ?></b></a>
 	</div>
 	<!-- This is inner text! -->
-	<div id="innertext">
+	<div role="main" id="innertext">
 		<h1 class="page-heading"><?= $LANG['EXCHANGE_MNG']; ?></h1>
 		<?php
 		if($isEditor && $collid){

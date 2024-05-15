@@ -48,7 +48,7 @@ $smManager = new SiteMapManager();
 	echo '</div>';
 	?>
 	<!-- This is inner text! -->
-	<div id="innertext">
+	<div role="main" id="innertext">
 		<h1 class="page-heading"><?= $LANG['SITEMAP']; ?></h1>
 		<div id="sitemap">
 			<h2><?php echo $LANG['COLLECTIONS']; ?></h2>

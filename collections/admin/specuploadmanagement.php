@@ -177,7 +177,7 @@ $duManager->readUploadParameters();
 	}
 ?>
 <!-- This is inner text! -->
-<div id="innertext">
+<div role="main" id="innertext">
 	<h1 class="page-heading"><?= $LANG['DAT_UP_MAN']; ?></h1>
 	<?php
 	if($statusStr){

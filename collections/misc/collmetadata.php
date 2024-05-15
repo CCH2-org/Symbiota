@@ -259,7 +259,7 @@ $collManager->cleanOutArr($collData);
 	else echo '<b>' . (isset($LANG['CREATE_COLL']) ? $LANG['CREATE_COLL'] : 'Create New Collection Profile') . '</b>';
 	echo '</div>';
 	?>
-	<div id="innertext">
+	<div role="main" id="innertext">
 		<?php
 		if ($statusStr) {
 			?>

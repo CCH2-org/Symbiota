@@ -147,7 +147,7 @@ if ($SYMB_UID) {
 		<a href="../index.php"><?php echo htmlspecialchars((isset($LANG['COLLECTION_SEARCH']) ? $LANG['COLLECTION_SEARCH'] : 'Collection Search Page'), ENT_COMPAT | ENT_HTML401 | ENT_SUBSTITUTE); ?></a> &gt;&gt;
 		<b><?php echo (isset($LANG['COLL_PROFILE']) ? $LANG['COLL_PROFILE'] : 'Collection Profile'); ?></b>
 	</div>
-	<div id="innertext" style="padding-top:0">
+	<div role="main" id="innertext" style="padding-top:0">
 		<?php if ($collid && !$collid == 0){
 		?>
 			<section id="quicksearch-box" class="fieldset-like float-rt-no-overlap" style="margin:0">
@@ -670,7 +670,7 @@ if ($SYMB_UID) {
 			</div>
 			<div>
 				<span class="button button-primary">
-					<a id="image-search" href="<?php echo $CLIENT_ROOT?>/imagelib/search.php?submitaction=search&db[]=1<?php echo $collid ?>" ><?php echo (isset($LANG['IMAGE_SEARCH_THIS_COLLECTION'])?$LANG['IMAGE_SEARCH_THIS_COLLECTION']:'Image Search this Collection'); ?></a>
+					<a id="image-search" href="<?php echo $CLIENT_ROOT?>/imagelib/search.php?submitaction=search&db[]=<?php echo $collid ?>" ><?php echo (isset($LANG['IMAGE_SEARCH_THIS_COLLECTION'])?$LANG['IMAGE_SEARCH_THIS_COLLECTION']:'Image Search this Collection'); ?></a>
 				</span>
 			</div>
 			<?php

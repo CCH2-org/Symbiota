@@ -230,7 +230,7 @@ if(!$researchList && !$editMode){
 	?>
 
 	<!-- This is inner text! -->
-	<div id="innertext">
+	<div role="main" id="innertext">
 		<h1 class="page-heading screen-reader-only">View Inventory Project</h1>
 		<?php
 		if($statusStr){

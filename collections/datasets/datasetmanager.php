@@ -282,7 +282,7 @@ if($isEditor){
 		<b><?php echo $LANG['DS_MANAGER']; ?></b>
 	</div>
 	<!-- This is inner text! -->
-	<div id="innertext">
+	<div role="main" id="innertext">
 		<h1 class="page-heading"><?= $LANG['DS_OCC_MANAGER']; ?></h1>
 		<?php
 		if($statusStr){

@@ -112,7 +112,7 @@ include($SERVER_ROOT.'/includes/header.php');
 	<a href='../index.php'><?= $LANG['HOME'] ?></a> &gt;&gt;
 	<b><?= $LANG['SENSITIVE_TAXA'] ?></b>
 </div>
-<div id="innertext">
+<div role="main" id="innertext">
 	<?php
 	if($isEditor){
 		?>

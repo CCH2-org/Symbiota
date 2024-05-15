@@ -212,7 +212,7 @@ if($spprid) $specManager->setProjVariables($spprid);
 	</head>
 	<body>
 		<!-- This is inner text! -->
-		<div id="innertext" style="background-color:white;">
+		<div role="main" id="innertext" style="background-color:white;">
 			<h1 class="page-heading screen-reader-only"><?= $LANG['IMG_PROCESSOR']; ?></h1>
 			<div style="padding:15px;">
 				<?php echo $LANG['IMG_PROCESSOR_EXPLAIN']; ?>

@@ -414,7 +414,7 @@ if($action != "Update Statistics"){
 			}
 			?>
 			<!-- This is inner text! -->
-			<div id="innertext">
+			<div role="main" id="innertext">
 				<h1 class="page-heading"><?= $LANG['SELECT_COLS']; ?></h1>
 				<div id="tabs" class="tabby">
 					<ul class="full-tab">
