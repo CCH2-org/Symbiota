@@ -39,7 +39,7 @@ header('Content-Type: text/html; charset=' . $CHARSET);
 				//leave as 0 if you do not wish for images to come from a checklist
 				//if you would like to use more than one checklist, separate their ids with a comma ex. "1,2,3,4"
 				//$clid = '1279';
-				$clid = '39';
+				$clid = '80';
 				//Enter field, specimen, or both to specify whether to use only field or specimen images, or both
 				$imageType = 'specimen';
 				//Enter number of days of most recent images that should be included
@@ -58,35 +58,44 @@ header('Content-Type: text/html; charset=' . $CHARSET);
 		<div style="padding: 0px 10px">
 			<h1>Welcome to the CCH2 data portal</h1>
 			<p>
-				<b>CCH2</b> serves data from specimens housed in member herbaria of the <b>Consortium of California Herbaria (CCH)</b>. This portal has a worldwide scope and a broad taxonomic basis including vascular plants, bryophytes, algae, fungi, and lichens.
+				California is home to over 6,000 plant species. The botanical diversity of the state is documented in herbarium 
+				collections housed at Universities, Field Stations, Museums, and Gardens. Plants are documented by field biologists 
+				and others who work with the Consortium of California Herbaria, whose members preserve and curate those plant specimens. 
+				The data are then leveraged by researchers to answer fundamental questions about plants in California.
 			</p>
 			<p>
-				These data are currently growing due to the work of the <b>California Phenology Thematic Collections Network</b> (<b>CAP-TCN;</b> <a href="https://www.capturingcaliforniasflowers.org" target="_blank">https://www.capturingcaliforniasflowers.org</a>).
-				This collaboration of 28 universities, research stations, natural history collections, and botanical gardens aims to capture images, label data, and phenological (i.e., flowering time)
-				data from nearly 1 million herbarium specimens by 2022. Data contained in the CCH2 portal
-				will continue to grow even after this time through the activities of the CCH member institutions.
+				This Symbiota portal is the primary database for California's herbaria to manage and share data about the plant 
+				specimens they curate. Currently over 60 collections share over 4 million plant records in this portal. Data 
+				managed here flows into other botanical resources like the Jepson eFlora, Calfora, iDigBio, and GBIF.
+			</p>
+			<div style="float:right"><img src="images/layout/UC1278733_small.jpg" style="width:200px;margin:0px 60px" /></div>
+			<p>
+				Funding for this portal was made possible in 2018 via NSF awards to create the California Phenology Thematic 
+				Collections Network (CAP-TCN; <a href="https://www.capturingcaliforniasflowers.org" target="_blank">https://www.capturingcaliforniasflowers.org</a>). 
+				This project created over 1 million images of specimens that can now be viewed in this portal, 
+				and more are added every day. To advance research of the California flora and the impacts of climate change, 
+				this project also developed phenological data for the specimens, and those data can be downloaded here.
 			</p>
 			<p>
-				The CCH2 portal is managed by UC Berkeley and Cal Poly, San Luis Obispo.
+				This portal is managed by Cal Poly, San Luis Obispo and the Symbiota Support Hub. For questions, 
+				please email <a href="mailto:help@symbiota.org">help@symbiota.org</a>.
 			</p>
-			<div style="float:right"><img src="images/layout/UC1278733_small.jpg" style="width:200px;margin:0px 90px" /></div>
             <div>
-            <h3>Using CCH2 data:</h3>
+            <h3>Using the data:</h3>
             </div>
 				<p>
 				Please refer to our <a href="http://cch2.org/portal/includes/usagepolicy.php">Data Use Policy</a>. The Consortium of California Herbaria asks that users not redistribute data obtained from this site.
 				However, links or references to this site may be freely posted. If you have any questions about this policy,
-				please contact Jason Alexander (<a href="mailto:jason_alexander@berkeley.edu">jason_alexander@berkeley.edu</a>) and Katie Pearson (<a href="mailto:kdpearso@asu.edu">kdpearso@asu.edu</a>).
+				please contact Jenn Yost (<a href="mailto:jyost@calpoly.edu">jyost@calpoly.edu</a>) and Katie Pearson (<a href="mailto:help@symbiota.org">help@symbiota.org</a>).
 				</p>
-            			<p>
+            	<p>
 				<b>More California specimen data may be found at the following portals:</b>
 				<ul>
-                    			<li>Only California vascular plants, linked to the statewide Jepson eFlora project: <a href="http://ucjeps.berkeley.edu/consortium/" target="_blank">CCH1 Portal</a></li>
-					<li>Bryophytes: <a href="https://bryophyteportal.org/portal/" target="_blank">Consortium of North American Bryophyte Herbaria</a></li>
-					<li>Fungi: <a href="http://mycoportal.org" target="_blank">Mycology Collections Portal (MyCoPortal)</a></li>
-					<li>Lichens: <a href="https://lichenportal.org/cnalh/" target="_blank">Consortium of North American Lichen Herbaria</a></li>
-					<li>Macroalgae: <a href="http://macroalgae.org" targert="_blank">Macroalgal Herbarium Consortium</a></li>
-					<li>Pteridophytes: <a href="http://www.pteridoportal.org/portal/" target="_blank">Pteridophyte Collections Consortium</a></li>
+					<li style="margin-bottom:7px; font-size:1.4rem">Bryophytes: <a href="https://bryophyteportal.org/portal/" target="_blank">Consortium of North American Bryophyte Herbaria</a></li>
+					<li style="margin-bottom:7px; font-size:1.4rem">Fungi: <a href="http://mycoportal.org" target="_blank">Mycology Collections Portal (MyCoPortal)</a></li>
+					<li style="margin-bottom:7px; font-size:1.4rem">Lichens: <a href="https://lichenportal.org/cnalh/" target="_blank">Consortium of North American Lichen Herbaria</a></li>
+					<li style="margin-bottom:7px; font-size:1.4rem">Macroalgae: <a href="http://macroalgae.org" targert="_blank">Macroalgal Herbarium Consortium</a></li>
+					<li style="margin-bottom:7px; font-size:1.4rem">Pteridophytes: <a href="http://www.pteridoportal.org/portal/" target="_blank">Pteridophyte Collections Consortium</a></li>
 				</ul>
 				</p>
 		</div>
