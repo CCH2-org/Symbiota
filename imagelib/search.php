@@ -60,7 +60,7 @@ if($action == 'batchAssignTag'){
 	include_once($SERVER_ROOT . '/includes/googleanalytics.php');
 	?>
 
-	<link href="<?= $CSS_BASE_PATH ?>/jquery-ui.css" type="text/css" rel="stylesheet">
+	<link href="<?= $CSS_BASE_PATH ?>/jquery-ui.min.css" type="text/css" rel="stylesheet">
 	<link href="<?= $CSS_BASE_PATH; ?>/symbiota/collections/listdisplay.css" type="text/css" rel="stylesheet" />
 	<link href="<?= $CSS_BASE_PATH; ?>/symbiota/collections/sharedCollectionStyling.css" type="text/css" rel="stylesheet" />
 	<style>
