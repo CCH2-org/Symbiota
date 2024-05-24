@@ -797,15 +797,15 @@ class TaxonomyEditorManager extends Manager{
 			if(!$this->conn->query($sql)) $this->warningArr[] = (isset($this->langArr['ERROR_TRANSFER_TAXLINKS'])?$this->langArr['ERROR_TRANSFER_TAXLINKS']:'ERROR transferring taxa links').' ('.$this->conn->error.')';
 
 			//Transfer children taxa
-			$sql ='UPDATE taxstatus SET parenttid = '.$targetTid.' WHERE parenttid = '.$this->tid;
+			$sql ='UPDATE IGNORE taxstatus SET parenttid = '.$targetTid.' WHERE parenttid = '.$this->tid;
 			if(!$this->conn->query($sql)) $this->warningArr[] = (isset($this->langArr['ERROR_TRANSFER_CHILD'])?$this->langArr['ERROR_TRANSFER_CHILD']:'ERROR transferring child taxa').' ('.$this->conn->error.')';
 
 			//Transfer Synonyms
-			$sql ='UPDATE taxstatus SET tidaccepted = '.$targetTid.' WHERE tidaccepted = '.$this->tid;
+			$sql ='UPDATE IGNORE taxstatus SET tidaccepted = '.$targetTid.' WHERE tidaccepted = '.$this->tid;
 			if(!$this->conn->query($sql)) $this->warningArr[] = (isset($this->langArr['ERROR_TRANSFER_SYN'])?$this->langArr['ERROR_TRANSFER_SYN']:'ERROR transferring synonyms taxa').' ('.$this->conn->error.')';
 
 			//Adjust taxaEnumTree index table
-			$sql ='UPDATE taxaenumtree SET parenttid = '.$targetTid.' WHERE parenttid = '.$this->tid;
+			$sql ='UPDATE IGNORE taxaenumtree SET parenttid = '.$targetTid.' WHERE parenttid = '.$this->tid;
 			if(!$this->conn->query($sql)) $this->warningArr[] = (isset($this->langArr['ERROR_TRANSFER_TAXENUMTREE'])?$this->langArr['ERROR_TRANSFER_TAXENUMTREE']:'ERROR resetting taxaEnumTree index').' ('.$this->conn->error.')';
 
 			$status = $this->deleteTaxon();
