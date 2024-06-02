@@ -198,14 +198,12 @@ class TaxonomyEditorManager extends Manager{
 	}
 
 	private function setParentName(){
-		$sql = "SELECT t.sciname, t.author ".
-			"FROM taxa t ".
-			"WHERE (t.tid = ".$this->parentTid.")";
-		//echo $sql."<br>";
+		$sql = 'SELECT sciname, author, rankid FROM taxa WHERE (tid = ' . $this->parentTid . ')';
 		$rs = $this->conn->query($sql);
 		if($r = $rs->fetch_object()){
-			$this->parentNameFull = $r->sciname.$r->author;
-			$this->parentName = $r->sciname;
+			if($r->rankid >= 180) $this->parentNameFull = '<i>' . htmlspecialchars($r->sciname, ENT_COMPAT | ENT_HTML401 | ENT_SUBSTITUTE) . '</i> ' . $r->author;
+			else $this->parentNameFull = htmlspecialchars($r->sciname . ' ' . $r->author, ENT_COMPAT | ENT_HTML401 | ENT_SUBSTITUTE);
+			$this->parentName = htmlspecialchars($r->sciname, ENT_COMPAT | ENT_HTML401 | ENT_SUBSTITUTE);
 		}
 		$rs->free();
 	}
