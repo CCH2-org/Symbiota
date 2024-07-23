@@ -68,7 +68,7 @@ header('Content-Type: text/html; charset=' . $CHARSET);
 				specimens they curate. Currently over 60 collections share over 4 million plant records in this portal. Data 
 				managed here flows into other botanical resources like the Jepson eFlora, Calfora, iDigBio, and GBIF.
 			</p>
-			<div style="float:right"><img src="images/layout/UC1278733_small.jpg" style="width:200px;margin:0px 60px" /></div>
+			<div style="float:right"><img src="images/layout/SHTC00976.jpg" style="width:200px;margin:0px 60px" /></div>
 			<p>
 				Funding for this portal was made possible in 2018 via NSF awards to create the California Phenology Thematic 
 				Collections Network (CAP-TCN; <a href="https://www.capturingcaliforniasflowers.org" target="_blank">https://www.capturingcaliforniasflowers.org</a>). 
