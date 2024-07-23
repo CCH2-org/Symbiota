@@ -60,12 +60,10 @@ $localSession = isset($_SESSION['active_stylesheet']) ? $_SESSION['active_styles
     div.brand-name h1{
 	font-family: "Staatliches", sans-serif;
 	font-weight: normal;
-	font-size: 8em;
     }
     div.brand-name h2{
 	font-family: "Gurajada", sans-serif;
 	font-weight: normal;
-	font-size: 3.5em;
     margin-top:-0.5em;
     }
 

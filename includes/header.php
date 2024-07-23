@@ -17,20 +17,20 @@ $collectionSearchPage = $SHOULD_USE_HARVESTPARAMS ? '/collections/index.php' : '
 				<?php
 				if ($USER_DISPLAY_NAME) {
 					?>
-					<div class="welcome-text bottom-breathing-room-rel" style="color: var(--light-color); font-size:1.5rem; text-decoration: none;">
+					<div class="welcome-text bottom-breathing-room-rel" style="color: var(--light-color);  text-decoration: none;">
 						<?= (isset($LANG['H_WELCOME'])?$LANG['H_WELCOME']:'Welcome') . ' ' . $USER_DISPLAY_NAME ?>!
 					</div>
-					<span style="white-space: nowrap; padding: 0.8rem; font-size:1.5rem; border:2px solid var(--light-color);" class="button button-tertiary bottom-breathing-room-rel">
-						<a style="font-size: 1.1em;" href="<?= $CLIENT_ROOT ?>/profile/viewprofile.php"><?= (isset($LANG['H_MY_PROFILE'])?$LANG['H_MY_PROFILE']:'My Profile') ?></a>
+					<span style="white-space: nowrap; padding: 0.8rem;  border:2px solid var(--light-color);" class="button button-tertiary bottom-breathing-room-rel">
+						<a href="<?= $CLIENT_ROOT ?>/profile/viewprofile.php"><?= (isset($LANG['H_MY_PROFILE'])?$LANG['H_MY_PROFILE']:'My Profile') ?></a>
 					</span>
-					<span style="white-space: nowrap; padding: 0.8rem; font-size:1.5rem; background-color: var(--light-color)" class="button button-secondary bottom-breathing-room-rel">
-						<a style="font-size: 1.1em;" href="<?= $CLIENT_ROOT ?>/profile/index.php?submit=logout"><?= (isset($LANG['H_LOGOUT'])?$LANG['H_LOGOUT']:'Sign Out') ?></a>
+					<span style="white-space: nowrap; padding: 0.8rem;  background-color: var(--light-color)" class="button button-secondary bottom-breathing-room-rel">
+						<a href="<?= $CLIENT_ROOT ?>/profile/index.php?submit=logout"><?= (isset($LANG['H_LOGOUT'])?$LANG['H_LOGOUT']:'Sign Out') ?></a>
 					</span>
 					<?php
 				} else {
 					?>
-					<span style="white-space: nowrap; padding: 0.8rem; font-size:1.5rem; background-color: var(--light-color); " class="button button-secondary bottom-breathing-room-rel">
-						<a style="font-size: 1.1em;" href="<?= $CLIENT_ROOT . "/profile/index.php?refurl=" . htmlspecialchars($_SERVER['SCRIPT_NAME'], ENT_COMPAT | ENT_HTML401 | ENT_SUBSTITUTE) . "?" . htmlspecialchars($_SERVER['QUERY_STRING'], ENT_QUOTES); ?>">
+					<span style="white-space: nowrap; padding: 0.8rem;  background-color: var(--light-color); " class="button button-secondary bottom-breathing-room-rel">
+						<a href="<?= $CLIENT_ROOT . "/profile/index.php?refurl=" . htmlspecialchars($_SERVER['SCRIPT_NAME'], ENT_COMPAT | ENT_HTML401 | ENT_SUBSTITUTE) . "?" . htmlspecialchars($_SERVER['QUERY_STRING'], ENT_QUOTES); ?>">
 							<?= (isset($LANG['H_LOGIN'])?$LANG['H_LOGIN']:'Login') ?>
 						</a>
 					</span>
@@ -45,8 +45,8 @@ $collectionSearchPage = $SHOULD_USE_HARVESTPARAMS ? '/collections/index.php' : '
 					</div>
 				</a>
 				<div class="brand-name">
-					<h1 style="font-size:6em">CCH2</h1>
-					<h2 style="font-size:2em">Specimen data from the Consortium of California Herbarium</h2>
+					<h1>CCH2</h1>
+					<h2>Specimen data from the Consortium of California Herbarium</h2>
 				</div>
 			</div>
 		</div>
