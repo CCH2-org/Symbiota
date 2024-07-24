@@ -1,26 +1,19 @@
 <?php
 /*
-** Symbiota Redesign
-** The version is determined by the number of the release
-** set in config/symbini.php ($CSS_VERSION_RELEASE).
-** To customize the styles, add your own CSS files to the
-** css folder and include them here.
+** Style sheets are determined by $CSS_BASE_PATH set within config/symbini.php
+** Customization can be made by modifying css files, $CSS_BASE_PATH, adding new css files below
 */
-include_once($SERVER_ROOT.'/classes/ProfileManager.php');
-$pHandler = new ProfileManager();
-$isAccessiblePreferred = $pHandler->getAccessibilityPreference($SYMB_UID);
-// $_SESSION['active_stylesheet'] = null; // use this if you want to troubleshoot the behavior of just the persisted preference
-$localSession = isset($_SESSION['active_stylesheet']) ? $_SESSION['active_stylesheet'] : null;
 ?>
 <!-- Responsive viewport -->
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 <!-- Symbiota styles -->
-<link href="<?php echo htmlspecialchars($CSS_BASE_PATH, ENT_COMPAT | ENT_HTML401 | ENT_SUBSTITUTE); ?>/symbiota/reset.css" type="text/css" rel="stylesheet">
-<link href="<?php echo htmlspecialchars($CSS_BASE_PATH, ENT_COMPAT | ENT_HTML401 | ENT_SUBSTITUTE); ?>/symbiota/normalize.slim.css" type="text/css" rel="stylesheet">
-<link href="<?php echo htmlspecialchars($CSS_BASE_PATH, ENT_COMPAT | ENT_HTML401 | ENT_SUBSTITUTE); ?>/symbiota/main.css" type="text/css" rel="stylesheet">
-<script src="<?php echo htmlspecialchars($CLIENT_ROOT, ENT_COMPAT | ENT_HTML401 | ENT_SUBSTITUTE); ?>/js/symb/lang.js" type="text/javascript"></script>
-<script src="<?php echo htmlspecialchars($CLIENT_ROOT, ENT_COMPAT | ENT_HTML401 | ENT_SUBSTITUTE); ?>/js/symb/accessibilityUtils.js" type="text/javascript"></script>
+<link href="<?= $CSS_BASE_PATH ?>/symbiota/reset.css" type="text/css" rel="stylesheet">
+<link href="<?= $CSS_BASE_PATH ?>/symbiota/normalize.slim.css" type="text/css" rel="stylesheet">
+<link href="<?= $CSS_BASE_PATH ?>/symbiota/header.css" type="text/css" rel="stylesheet">
+<link href="<?= $CSS_BASE_PATH ?>/symbiota/footer.css" type="text/css" rel="stylesheet">
+<link href="<?= $CSS_BASE_PATH ?>/symbiota/main.css" type="text/css" rel="stylesheet">
+<link href="<?= $CSS_BASE_PATH ?>/symbiota/accessibility-controls.css" type="text/css" rel="stylesheet">
 
 <!-- Google Fonts -->
 <link rel="preconnect" href="https://fonts.googleapis.com">
