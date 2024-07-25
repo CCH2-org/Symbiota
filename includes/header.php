@@ -46,7 +46,7 @@ $collectionSearchPage = $SHOULD_USE_HARVESTPARAMS ? '/collections/index.php' : '
 				</a>
 				<div class="brand-name">
 					<h1>CCH2</h1>
-					<h2>Specimen data from the Consortium of California Herbarium</h2>
+					<h2>Specimen data from the Consortium of California Herbaria</h2>
 				</div>
 			</div>
 		</div>
