@@ -2263,11 +2263,11 @@ Record Limit:
 						<h3 id="recordstaxaheader" style="display:none;padding-left:30px;"><?php echo (isset($LANG['RECORDS_TAXA'])?$LANG['RECORDS_TAXA']:'Records and Taxa'); ?></h3>
 						<div id="tabs2" style="display:none;padding:0px;">
 							<ul>
-								<li><a href='#occurrencelist'><span><?php echo htmlspecialchars($LANG['RECORDS'], ENT_COMPAT | ENT_HTML401 | ENT_SUBSTITUTE); ?></span></a></li>
-								<li id="cross_portal_results"><a href='#external_occurrencelist'><span><?php echo htmlspecialchars($LANG['EXTERNAL_RECORDS'], ENT_COMPAT | ENT_HTML401 | ENT_SUBSTITUTE); ?></span></a></li>
-								<li id="cross_portal_list"><a href='#portalsymbology'><span><?php echo htmlspecialchars($LANG['PORTAL_LIST'], ENT_COMPAT | ENT_HTML401 | ENT_SUBSTITUTE); ?></span></a></li>
-						   	<li><a href='#symbology'><span><?php echo htmlspecialchars($LANG['COLLECTIONS'], ENT_COMPAT | ENT_HTML401 | ENT_SUBSTITUTE); ?></span></a></li>
-								<li><a href='#maptaxalist'><span><?php echo htmlspecialchars($LANG['TAXA_LIST'], ENT_COMPAT | ENT_HTML401 | ENT_SUBSTITUTE); ?></span></a></li>
+								<li><a href='#occurrencelist'><span><?= $LANG['RECORDS'] ?></span></a></li>
+								<li id="cross_portal_results"><a href='#external_occurrencelist'><span><?= $LANG['EXTERNAL_RECORDS'] ?></span></a></li>
+								<li id="cross_portal_list"><a href='#portalsymbology'><span><?= $LANG['PORTAL_LIST'] ?></span></a></li>
+						   	<li><a href='#symbology'><span><?= $LANG['COLLECTIONS'] ?></span></a></li>
+								<li><a href='#maptaxalist'><span><?= $LANG['TAXA_LIST'] ?></span></a></li>
 							</ul>
 							<div id="occurrencelist" style="">
 								loading...

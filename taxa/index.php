@@ -307,7 +307,7 @@ include($SERVER_ROOT.'/includes/header.php');
 										$legendStr .= $LANG['SPECIES_CHECKLIST'] . ': <b>' . $checklistName . '</b>';
 									}
 									if($parentChecklistArr = $taxonManager->getParentChecklist($clid)){
-										$titleStr = $LANG['GO_TO_PARENT_CHECKLIST'] . ': ' . current($parentChecklistArr);
+										$titleStr = $LANG['GO_TO'] . ': ' . current($parentChecklistArr);
 										$legendStr .= ' <a href="index.php?tid=' . htmlspecialchars($tid, ENT_COMPAT | ENT_HTML401 | ENT_SUBSTITUTE) . '&clid='. htmlspecialchars(key($parentChecklistArr), ENT_COMPAT | ENT_HTML401 | ENT_SUBSTITUTE) . '&pid=' . htmlspecialchars($pid, ENT_COMPAT | ENT_HTML401 | ENT_SUBSTITUTE) . '&taxauthid=' . htmlspecialchars($taxAuthId, ENT_COMPAT | ENT_HTML401 | ENT_SUBSTITUTE) . '" title="' . htmlspecialchars($titleStr, ENT_COMPAT | ENT_HTML401 | ENT_SUBSTITUTE) . '">';
 										$legendStr .= '<img style="border:0px;width:1.3em;" src="../images/toparent.png"/>';
 										$legendStr .= '</a>';
