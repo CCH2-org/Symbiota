@@ -1,37 +1,37 @@
 <?php
-if($LANG_TAG == 'en' || !file_exists($SERVER_ROOT.'/content/lang/header.' . $LANG_TAG . '.php')) include_once($SERVER_ROOT . '/content/lang/header.en.php');
-else include_once($SERVER_ROOT . '/content/lang/header.' . $LANG_TAG . '.php');
-include_once($SERVER_ROOT . '/includes/head.php');
-
-include_once($SERVER_ROOT . '/classes/ProfileManager.php');
-$pHandler = new ProfileManager();
-$isAccessiblePreferred = $pHandler->getAccessibilityPreference($SYMB_UID);
+if($LANG_TAG == 'en' || !file_exists($SERVER_ROOT.'/content/lang/templates/header.' . $LANG_TAG . '.php')) include_once($SERVER_ROOT . '/content/lang/templates/header.en.php');
+else include_once($SERVER_ROOT . '/content/lang/templates/header.' . $LANG_TAG . '.php');
 $SHOULD_USE_HARVESTPARAMS = $SHOULD_USE_HARVESTPARAMS ?? false;
 $collectionSearchPage = $SHOULD_USE_HARVESTPARAMS ? '/collections/index.php' : '/collections/search/index.php';
 ?>
 <div class="header-wrapper">
 	<header>
 		<div class="top-wrapper">
-			<a class="screen-reader-only" href="#end-nav"><?= $LANG['SKIP_NAV'] ?></a>
+			<a class="screen-reader-only" href="#end-nav"><?= $LANG['H_SKIP_NAV'] ?></a>
 			<nav class="top-login" aria-label="horizontal-nav">
 				<?php
 				if ($USER_DISPLAY_NAME) {
 					?>
-					<div class="welcome-text bottom-breathing-room-rel" style="color: var(--light-color);  text-decoration: none;">
+					<div class="welcome-text bottom-breathing-room-rel">
 						<?= (isset($LANG['H_WELCOME'])?$LANG['H_WELCOME']:'Welcome') . ' ' . $USER_DISPLAY_NAME ?>!
 					</div>
-					<span style="white-space: nowrap; padding: 0.8rem;  border:2px solid var(--light-color);" class="button button-tertiary bottom-breathing-room-rel">
-						<a href="<?= $CLIENT_ROOT ?>/profile/viewprofile.php"><?= (isset($LANG['H_MY_PROFILE'])?$LANG['H_MY_PROFILE']:'My Profile') ?></a>
+					<span style="white-space: nowrap;" class="button button-tertiary bottom-breathing-room-rel">
+						<a href="<?= $CLIENT_ROOT ?>/profile/viewprofile.php"><?= $LANG['H_MY_PROFILE'] ?></a>
 					</span>
-					<span style="white-space: nowrap; padding: 0.8rem;  background-color: var(--light-color)" class="button button-secondary bottom-breathing-room-rel">
-						<a href="<?= $CLIENT_ROOT ?>/profile/index.php?submit=logout"><?= (isset($LANG['H_LOGOUT'])?$LANG['H_LOGOUT']:'Sign Out') ?></a>
+					<span style="white-space: nowrap;" class="button button-secondary bottom-breathing-room-rel">
+						<a href="<?= $CLIENT_ROOT ?>/profile/index.php?submit=logout"><?= $LANG['H_LOGOUT'] ?></a>
 					</span>
 					<?php
 				} else {
 					?>
-					<span style="white-space: nowrap; padding: 0.8rem;  background-color: var(--light-color); " class="button button-secondary bottom-breathing-room-rel">
+					<span class="button button-tertiary">
+						<a onclick="window.location.href='#'">
+							<?= $LANG['H_CONTACT_US'] ?>
+						</a>
+					</span>
+					<span class="button button-secondary">
 						<a href="<?= $CLIENT_ROOT . "/profile/index.php?refurl=" . htmlspecialchars($_SERVER['SCRIPT_NAME'], ENT_COMPAT | ENT_HTML401 | ENT_SUBSTITUTE) . "?" . htmlspecialchars($_SERVER['QUERY_STRING'], ENT_QUOTES); ?>">
-							<?= (isset($LANG['H_LOGIN'])?$LANG['H_LOGIN']:'Login') ?>
+							<?= $LANG['H_LOGIN'] ?>
 						</a>
 					</span>
 					<?php
@@ -39,7 +39,7 @@ $collectionSearchPage = $SHOULD_USE_HARVESTPARAMS ? '/collections/index.php' : '
 				?>
 			</nav>
 			<div class="top-brand">
-				<a href="https://symbiota.org">
+				<a href="https://cch2.org">
 					<div class="image-container">
 						<img src="<?= $CLIENT_ROOT ?>/images/layout/CCH.png" alt="CCH2 logo">
 					</div>
@@ -57,33 +57,33 @@ $collectionSearchPage = $SHOULD_USE_HARVESTPARAMS ? '/collections/index.php' : '
 			<!-- Menu -->
 			<nav class="top-menu" aria-label="hamburger-nav">
 				<ul class="menu">
-                                        <li>
-                                                <a href="<?php echo $CLIENT_ROOT; ?>/index.php" >Home</a>
-                                        </li>
-                                        <li>
-                                                <a href="<?php echo $CLIENT_ROOT; ?>/collections/search/index.php" >Search Collections</a>
-                                        </li>
-                                        <li>
-                                                <a href="<?php echo $CLIENT_ROOT; ?>/collections/map/index.php" target="_blank">Map Search</a>
-                                        </li>
-                                        <li>
-                                                <a href="<?php echo $CLIENT_ROOT; ?>/checklists/index.php">Checklists</a>
-                                        </li>
-                                        <li>
-                                                <a href="<?php echo $CLIENT_ROOT; ?>/imagelib/search.php" >Image Search</a>
-                                        </li>
-                                        <li>
-                                                <a href="<?php echo $CLIENT_ROOT; ?>/includes/usagepolicy.php">Data Use Policy</a>
-                                        </li>
-                                        <li>
-                                                <a href="http://ucjeps.berkeley.edu/consortium/about.html" target="_blank">About CCH</a>
-                                        </li>
-                                        <li>
-                                                <a href="https://www.capturingcaliforniasflowers.org/symbiota.html" target="_blank">Help & Resources</a>
-                                        </li>
-                                        <li>
-                                                <a href="<?php echo $CLIENT_ROOT; ?>/sitemap.php">Sitemap</a>
-                                        </li>
+					<li>
+						<a href="<?= $CLIENT_ROOT ?>/index.php"><?= $LANG['H_HOME'] ?></a>
+					</li>					
+					<li>
+							<a href="<?= $CLIENT_ROOT ?>/collections/search/index.php" >Search Collections</a>
+					</li>
+					<li>
+							<a href="<?= $CLIENT_ROOT ?>/collections/map/index.php" target="_blank">Map Search</a>
+					</li>
+					<li>
+							<a href="<?= $CLIENT_ROOT ?>/checklists/index.php">Checklists</a>
+					</li>
+					<li>
+							<a href="<?= $CLIENT_ROOT ?>/imagelib/search.php" >Image Search</a>
+					</li>
+					<li>
+							<a href="<?= $CLIENT_ROOT ?>/includes/usagepolicy.php">Data Use Policy</a>
+					</li>
+					<li>
+							<a href="http://ucjeps.berkeley.edu/consortium/about.html" target="_blank">About CCH</a>
+					</li>
+					<li>
+							<a href="https://www.capturingcaliforniasflowers.org/symbiota.html" target="_blank">Help & Resources</a>
+					</li>
+					<li>
+							<a href="<?= $CLIENT_ROOT ?>/sitemap.php">Sitemap</a>
+					</li>
 				</ul>
 			</nav>
 		</div>
