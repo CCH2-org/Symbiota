@@ -14,7 +14,7 @@
 
 	</div>
 	<p>
-		<?= $LANG['F_POWERED_BY'] ?> <a href="https://symbiota.org/" target="_blank">Symbiota</a>. This project made possible by National Science Foundation Awards <a href="https://www.nsf.gov/awardsearch/showAward?AWD_ID=1802301" target="_blank">1802301</a> and <a href="https://www.nsf.gov/awardsearch/showAward?AWD_ID=1802163" target="_blank">1802163</a> and by the National Park Service.
+		<?= $LANG['F_POWERED_BY'] ?> <a href="https://symbiota.org/" target="_blank">Symbiota</a>. This project made possible by U.S. National Science Foundation Awards <a href="https://www.nsf.gov/awardsearch/showAward?AWD_ID=1802301" target="_blank">1802301</a> and <a href="https://www.nsf.gov/awardsearch/showAward?AWD_ID=1802163" target="_blank">1802163</a> and by the National Park Service.
 	</p>
 	<p>
 		For more information about CCH2 or the California Phenology Network, email Jenn Yost <a href="mailto:jyost@calpoly.edu">jyost@calpoly.edu</a>.
