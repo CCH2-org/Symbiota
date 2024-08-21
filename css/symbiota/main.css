@@ -1,6 +1,7 @@
 /* Style and Font imports
   ========================================================================== */
 @import url("https://fonts.googleapis.com/css2?family=Roboto&display=swap");
+@import "normalize.slim.css";
 @import "variables.css";
 
 
@@ -143,6 +144,11 @@ span[class="link"] {
 span[class="link"]:hover {
   color: black;
   text-decoration: underline;
+}
+
+/* User rights elements associated with occurrences, images, collections, data, etc */
+.rights-span img{
+	width: 100px;
 }
 
 /*
@@ -365,6 +371,10 @@ button.icon-button {
   border-width: 1px;
   border-style: outset;
   border-color: buttonborder;
+}
+
+button.icon-button > svg {
+  fill: var(--light-color);
 }
 
 button.icon-button:hover {
