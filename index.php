@@ -1,24 +1,24 @@
 <?php
 include_once('config/symbini.php');
-if($LANG_TAG == 'en' || !file_exists($SERVER_ROOT.'/content/lang/index.'.$LANG_TAG.'.php')) include_once($SERVER_ROOT.'/content/lang/index.en.php');
-else include_once($SERVER_ROOT.'/content/lang/index.'.$LANG_TAG.'.php');
+if($LANG_TAG == 'en' || !file_exists($SERVER_ROOT.'/content/lang/templates/index.'.$LANG_TAG.'.php')) include_once($SERVER_ROOT.'/content/lang/templates/index.en.php');
+else include_once($SERVER_ROOT.'/content/lang/templates/index.'.$LANG_TAG.'.php');
 header('Content-Type: text/html; charset=' . $CHARSET);
 ?>
 <!DOCTYPE html>
 <html lang="<?php echo $LANG_TAG ?>">
 <head>
-        <title><?php echo $DEFAULT_TITLE; ?> Home</title>
-        <?php
-        include_once($SERVER_ROOT . '/includes/head.php');
-        include_once($SERVER_ROOT . '/includes/googleanalytics.php');
-        ?>
+	<title><?php echo $DEFAULT_TITLE; ?> Home</title>
+	<?php
+	include_once($SERVER_ROOT . '/includes/head.php');
+	include_once($SERVER_ROOT . '/includes/googleanalytics.php');
+	?>
 </head>
 <body>
-        <?php
-        include($SERVER_ROOT . '/includes/header.php');
-        ?>
-        <div class="navpath"></div>
-        <main id="innertext">
+	<?php
+	include($SERVER_ROOT . '/includes/header.php');
+	?>
+	<div class="navpath"></div>
+	<main id="innertext">
 		<div style="float:right;margin-left:15px">
 			<!--
 			<div>
@@ -51,8 +51,8 @@ header('Content-Type: text/html; charset=' . $CHARSET);
 				//$pluginManager = new PluginsManager();
 				//echo $pluginManager->createSlideShow($ssId,$numSlides,$width,$numDays,$imageType,$clid,$dayInterval,$interval);
 				//?>
-			//---------------------------END SLIDESHOW SETTINGS---------------------------------------
-		</div>
+				//---------------------------END SLIDESHOW SETTINGS---------------------------------------
+			</div>
 			-->
 		</div>
 		<div style="padding: 0px 10px">
@@ -80,26 +80,26 @@ header('Content-Type: text/html; charset=' . $CHARSET);
 				This portal is managed by Cal Poly, San Luis Obispo and the Symbiota Support Hub. For questions, 
 				please email <a href="mailto:help@symbiota.org">help@symbiota.org</a>.
 			</p>
-            <div>
-            <h3>Using the data:</h3>
-            </div>
-				<p>
-				Please refer to our <a href="http://cch2.org/portal/includes/usagepolicy.php">Data Use Policy</a>. The Consortium of California Herbaria asks that users not redistribute data obtained from this site.
-				However, links or references to this site may be freely posted. If you have any questions about this policy,
-				please contact Jenn Yost (<a href="mailto:jyost@calpoly.edu">jyost@calpoly.edu</a>) and Katie Pearson (<a href="mailto:help@symbiota.org">help@symbiota.org</a>).
-				</p>
-            	<p>
-				<b>More California specimen data may be found at the following portals:</b>
-				<ul>
-					<li style="margin-bottom:7px; ">Bryophytes: <a href="https://bryophyteportal.org/portal/" target="_blank">Consortium of North American Bryophyte Herbaria</a></li>
-					<li style="margin-bottom:7px; ">Fungi: <a href="http://mycoportal.org" target="_blank">Mycology Collections Portal (MyCoPortal)</a></li>
-					<li style="margin-bottom:7px; ">Lichens: <a href="https://lichenportal.org/cnalh/" target="_blank">Consortium of North American Lichen Herbaria</a></li>
-					<li style="margin-bottom:7px; ">Macroalgae: <a href="http://macroalgae.org" targert="_blank">Macroalgal Herbarium Consortium</a></li>
-					<li style="margin-bottom:7px; ">Pteridophytes: <a href="http://www.pteridoportal.org/portal/" target="_blank">Pteridophyte Collections Consortium</a></li>
-				</ul>
-				</p>
+			<div>
+				<h3>Using the data:</h3>
+			</div>
+			<p>
+			Please refer to our <a href="http://cch2.org/portal/includes/usagepolicy.php">Data Use Policy</a>. The Consortium of California Herbaria asks that users not redistribute data obtained from this site.
+			However, links or references to this site may be freely posted. If you have any questions about this policy,
+			please contact Jenn Yost (<a href="mailto:jyost@calpoly.edu">jyost@calpoly.edu</a>) and Katie Pearson (<a href="mailto:help@symbiota.org">help@symbiota.org</a>).
+			</p>
+			<p>
+			<b>More California specimen data may be found at the following portals:</b>
+			<ul>
+				<li style="margin-bottom:7px; ">Bryophytes: <a href="https://bryophyteportal.org/portal/" target="_blank">Consortium of North American Bryophyte Herbaria</a></li>
+				<li style="margin-bottom:7px; ">Fungi: <a href="http://mycoportal.org" target="_blank">Mycology Collections Portal (MyCoPortal)</a></li>
+				<li style="margin-bottom:7px; ">Lichens: <a href="https://lichenportal.org/cnalh/" target="_blank">Consortium of North American Lichen Herbaria</a></li>
+				<li style="margin-bottom:7px; ">Macroalgae: <a href="http://macroalgae.org" targert="_blank">Macroalgal Herbarium Consortium</a></li>
+				<li style="margin-bottom:7px; ">Pteridophytes: <a href="http://www.pteridoportal.org/portal/" target="_blank">Pteridophyte Collections Consortium</a></li>
+			</ul>
+			</p>
 		</div>
- </main>
+ 	</main>
         <?php
         include($SERVER_ROOT . '/includes/footer.php');
         ?>

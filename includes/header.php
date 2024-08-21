@@ -1,5 +1,6 @@
 <?php
-if($LANG_TAG == 'en' || !file_exists($SERVER_ROOT.'/content/lang/templates/header.' . $LANG_TAG . '.php')) include_once($SERVER_ROOT . '/content/lang/templates/header.en.php');
+if($LANG_TAG == 'en' || !file_exists($SERVER_ROOT.'/content/lang/templates/header.' . $LANG_TAG . '.php'))
+	include_once($SERVER_ROOT . '/content/lang/templates/header.en.php');
 else include_once($SERVER_ROOT . '/content/lang/templates/header.' . $LANG_TAG . '.php');
 $SHOULD_USE_HARVESTPARAMS = $SHOULD_USE_HARVESTPARAMS ?? false;
 $collectionSearchPage = $SHOULD_USE_HARVESTPARAMS ? '/collections/index.php' : '/collections/search/index.php';
@@ -13,7 +14,7 @@ $collectionSearchPage = $SHOULD_USE_HARVESTPARAMS ? '/collections/index.php' : '
 				if ($USER_DISPLAY_NAME) {
 					?>
 					<div class="welcome-text bottom-breathing-room-rel">
-						<?= (isset($LANG['H_WELCOME'])?$LANG['H_WELCOME']:'Welcome') . ' ' . $USER_DISPLAY_NAME ?>!
+					<?= $LANG['H_WELCOME'] . ' ' . $USER_DISPLAY_NAME ?>!
 					</div>
 					<span style="white-space: nowrap;" class="button button-tertiary bottom-breathing-room-rel">
 						<a href="<?= $CLIENT_ROOT ?>/profile/viewprofile.php"><?= $LANG['H_MY_PROFILE'] ?></a>
@@ -58,31 +59,45 @@ $collectionSearchPage = $SHOULD_USE_HARVESTPARAMS ? '/collections/index.php' : '
 			<nav class="top-menu" aria-label="hamburger-nav">
 				<ul class="menu">
 					<li>
-						<a href="<?= $CLIENT_ROOT ?>/index.php"><?= $LANG['H_HOME'] ?></a>
+						<a href="<?= $CLIENT_ROOT ?>/index.php">
+							<?= $LANG['H_HOME'] ?>
+						</a>
 					</li>					
 					<li>
-							<a href="<?= $CLIENT_ROOT ?>/collections/search/index.php" >Search Collections</a>
+						<a href="<?= $CLIENT_ROOT . $collectionSearchPage ?>">
+							<?= $LANG['H_SEARCH'] ?>
+						</a>
 					</li>
 					<li>
-							<a href="<?= $CLIENT_ROOT ?>/collections/map/index.php" target="_blank">Map Search</a>
+						<a href="<?= $CLIENT_ROOT ?>/collections/map/index.php" rel="noopener noreferrer">
+							<?= $LANG['H_MAP_SEARCH'] ?>
+						</a>
 					</li>
 					<li>
-							<a href="<?= $CLIENT_ROOT ?>/checklists/index.php">Checklists</a>
+						<a href="<?= $CLIENT_ROOT ?>/checklists/index.php">
+							<?= $LANG['H_INVENTORIES'] ?>
+						</a>
 					</li>
 					<li>
-							<a href="<?= $CLIENT_ROOT ?>/imagelib/search.php" >Image Search</a>
+						<a href="<?= $CLIENT_ROOT ?>/imagelib/search.php">
+							<?= $LANG['H_IMAGES'] ?>
+						</a>
 					</li>
 					<li>
-							<a href="<?= $CLIENT_ROOT ?>/includes/usagepolicy.php">Data Use Policy</a>
+						<a href="<?= $CLIENT_ROOT ?>/includes/usagepolicy.php">
+							<?= $LANG['H_DATA_USAGE'] ?>
+						</a>
 					</li>
 					<li>
-							<a href="http://ucjeps.berkeley.edu/consortium/about.html" target="_blank">About CCH</a>
+						<a href="http://ucjeps.berkeley.edu/consortium/about.html" target="_blank">About CCH</a>
 					</li>
 					<li>
-							<a href="https://www.capturingcaliforniasflowers.org/symbiota.html" target="_blank">Help & Resources</a>
+						<a href="https://www.capturingcaliforniasflowers.org/symbiota.html" target="_blank">Help & Resources</a>
 					</li>
 					<li>
-							<a href="<?= $CLIENT_ROOT ?>/sitemap.php">Sitemap</a>
+						<a href='<?= $CLIENT_ROOT ?>/sitemap.php'>
+							<?= $LANG['H_SITEMAP'] ?>
+						</a>
 					</li>
 				</ul>
 			</nav>
