@@ -3866,7 +3866,7 @@ INSERT INTO `taxa` VALUES (1,NULL,1,'Organism',NULL,'Organism',NULL,NULL,NULL,NU
 INSERT INTO `taxstatus` VALUES (1,1,1,1,NULL,NULL,NULL,NULL,NULL,NULL,50,NULL,NULL,'2023-03-26 18:14:32'),(2,2,1,1,NULL,NULL,NULL,NULL,NULL,NULL,50,NULL,NULL,'2023-03-26 18:14:32'),(3,3,1,1,NULL,NULL,NULL,NULL,NULL,NULL,50,NULL,NULL,'2023-03-26 18:14:32'),(4,4,1,1,NULL,NULL,NULL,NULL,NULL,NULL,50,NULL,NULL,'2023-03-26 18:14:32'),(5,5,1,1,NULL,NULL,NULL,NULL,NULL,NULL,50,NULL,NULL,'2023-03-26 18:14:32'),(6,6,1,1,NULL,NULL,NULL,NULL,NULL,NULL,50,NULL,NULL,'2023-03-26 18:14:32');
 
 #Update schema table
-INSERT IGNORE INTO schemaversion (versionnumber) values ("3.0");
+INSERT IGNORE INTO `schemaversion` (versionnumber) values ("3.0");
 
 #Create default thesaurus
 INSERT INTO `geographicthesaurus` (`geoThesID`, `geoterm`, `abbreviation`, `iso2`, `iso3`, `numcode`, `category`, `geoLevel`, `termstatus`, `acceptedID`, `parentID`) VALUES (1, "Africa", NULL, NULL, NULL, NULL, NULL, 40, NULL, NULL, NULL),

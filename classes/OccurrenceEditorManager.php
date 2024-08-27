@@ -35,8 +35,8 @@ class OccurrenceEditorManager {
 		$this->fieldArr['omoccurrences'] = array('basisofrecord' => 's', 'catalognumber' => 's', 'othercatalognumbers' => 's', 'occurrenceid' => 's', 'ownerinstitutioncode' => 's',
 			'institutioncode' => 's', 'collectioncode' => 's', 'eventid' => 's',
 			'family' => 's', 'sciname' => 's', 'tidinterpreted' => 'n', 'scientificnameauthorship' => 's', 'identifiedby' => 's', 'dateidentified' => 's',
-			'identificationreferences' => 's', 'identificationremarks' => 's', 'taxonremarks' => 's', 'identificationqualifier' => 's', 'typestatus' => 's',
-			'recordedby' => 's', 'recordnumber' => 's', 'associatedcollectors' => 's', 'eventdate' => 'd', 'eventdate2' => 'd',
+				'identificationreferences' => 's', 'identificationremarks' => 's', 'taxonremarks' => 's', 'identificationqualifier' => 's', 'typestatus' => 's', 'recordedby' => 's', 'recordnumber' => 's',
+			'associatedcollectors' => 's', 'eventdate' => 'd', 'eventdate2' => 'd', 'year' => 'n', 'month' => 'n', 'day' => 'n', 'startdayofyear' => 'n', 'enddayofyear' => 'n',
 			'verbatimeventdate' => 's', 'habitat' => 's', 'substrate' => 's', 'fieldnumber' => 's', 'occurrenceremarks' => 's', 'datageneralizations' => 's',
 			'associatedtaxa' => 's', 'verbatimattributes' => 's', 'behavior' => 's', 'vitality' => 's', 'dynamicproperties' => 's', 'reproductivecondition' => 's', 'cultivationstatus' => 's', 'establishmentmeans' => 's',
 			'lifestage' => 's', 'sex' => 's', 'individualcount' => 's', 'samplingprotocol' => 's', 'preparations' => 's',
@@ -980,6 +980,7 @@ class OccurrenceEditorManager {
 				//Edit record only if user is authorized to autoCommit
 				if($autoCommit){
 					$status = $LANG['SUCCESS_EDITS_SUBMITTED'].' ';
+					$postArr = array_merge($postArr, $this->getDatefields($postArr));
 					$sql = '';
 					//Apply autoprocessing status if set
 					if(array_key_exists('autoprocessingstatus',$postArr) && $postArr['autoprocessingstatus']){
@@ -1017,7 +1018,7 @@ class OccurrenceEditorManager {
 						$this->conn->query($sqlHost);
 					}
 					//Update occurrence record
-					$sql = 'UPDATE omoccurrences SET '.substr($sql,1).' WHERE (occid = '.$this->occid.')';
+					$sql = 'UPDATE IGNORE omoccurrences SET '.substr($sql,1).' WHERE (occid = '.$this->occid.')';
 					if($this->conn->query($sql)){
 						if(strtolower($postArr['processingstatus']) != 'unprocessed'){
 							//UPDATE uid within omcrowdsourcequeue, only if not yet processed
@@ -1256,8 +1257,9 @@ class OccurrenceEditorManager {
 		global $LANG;
 		$status = $LANG['SUCCESS_NEW_OCC_SUBMITTED'];
 		if($postArr){
+			$postArr = array_merge($postArr, $this->getDatefields($postArr));
 			$guid = UuidFactory::getUuidV4();
-			$sql = 'INSERT INTO omoccurrences(collid, recordID, '.implode(',',array_keys($this->fieldArr['omoccurrences'])).') VALUES ('.$postArr['collid'].', "'.$guid.'"';
+			$sql = 'INSERT IGNORE INTO omoccurrences(collid, recordID, '.implode(',',array_keys($this->fieldArr['omoccurrences'])).') VALUES ('.$postArr['collid'].', "'.$guid.'"';
 			//if(array_key_exists('cultivationstatus',$postArr) && $postArr['cultivationstatus']) $postArr['cultivationstatus'] = $postArr['cultivationstatus'];
 			//if(array_key_exists('localitysecurity',$postArr) && $postArr['localitysecurity']) $postArr['localitysecurity'] = $postArr['localitysecurity'];
 			if(!isset($postArr['dateentered']) || !$postArr['dateentered']) $postArr['dateentered'] = date('Y-m-d H:i:s');
@@ -1391,6 +1393,37 @@ class OccurrenceEditorManager {
 				}
 			}
 		}
+	}
+
+	private function getDatefields($occurrenceArr){
+		$dateArr = array();
+		if(isset($occurrenceArr['eventdate'])){
+			$dateArr['year'] = '';
+			$dateArr['month'] = '';
+			$dateArr['day'] = '';
+			$dateArr['startdayofyear'] = '';
+			$dateArr['enddayofyear'] = '';
+			if(preg_match('/(\d{4})-(\d{2})-(\d{2})/', $occurrenceArr['eventdate'], $m)){
+				if(!empty((int) $m[1])) $dateArr['year'] = (int) $m[1];
+				if(!empty((int) $m[2])) $dateArr['month'] = (int) $m[2];
+				if(!empty((int) $m[3])) $dateArr['day'] = (int) $m[3];
+			}
+			if(!empty((int)$dateArr['day'])){
+				if($dayOfYear = date('z', strtotime($occurrenceArr['eventdate']))){
+					$dayOfYear++;
+					$dateArr['startdayofyear'] = $dayOfYear;
+					$endDayOfYear = $dayOfYear;
+					if(!empty($occurrenceArr['eventdate2'])){
+						if($dayOfYear = date('z', strtotime($occurrenceArr['eventdate2']))){
+							$dayOfYear++;
+							$endDayOfYear = $dayOfYear;
+						}
+					}
+					$dateArr['enddayofyear'] = $endDayOfYear;
+				}
+			}
+		}
+		return $dateArr;
 	}
 
 	public function deleteOccurrence($delOccid){
