@@ -40,6 +40,7 @@ $LANG['H_CONTACTS'] = 'Contactos';
 $LANG['H_HELP'] = 'Ayuda de Symbiota';
 $LANG['H_SITEMAP'] = 'Mapa del Sitio';
 $LANG['H_DATA_USAGE'] = 'Uso de Datos';
+$LANG['H_CROWDSOURCING'] = 'Colaboración Colectiva';
 
 $LANG['H_WELCOME'] = 'Bienvenido';
 $LANG['H_MY_PROFILE'] = 'Mi Perfil';

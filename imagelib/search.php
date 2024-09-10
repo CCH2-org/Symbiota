@@ -393,8 +393,12 @@ if($action == 'batchAssignTag'){
 											if($imgArr['occid']){
 												$collid = $occArr[$imgArr['occid']]['collid'];
 												if($collid){
-													if(isset($USER_RIGHTS['CollAdmin'][$collid])) $isEditorOfThisImage = true;
-													elseif(isset($USER_RIGHTS['CollEditor'][$collid])) $isEditorOfThisImage = true;
+													if(isset($USER_RIGHTS['CollAdmin']) && in_array($collid, $USER_RIGHTS['CollAdmin'])){
+														$isEditorOfThisImage = true;
+													}
+													elseif(isset($USER_RIGHTS['CollEditor']) && in_array($collid, $USER_RIGHTS['CollEditor'])){
+														$isEditorOfThisImage = true;
+													}
 												}
 											}
 											else{
