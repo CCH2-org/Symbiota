@@ -46,3 +46,7 @@ nav.top-login span.button.button-tertiary.bottom-breathing-room-rel {
     padding: 0.8rem;
     border: 2px solid var(--light-color);
 }
+
+.ui-tabs-tab {
+  font-size: 1rem;
+}
