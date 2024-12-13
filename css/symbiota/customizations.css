@@ -52,8 +52,15 @@ nav.top-login span.button.button-tertiary.bottom-breathing-room-rel {
 }
 
 .button-tertiary {
-    background-color: #ffffff8e;
-    border: 1px solid var(--bright-color);
-    color: var(--darkest-color);
+    background-color: transparent;
+    border: 3px solid white;
+    color: white;
+    padding: 0.5rem 0.9rem;
+  }
+
+  .button-secondary {
+    background-color: white;
+    color: black;
+    border: 3px solid white;
     padding: 0.5rem 0.9rem;
   }
