@@ -50,3 +50,10 @@ nav.top-login span.button.button-tertiary.bottom-breathing-room-rel {
 .ui-tabs-tab {
   font-size: 1rem;
 }
+
+.button-tertiary {
+    background-color: #ffffff8e;
+    border: 1px solid var(--bright-color);
+    color: var(--darkest-color);
+    padding: 0.5rem 0.9rem;
+  }
