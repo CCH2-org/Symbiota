@@ -33,19 +33,19 @@ $indManager->setDisplayFormat($format);
 $indManager->setOccurData();
 if(!$occid) $occid = $indManager->getOccid();
 if(!$collid) $collid = $indManager->getCollid();
-//$occArr = $indManager->getOccData();
 
 $isSecuredReader = false;
 $isEditor = false;
 if($SYMB_UID){
 	//Check editing status
+	$observerUid = $indManager->getOccData('observeruid');
 	if($IS_ADMIN || (array_key_exists('CollAdmin',$USER_RIGHTS) && in_array($collid,$USER_RIGHTS['CollAdmin']))){
 		$isEditor = true;
 	}
 	elseif((array_key_exists('CollEditor',$USER_RIGHTS) && in_array($collid,$USER_RIGHTS['CollEditor']))){
 		$isEditor = true;
 	}
-	elseif(isset($occArr['observeruid']) && $occArr['observeruid'] == $SYMB_UID){
+	elseif($observerUid == $SYMB_UID){
 		$isEditor = true;
 	}
 	elseif($indManager->isTaxonomicEditor()){
@@ -65,12 +65,10 @@ if($SYMB_UID){
 		$isSecuredReader = true;
 	}
 }
+
+//Appy protections and build occurrence array
 $indManager->applyProtections($isSecuredReader);
 $occArr = $indManager->getOccData();
-/*if($indManager->applyProtections($isSecuredReader)){
-	//Protections applied, thus reset occurrence array
-	$occArr = $indManager->getOccData();
-}*/
 $collMetadata = $indManager->getMetadata();
 $genticArr = $indManager->getGeneticArr();
 
