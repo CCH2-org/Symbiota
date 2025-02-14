@@ -1738,7 +1738,7 @@ class OccurrenceEditorManager {
 				$sql = <<<'SQL'
 				SELECT detid FROM omoccurdeterminations where occid = ? and isCurrent = 1;
 				SQL;
-				$result = SymbUtil::execute_query($this->conn, $sql, [$occid]);
+				$result = QueryUtil::executeQuery($this->conn, $sql, [$occid]);
 				return array_map(function ($v) {
 					return $v[0];
 				}, $result->fetch_all());
