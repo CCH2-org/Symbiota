@@ -325,7 +325,7 @@ class Media {
 		return [
 			'name' => substr($file_name, $dir_path_pos, $file_type_pos - $dir_path_pos),
 			'tmp_name' => $filepath,
-			'extension' => substr($file_name, $file_type_pos + 1),
+			'extension' => strtolower(substr($file_name, $file_type_pos + 1)),
 		];
 	}
 	/**
