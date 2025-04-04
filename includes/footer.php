@@ -9,16 +9,16 @@
 		<a href="http://idigbio.org" target="_blank" title="iDigBio" aria-label="<?= $LANG['F_VISIT_IDIGBIO'] ?>">
 			<img src="<?= $CLIENT_ROOT; ?>/images/layout/logo_idig.png" alt="<?= $LANG['F_IDIGBIO_LOGO'] ?>" />
 		</a>
-		<a href="https://www.capturingcaliforniasflowers.org/" target="_blank" title="California Phenology Network">
-			<img src="<?php echo $CLIENT_ROOT;?>/images/layout/CAP_network.png" />
-		</a>
 		<a href="https://biokic.asu.edu" target="_blank" title="Biodiversity Knowledge Integration Center">
 			<img src="<?php echo $CLIENT_ROOT; ?>/images/layout/logo-asu-biokic.png" />
 		</a>
 		<a href="https://biodiversity.ku.edu/" target="_blank" title="University of Kansas BI">
 			<img src="<?php echo $CLIENT_ROOT; ?>/images/layout/KUBI_bw.png" />
 		</a>
-
+		<a></a>
+		<a href="https://www.capturingcaliforniasflowers.org/" target="_blank" title="California Phenology Network">
+			<img src="<?php echo $CLIENT_ROOT;?>/images/layout/CAP_network.png" />
+		</a>
 	</div>
 	<p>
 		<?= $LANG['F_POWERED_BY'] ?> <a href="https://symbiota.org/" target="_blank">Symbiota</a>. This project made possible by U.S. National Science Foundation Awards <a href="https://www.nsf.gov/awardsearch/showAward?AWD_ID=1802301" target="_blank">1802301</a> and <a href="https://www.nsf.gov/awardsearch/showAward?AWD_ID=1802163" target="_blank">1802163</a> and by the National Park Service.
