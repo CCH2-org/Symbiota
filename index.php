@@ -91,10 +91,10 @@ header('Content-Type: text/html; charset=' . $CHARSET);
 			<p>
 			<b>More California specimen data may be found at the following portals:</b>
 			<ul>
-				<li style="margin-bottom:7px; ">Bryophytes: <a href="https://bryophyteportal.org/portal/" target="_blank">Consortium of North American Bryophyte Herbaria</a></li>
+				<li style="margin-bottom:7px; ">Bryophytes: <a href="https://bryophyteportal.org/portal/" target="_blank">Consortium of Bryophyte Herbaria</a></li>
 				<li style="margin-bottom:7px; ">Fungi: <a href="http://mycoportal.org" target="_blank">Mycology Collections Portal (MyCoPortal)</a></li>
-				<li style="margin-bottom:7px; ">Lichens: <a href="https://lichenportal.org/cnalh/" target="_blank">Consortium of North American Lichen Herbaria</a></li>
-				<li style="margin-bottom:7px; ">Macroalgae: <a href="http://macroalgae.org" targert="_blank">Macroalgal Herbarium Consortium</a></li>
+				<li style="margin-bottom:7px; ">Lichens: <a href="https://lichenportal.org/cnalh/" target="_blank">Consortium of Lichen Herbaria</a></li>
+				<li style="margin-bottom:7px; ">Macroalgae: <a href="http://macroalgae.org" targert="_blank">Algae Herbarium Consortium</a></li>
 				<li style="margin-bottom:7px; ">Pteridophytes: <a href="http://www.pteridoportal.org/portal/" target="_blank">Pteridophyte Collections Consortium</a></li>
 			</ul>
 			</p>
