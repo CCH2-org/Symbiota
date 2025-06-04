@@ -3,7 +3,11 @@ include_once('config/symbini.php');
 if($LANG_TAG == 'en' || !file_exists($SERVER_ROOT.'/content/lang/templates/index.'.$LANG_TAG.'.php')) include_once($SERVER_ROOT.'/content/lang/templates/index.en.php');
 else include_once($SERVER_ROOT.'/content/lang/templates/index.'.$LANG_TAG.'.php');
 header('Content-Type: text/html; charset=' . $CHARSET);
+
+$filename = file_exists($SERVER_ROOT . '/js/symb/' . $LANG_TAG . '.js') ? $CLIENT_ROOT . '/js/symb/' . $LANG_TAG . '.js' : $CLIENT_ROOT . '/js/symb/en.js';
+
 ?>
+
 <!DOCTYPE html>
 <html lang="<?php echo $LANG_TAG ?>">
 <head>
@@ -99,9 +103,23 @@ header('Content-Type: text/html; charset=' . $CHARSET);
 			</ul>
 			</p>
 		</div>
+	<a href="https://securelb.imodules.com/s/1312/lg21/form.aspx?sid=1312&gid=1&pgid=791&cid=1843&dids=2783.375&bledit=1&sort=1&appealcode=WDP" target="_blank">
+		<button class="button" style="background-color:black;position:sticky;bottom:20px;float:right;z-index:9999">Donate to Symbiota</button>
+	</a>
  	</main>
         <?php
         include($SERVER_ROOT . '/includes/footer.php');
         ?>
 </body>
+
+<script src="<?php echo $filename ?>" type="text/javascript"></script>
+<script src="<?php echo $CLIENT_ROOT . '/collections/search/js/alerts.js?v=202107'; ?>" type="text/javascript"></script>
+<script>
+	let alerts = [{
+		'alertMsg': '<?php echo "<b>" ?> <a href="https://tinyurl.com/supportsymbiota" alt="Link to Portal Donation Page">Support this Portal!</a><?= "</b>. This portal relies on support from users like you. Please consider contributing to make this resource available to all, free of charge." ?>'
+	}];
+	handleAlerts(alerts, 3000);
+
+</script>
+
 </html>
