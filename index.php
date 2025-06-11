@@ -114,7 +114,7 @@ $filename = file_exists($SERVER_ROOT . '/js/symb/' . $LANG_TAG . '.js') ? $CLIEN
 <script src="<?php echo $CLIENT_ROOT . '/collections/search/js/alerts.js?v=202120'; ?>" type="text/javascript"></script>
 <script type="text/javascript">
 	let alerts = [{
-		'alertMsg': '<?php echo "<b>" ?> <a href="https://tinyurl.com/supportsymbiota" alt="Link to Portal Donation Page"" target="_blank" rel="noopener">Support this Portal!</a><?= "</b>. This portal relies on support from users like you. Please consider contributing to make this resource available to all, free of charge." ?>'
+		'alertMsg': '<?php echo "<b>" ?> <a href="https://tinyurl.com/supportsymbiota" alt="Link to Portal Donation Page"" target="_blank" rel="noopener">Support this Portal!</a><?= "</b> This portal relies on support from users like you. Please consider contributing to make this resource available to all, free of charge." ?>'
 	}];
 	handleAlerts(alerts, 3000);
 
