@@ -235,8 +235,8 @@ if ($isEditor) {
 				<?php
 				echo $LANG['DWCA_EXPLAIN_1'] . ' <a href="https://en.wikipedia.org/wiki/Darwin_Core_Archive" target="_blank">' . $LANG['DWCA'] . '</a> ' . $LANG['DWCA_EXPLAIN_2'] .
 					' <a href="http://rs.tdwg.org/dwc/terms/" target="_blank">' . $LANG['DWC'] . '</a> ' . $LANG['DWCA_EXPLAIN_3'] .
-					' <a href="https://biokic.github.io/symbiota-docs/coll_manager/data_publishing/idigbio/" target="_blank"> ' . $LANG['PUBLISH_IDIGBIO'] . '</a> &amp;' .
-					' <a href="https://biokic.github.io/symbiota-docs/coll_manager/data_publishing/gbif/" target="_blank"> ' . $LANG['PUBLISH_GBIF'] . '</a>.';
+					' <a href="https://docs.symbiota.org/docs/Collection_Manager_Guide/Data_Publishing/publishing_idigbio" target="_blank"> ' . $LANG['PUBLISH_IDIGBIO'] . '</a> &amp;' .
+					' <a href="https://docs.symbiota.org/docs/Collection_Manager_Guide/Data_Publishing/publishing_gbif" target="_blank"> ' . $LANG['PUBLISH_GBIF'] . '</a>.';
 				?>
 			</div>
 			<?php
@@ -441,7 +441,7 @@ if ($isEditor) {
 						?>
 					</div>
 					<div style="margin-top:5px;" class="font-control top-breathing-room-rel">
-						<input type="checkbox" name="redact" value="1" <?php echo ($redactLocalities ? 'CHECKED' : ''); ?> /> <?php echo $LANG['REDACT_LOC']; ?><br />
+						<input type="checkbox" name="redact" value="1" <?php echo ($redactLocalities ? 'CHECKED' : ''); ?> /> <?php echo $LANG['REDACT_REC']; ?><br />
 					</div>
 					<div class="font-control top-breathing-room-rel">
 						<input type="hidden" name="collid" value="<?php echo $collid; ?>" />
@@ -538,7 +538,7 @@ if ($isEditor) {
 									?>
 								</div>
 								<div style="margin-top:5px;">
-									<input type="checkbox" name="redact" value="1" <?php echo ($redactLocalities ? 'CHECKED' : ''); ?> /> <?php echo $LANG['REDACT_LOC']; ?><br />
+									<input type="checkbox" name="redact" value="1" <?php echo ($redactLocalities ? 'CHECKED' : ''); ?> /> <?php echo $LANG['REDACT_REC']; ?><br />
 								</div>
 							</fieldset>
 							<div style="clear:both;">
