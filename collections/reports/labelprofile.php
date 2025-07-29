@@ -1,6 +1,7 @@
 <?php
 include_once('../../config/symbini.php');
 include_once($SERVER_ROOT.'/classes/OccurrenceLabel.php');
+
 header('Content-Type: text/html; charset='.$CHARSET);
 
 if(!$SYMB_UID) header('Location: ../../profile/index.php?refurl=../collections/reports/labelprofile.php?'.htmlspecialchars($_SERVER['QUERY_STRING'], ENT_QUOTES));
@@ -39,7 +40,7 @@ if($isEditor && $action){
 			}
 		}
 		elseif($action == 'deleteProfile'){
-			if(!$labelManager->deleteLabelFormat($_POST['group'],$_POST['index'])){
+			if(!$labelManager->deleteLabelFormat($_POST['group'],$_POST['index'])){ // @TODO this is brittle. If you refresh the page after successful deletion, it will delete the profile that now has this index. So, it'll just keep eating profiles.
 				$statusStr = implode('; ', $labelManager->getErrorArr());
 			}
 		}
@@ -67,7 +68,7 @@ $isGeneralObservation = (($labelManager->getMetaDataTerm('colltype') == 'General
 			}
 
 			function makeJsonEditable(classTag){
-				alert("You should now be able to edit the JSON label definition. Feel free to modify, but note that editing the raw JSON requires knowledge of the JSON format. A simple error may cause label generation to completely fail. Within the next couple weeks, there should be a editor interface made available that will assist. Until then, you may need to ask your portal manager for assistance if you run into problems. Thank you for your patience.");
+				alert("You should now be able to edit the JSON label definition. Feel free to modify, but note that editing the raw JSON requires knowledge of the JSON format. A simple error may cause label generation to completely fail and your changes to be lost. We recommend creating and editing your JSON in a separate text file, then pasting it into the field below to see if it works.");
 				$('#json-'+classTag).prop('readonly', false);
 				activeProfileCode = classTag;
 			}

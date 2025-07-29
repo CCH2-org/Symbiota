@@ -2,7 +2,9 @@
 include_once('Manager.php');
 include_once('OccurrenceAccessStats.php');
 include_once('ChecklistVoucherAdmin.php');
-include_once($SERVER_ROOT . '/utilities/SymbUtil.php');
+include_once('utilities/GeneralUtil.php');
+include_once('utilities/QueryUtil.php');
+include_once('utilities/OccurrenceUtil.php');
 
 class OccurrenceIndividual extends Manager{
 
@@ -76,7 +78,7 @@ class OccurrenceIndividual extends Manager{
 		if(!$this->occid){
 			//Check occurrence recordID
 			$sql = 'SELECT occid FROM omoccurrences WHERE (occurrenceid = ?) OR (recordID = ?)';
-			if($result = SymbUtil::execute_query($this->conn, $sql, [$guid, $guid])){
+			if($result = QueryUtil::executeQuery($this->conn, $sql, [$guid, $guid])){
 				if($row = $result->fetch_assoc()) {
 					$this->occid = $row['occid'];
 				}
@@ -85,8 +87,8 @@ class OccurrenceIndividual extends Manager{
 		}
 		if(!$this->occid){
 			//Check image recordID
-			$sql = 'SELECT occid FROM images WHERE recordID = ?';
-			if($result = SymbUtil::execute_query($this->conn, $sql, [$guid])){
+			$sql = 'SELECT occid FROM media WHERE recordID = ?';
+			if($result = QueryUtil::executeQuery($this->conn, $sql, [$guid])){
 				if($row = $result->fetch_assoc()) {
 					$this->occid = $row['occid'];
 				}
@@ -96,7 +98,7 @@ class OccurrenceIndividual extends Manager{
 		if(!$this->occid){
 			//Check identification recordID
 			$sql = 'SELECT occid FROM omoccurdeterminations WHERE recordID = ?';
-			if($result = SymbUtil::execute_query($this->conn, $sql, [$guid])){
+			if($result = QueryUtil::executeQuery($this->conn, $sql, [$guid])){
 				if($row = $result->fetch_assoc()) {
 					$this->occid = $row['occid'];
 				}
@@ -124,7 +126,7 @@ class OccurrenceIndividual extends Manager{
 			o.occurrenceid, o.catalognumber, o.occurrenceremarks, o.tidinterpreted, o.family, o.sciname,
 			o.scientificnameauthorship, o.identificationqualifier, o.identificationremarks, o.identificationreferences, o.taxonremarks,
 			o.identifiedby, o.dateidentified, o.eventid, o.recordedby, o.associatedcollectors, o.recordnumber, o.eventdate, o.eventdate2, MAKEDATE(YEAR(o.eventDate),o.enddayofyear) AS eventdateend,
-			o.verbatimeventdate, o.country, o.stateprovince, o.locationid, o.county, o.municipality, o.locality, o.localitysecurity, o.localitysecurityreason,
+			o.verbatimeventdate, o.country, o.stateprovince, o.locationid, o.county, o.municipality, o.locality, o.recordsecurity, o.securityreason,
 			o.decimallatitude, o.decimallongitude, o.geodeticdatum, o.coordinateuncertaintyinmeters, o.verbatimcoordinates, o.georeferenceremarks,
 			o.minimumelevationinmeters, o.maximumelevationinmeters, o.verbatimelevation, o.minimumdepthinmeters, o.maximumdepthinmeters, o.verbatimdepth,
 			o.verbatimattributes, o.locationremarks, o.lifestage, o.sex, o.individualcount, o.samplingprotocol, o.preparations, o.typestatus, o.dbpk, o.habitat,
@@ -209,7 +211,7 @@ class OccurrenceIndividual extends Manager{
 			 }
 			 */
 			$protectLocality = false;
-			if($this->occArr['localitysecurity'] == 1 && !$isSecuredReader){
+			if($this->occArr['recordsecurity'] == 1 && !$isSecuredReader){
 				$protectLocality = true;
 				$retBool = true;
 				$this->occArr['localsecure'] = 1;
@@ -263,37 +265,39 @@ class OccurrenceIndividual extends Manager{
 	}
 
 	private function setImages(){
-	    global $IMAGE_DOMAIN;
-		$sql = 'SELECT i.imgid, i.url, i.thumbnailurl, i.originalurl, i.sourceurl, i.notes, i.caption,
-            CONCAT_WS(" ",u.firstname,u.lastname) as innerPhotographer, i.photographer, i.rights, i.accessRights, i.copyright
-			FROM images i LEFT JOIN users u ON i.photographeruid = u.uid
-			WHERE (i.occid = ?) ORDER BY i.sortoccurrence,i.sortsequence';
+		global $MEDIA_DOMAIN;
+		$sql = 'SELECT m.mediaID, m.url, m.thumbnailurl, m.originalurl, m.sourceurl, m.notes, m.caption, m.mediaType, m.format,
+			CONCAT_WS(" ",u.firstname,u.lastname) as innerCreator, m.creator, m.rights, m.accessRights, m.copyright
+			FROM media m LEFT JOIN users u ON m.creatorUid = u.uid
+			WHERE (m.occid = ?) ORDER BY m.sortOccurrence,m.sortsequence';
 		if($stmt = $this->conn->prepare($sql)){
 			$stmt->bind_param('i', $this->occid);
 			$stmt->execute();
 			if($rs = $stmt->get_result()){
 				while($row = $rs->fetch_object()){
-					$imgId = $row->imgid;
+					$mediaID = $row->mediaID;
 					$url = $row->url;
 					$tnUrl = $row->thumbnailurl;
 					$lgUrl = $row->originalurl;
-					if($IMAGE_DOMAIN){
-					    if(substr($url,0,1)=='/') $url = $IMAGE_DOMAIN . $url;
-					    if($lgUrl && substr($lgUrl, 0, 1) == '/') $lgUrl = $IMAGE_DOMAIN . $lgUrl;
-					    if($tnUrl && substr($tnUrl, 0, 1) == '/') $tnUrl = $IMAGE_DOMAIN . $tnUrl;
+					if($MEDIA_DOMAIN){
+					    if(substr($url,0,1)=='/') $url = $MEDIA_DOMAIN . $url;
+					    if($lgUrl && substr($lgUrl, 0, 1) == '/') $lgUrl = $MEDIA_DOMAIN . $lgUrl;
+					    if($tnUrl && substr($tnUrl, 0, 1) == '/') $tnUrl = $MEDIA_DOMAIN . $tnUrl;
 					}
 					if((!$url || $url == 'empty') && $lgUrl) $url = $lgUrl;
 					if(!$tnUrl && $url) $tnUrl = $url;
-					$this->occArr['imgs'][$imgId]['url'] = $url;
-					$this->occArr['imgs'][$imgId]['tnurl'] = $tnUrl;
-					$this->occArr['imgs'][$imgId]['lgurl'] = $lgUrl;
-					$this->occArr['imgs'][$imgId]['sourceurl'] = $row->sourceurl;
-					$this->occArr['imgs'][$imgId]['caption'] = $row->caption;
-					$this->occArr['imgs'][$imgId]['photographer'] = $row->photographer;
-					$this->occArr['imgs'][$imgId]['rights'] = $row->rights;
-					$this->occArr['imgs'][$imgId]['accessrights'] = $row->accessRights;
-					$this->occArr['imgs'][$imgId]['copyright'] = $row->copyright;
-          if($row->innerPhotographer) $this->occArr['imgs'][$imgId]['photographer'] = $row->innerPhotographer;
+					$this->occArr['imgs'][$mediaID]['url'] = $url;
+					$this->occArr['imgs'][$mediaID]['tnurl'] = $tnUrl;
+					$this->occArr['imgs'][$mediaID]['lgurl'] = $lgUrl;
+					$this->occArr['imgs'][$mediaID]['sourceurl'] = $row->sourceurl;
+					$this->occArr['imgs'][$mediaID]['caption'] = $row->caption;
+					$this->occArr['imgs'][$mediaID]['creator'] = $row->creator;
+					$this->occArr['imgs'][$mediaID]['rights'] = $row->rights;
+					$this->occArr['imgs'][$mediaID]['accessrights'] = $row->accessRights;
+					$this->occArr['imgs'][$mediaID]['copyright'] = $row->copyright;
+					$this->occArr['imgs'][$mediaID]['mediaType'] = $row->mediaType;
+					$this->occArr['imgs'][$mediaID]['format'] = $row->format;
+					if($row->innerCreator) $this->occArr['imgs'][$mediaID]['creator'] = $row->innerCreator;
 				}
 				$rs->free();
 			}
@@ -392,9 +396,10 @@ class OccurrenceIndividual extends Manager{
 
 	private function setOccurrenceRelationships(){
 		$relOccidArr = array();
-		$sql = 'SELECT assocID, occid, occidAssociate, relationship, subType, resourceUrl, objectID, dynamicProperties, verbatimSciname, tid
-			FROM omoccurassociations
-			WHERE occid = ? OR occidAssociate = ?';
+		$sql = 'SELECT a.assocID, a.occid, a.occidAssociate, a.relationship, a.subType, a.resourceUrl, a.objectID, a.dynamicProperties, a.verbatimSciname, a.tid
+			FROM omoccurassociations a LEFT JOIN omoccurrences o ON a.occidAssociate = o.occid
+			WHERE (a.occid = ? OR a.occidAssociate = ?) ';
+		$sql .= OccurrenceUtil::appendFullProtectionSQL(true);
 		if($stmt = $this->conn->prepare($sql)){
 			$stmt->bind_param('ii', $this->occid, $this->occid);
 			$stmt->execute();
@@ -505,7 +510,7 @@ class OccurrenceIndividual extends Manager{
 
 	private function setSource(){
 		if(isset($GLOBALS['ACTIVATE_PORTAL_INDEX']) && $GLOBALS['ACTIVATE_PORTAL_INDEX']){
-			$sql = 'SELECT o.remoteOccid, o.refreshTimestamp, o.verification, i.urlRoot, i.portalName
+			$sql = 'SELECT o.remoteOccid, o.refreshTimestamp, o.initialTimestamp, o.verification, i.urlRoot, i.portalName
 				FROM portaloccurrences o INNER JOIN portalpublications p ON o.pubid = p.pubid
 				INNER JOIN portalindex i ON p.portalID = i.portalID
 				WHERE (o.occid = ?) AND (p.direction = "import")';
@@ -517,14 +522,16 @@ class OccurrenceIndividual extends Manager{
 						$this->occArr['source']['type'] = 'symbiota';
 						$this->occArr['source']['url'] = $r->urlRoot.'/collections/individual/index.php?occid='.$r->remoteOccid;
 						$this->occArr['source']['sourceName'] = $r->portalName;
-						$this->occArr['source']['refreshTimestamp'] = $r->refreshTimestamp;
 						$this->occArr['source']['sourceID'] = $r->remoteOccid;
+						$this->occArr['source']['refreshTimestamp'] = $r->refreshTimestamp;
+						$this->occArr['source']['initialTimestamp'] = $r->initialTimestamp;
 					}
 					$rs->free();
 				}
 				$stmt->close();
 			}
 			if(isset($this->occArr['source'])){
+				//If there is a more recent batch upload event, than us that date as the refresh timestamp
 				$sql2 = 'SELECT uploadDate FROM omcollectionstats WHERE collid = ?';
 				if($stmt = $this->conn->prepare($sql2)){
 					$stmt->bind_param('i', $this->collid);
@@ -542,29 +549,29 @@ class OccurrenceIndividual extends Manager{
 
 		//Format link out to source
 		if(!isset($this->occArr['source']) && $this->metadataArr['individualurl']){
+			$sourceName = '';
 			$iUrl = trim($this->metadataArr['individualurl']);
 			if(substr($iUrl, 0, 4) != 'http'){
 				if($pos = strpos($iUrl, ':')){
-					$this->occArr['source']['title'] = substr($iUrl, 0, $pos);
+					$sourceName = substr($iUrl, 0, $pos);
 					$iUrl = trim(substr($iUrl, $pos+1));
 				}
 			}
-			$displayStr = '';
+			$sourceID = '';
 			$indUrl = '';
 			if(strpos($iUrl,'--DBPK--') !== false && $this->occArr['dbpk']){
 				$indUrl = str_replace('--DBPK--',$this->occArr['dbpk'],$iUrl);
-				$displayStr = $indUrl;
 			}
 			elseif(strpos($iUrl,'--CATALOGNUMBER--') !== false && $this->occArr['catalognumber']){
 				$indUrl = str_replace('--CATALOGNUMBER--',$this->occArr['catalognumber'],$iUrl);
-				$displayStr = $this->occArr['catalognumber'];
+				$sourceID = $this->occArr['catalognumber'];
 			}
 			elseif(strpos($iUrl,'--OTHERCATALOGNUMBERS--') !== false && $this->occArr['othercatalognumbers']){
 				foreach($this->occArr['othercatalognumbers'] as $idArr){
 					$tagName = $idArr['name'];
 					$idValue = $idArr['value'];
-					if(!$displayStr || $tagName == 'NEON sampleID' || $tagName == 'NEON sampleCode (barcode)'){
-						$displayStr = $tagName;
+					if(!$sourceID || $tagName == 'NEON sampleID' || $tagName == 'NEON sampleCode (barcode)'){
+						$sourceID = $idValue;
 						if($tagName == 'NEON sampleCode (barcode)') $iUrl = str_replace('sampleTag','barcode',$iUrl);
 						$indUrl = str_replace('--OTHERCATALOGNUMBERS--', $idValue, $iUrl);
 						if($tagName == 'NEON sampleCode (barcode)') break;
@@ -573,12 +580,14 @@ class OccurrenceIndividual extends Manager{
 			}
 			elseif(strpos($iUrl,'--OCCURRENCEID--') !== false && $this->occArr['occurrenceid']){
 				$indUrl = str_replace('--OCCURRENCEID--',$this->occArr['occurrenceid'],$iUrl);
-				$displayStr = $this->occArr['occurrenceid'];
+				$sourceID = $this->occArr['occurrenceid'];
 			}
 			$this->occArr['source']['type'] = 'external';
 			$this->occArr['source']['url'] = $indUrl;
-			$this->occArr['source']['displayStr'] = $displayStr;
+			$this->occArr['source']['sourceName'] = $sourceName;
+			$this->occArr['source']['sourceID'] = $sourceID;
 			$this->occArr['source']['refreshTimestamp'] = $this->metadataArr['uploaddate'];
+			$this->occArr['source']['initialTimestamp'] = $this->occArr['dateentered'];
 		}
 	}
 
@@ -591,7 +600,7 @@ class OccurrenceIndividual extends Manager{
 			$sql = $sqlBase.'FROM omexsiccatiocclink l INNER JOIN omexsiccatiocclink l2 ON l.omenid = l2.omenid
 				INNER JOIN omoccurrences o ON l2.occid = o.occid
 				INNER JOIN omcollections c ON o.collid = c.collid
-				LEFT JOIN images i ON o.occid = i.occid
+				LEFT JOIN media i ON o.occid = i.occid
 				WHERE (o.occid != l.occid) AND (l.occid = ?)';
 			if($stmt = $this->conn->prepare($sql)){
 				$stmt->bind_param('i', $this->occid);
@@ -609,8 +618,9 @@ class OccurrenceIndividual extends Manager{
 		$sql = $sqlBase.'FROM omoccurduplicatelink d INNER JOIN omoccurduplicatelink d2 ON d.duplicateid = d2.duplicateid
 			INNER JOIN omoccurrences o ON d2.occid = o.occid
 			INNER JOIN omcollections c ON o.collid = c.collid
-			LEFT JOIN images i ON o.occid = i.occid
+			LEFT JOIN media i ON o.occid = i.occid
 			WHERE (d.occid = ?) AND (d.occid != d2.occid) ';
+		$sql .= OccurrenceUtil::appendFullProtectionSQL();
 		if($stmt = $this->conn->prepare($sql)){
 			$stmt->bind_param('i', $this->occid);
 			$stmt->execute();
@@ -784,7 +794,7 @@ class OccurrenceIndividual extends Manager{
 
 			//Email to portal admin
 			$emailAddr = $GLOBALS['ADMIN_EMAIL'];
-			$comUrl = $this->getDomain().$GLOBALS['CLIENT_ROOT'].'/collections/individual/index.php?occid=' . $this->occid . '#commenttab';
+			$comUrl = GeneralUtil::getDomain().$GLOBALS['CLIENT_ROOT'].'/collections/individual/index.php?occid=' . $this->occid . '#commenttab';
 			$subject = $GLOBALS['DEFAULT_TITLE'] . ' '. $LANG['INAPPROPRIATE'] . '<br/>';
 			$bodyStr = $LANG['REPORTED_AS_INAPPROPRIATE'] . ':<br/> <a href="' . $comUrl  . '">' . $comUrl . '</a>';
 			$headerStr = "MIME-Version: 1.0 \r\nContent-type: text/html \r\nTo: " . $emailAddr . " \r\nFrom: Admin <" . $emailAddr . "> \r\n";
@@ -1121,6 +1131,10 @@ class OccurrenceIndividual extends Manager{
 			$retArr['obj'] = json_decode($archiveObject, true);
 			$retArr['notes'] = $notes;
 		}
+		if(isset($retArr['recordSecurity']) && $retArr['recordSecurity'] == 5 && OccurrenceUtil::getFullProtectionPermission()){
+			unset($retArr);
+			$retArr = array();
+		}
 		return $this->cleanOutArray($retArr);
 	}
 
@@ -1189,13 +1203,13 @@ class OccurrenceIndividual extends Manager{
 			//Restore images
 			if(isset($recArr['imgs']) && $recArr['imgs']){
 				$imgFieldArr = array();
-				$rsImg = $this->conn->query('SHOW COLUMNS FROM images');
+				$rsImg = $this->conn->query('SHOW COLUMNS FROM media ');
 				while($rImg= $rsImg->fetch_object()){
 					$imgFieldArr[] = strtolower($rImg->Field);
 				}
 				$rsImg->free();
 				foreach($recArr['imgs'] as $pk => $secArr){
-					$sql1 = 'INSERT INTO images(';
+					$sql1 = 'INSERT INTO media (';
 					$sql2 = 'VALUES(';
 					foreach($secArr as $f => $v){
 						if(in_array(strtolower($f),$imgFieldArr)){
