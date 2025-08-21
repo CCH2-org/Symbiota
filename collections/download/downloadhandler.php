@@ -44,9 +44,7 @@ if ($schema == 'backup') {
 				readfile($archiveFile);
 				unlink($archiveFile);
 			} else {
-				$errMsg = $dwcaHandler->getErrorMessage();
-				if($errMsg) echo $errMsg;
-				else echo 'ERROR creating output file. Query probably did not include any records.';
+				echo 'ERROR creating output file. Query probably did not include any records.';
 			}
 		}
 	}
@@ -237,8 +235,7 @@ if ($schema == 'backup') {
 		} else {
 			header("Content-type: text/plain");
 			header("Content-Disposition: attachment; filename=NoData.txt");
-			if($dwcaHandler->getErrorMessage()) echo $dwcaHandler->getErrorMessage();
-			else echo 'The query failed to return records. Please modify query criteria and try again.';
+			echo 'The query failed to return records. Please modify query criteria and try again.';
 		}
 	}
 }

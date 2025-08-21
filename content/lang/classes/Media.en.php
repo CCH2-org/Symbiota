@@ -14,6 +14,5 @@ $LANG['UNKNOWN_MEDIA_TYPE_MSG'] = 'Unknown Media Type';
 $LANG['SUSPICIOUS_FILE'] = 'Suspicious File';
 $LANG['ILLEGAL_RENAME_CHANGED_FILE_TYPE'] = 'Illegal rename changed file type';
 $LANG['FILE_TYPE_NOT_ALLOWED'] = 'File type not allowed';
-$LANG['FILEPATH_NOT_WRITABLE'] = 'Filepath is not writable';
 
 ?>
