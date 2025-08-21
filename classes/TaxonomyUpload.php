@@ -1,6 +1,7 @@
 <?php
 include_once($SERVER_ROOT.'/config/dbconnection.php');
 include_once($SERVER_ROOT.'/classes/utilities/TaxonomyUtil.php');
+include_once($SERVER_ROOT.'/classes/utilities/UploadUtil.php');
 include_once($SERVER_ROOT.'/classes/TaxonomyHarvester.php');
 include_once($SERVER_ROOT.'/classes/OccurrenceMaintenance.php');
 include_once($SERVER_ROOT.'/traits/TaxonomyTrait.php');
@@ -59,6 +60,16 @@ class TaxonomyUpload{
 			}
 		}
 		elseif(!empty($_FILES['uploadfile']['name'])){
+			try {
+				UploadUtil::checkFileUpload(
+					$_FILES['uploadfile'],
+					UploadUtil::ALLOWED_ZIP_MIMES
+				);
+			} catch(Exception $e) {
+				$this->errorStr = 'ERROR: ' . $e->getMessage();
+				return false;
+			}
+
 			if($this->validateFileName($_FILES['uploadfile']['name'], true)){
 				$this->uploadFileName = $_FILES['uploadfile']['name'];
 				if(move_uploaded_file($_FILES['uploadfile']['tmp_name'], $this->uploadTargetPath.$this->uploadFileName)){
@@ -1087,18 +1098,13 @@ class TaxonomyUpload{
 	//Setters and getters
 	private function setUploadTargetPath(){
 		$tPath = '';
-		if(!$tPath && isset($GLOBALS["TEMP_DIR_ROOT"])){
+		if(!$tPath && isset($GLOBALS['TEMP_DIR_ROOT'])){
 			$tPath = $GLOBALS['TEMP_DIR_ROOT'];
 			if(substr($tPath,-1) != '/') $tPath .= "/";
-			if(file_exists($tPath.'downloads')) $tPath .= 'downloads/';
+			if(file_exists($tPath.'imports')) $tPath .= 'imports/';
 		}
 		elseif(!$tPath){
 			$tPath = ini_get('upload_tmp_dir');
-		}
-		if(!$tPath){
-			$tPath = $GLOBALS['SERVER_ROOT'];
-			if(substr($tPath,-1) != '/') $tPath .= "/";
-			$tPath .= "temp/downloads/";
 		}
 		if(substr($tPath,-1) != '/') $tPath .= '/';
 		$this->uploadTargetPath = $tPath;
