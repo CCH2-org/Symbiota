@@ -1,8 +1,8 @@
 <?php
 include_once('Manager.php');
+include_once('AssociationManager.php');
 include_once('utilities/OccurrenceUtil.php');
 include_once('utilities/UuidFactory.php');
-include_once('AssociationManager.php');
 
 class OmAssociations extends Manager{
 
@@ -18,7 +18,7 @@ class OmAssociations extends Manager{
 		parent::__construct(null, 'write', $conn);
 		$this->schemaMap = array('associationType' => 's', 'occidAssociate' => 'i', 'relationship' => 's', 'relationshipID' => 's', 'subType' => 's', 'objectID' => 's',
 			'basisOfRecord' => 's', 'resourceUrl' => 's', 'verbatimSciname' => 's', 'tid' => 'i', 'locationOnHost' => 's', 'conditionOfAssociate' => 's', 'establishedDate' => 's',
-			'imageMapJSON' => 's', 'dynamicProperties' => 's', 'notes' => 's', 'accordingTo' => 's', 'instanceID' => 's', 'recordID' => 's');
+			'imageMapJSON' => 's', 'dynamicProperties' => 's', 'notes' => 's', 'accordingTo' => 's', 'instanceID' => 's', 'recordID' => 's', 'createdUid' => 's');
 	}
 
 	public function __destruct(){

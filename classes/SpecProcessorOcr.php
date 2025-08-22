@@ -5,6 +5,7 @@
 include_once($SERVER_ROOT . '/classes/Manager.php');
 include_once($SERVER_ROOT . '/classes/utilities/Encoding.php');
 include_once($SERVER_ROOT . '/classes/utilities/GeneralUtil.php');
+include_once($SERVER_ROOT . '/classes/utilities/UploadUtil.php');
 
 class SpecProcessorOcr extends Manager{
 
@@ -535,10 +536,10 @@ class SpecProcessorOcr extends Manager{
 					$imgH = imagesy($img);
 					if(($this->cropX + $this->cropW) > 1) $this->cropW = 1 - $this->cropX;
 					if(($this->cropY + $this->cropH) > 1) $this->cropH = 1 - $this->cropY;
-					$pX = $imgW*$this->cropX;
-					$pY = $imgH*$this->cropY;
-					$pW = $imgW*$this->cropW;
-					$pH = $imgH*$this->cropH;
+					$pX = (int)($imgW*$this->cropX);
+					$pY = (int)($imgH*$this->cropY);
+					$pW = (int)($imgW*$this->cropW);
+					$pH = (int)($imgH*$this->cropH);
 					$dest = imagecreatetruecolor($pW,$pH);
 
 					// Copy image
@@ -838,19 +839,8 @@ class SpecProcessorOcr extends Manager{
 	}
 
 	private function setTempPath(){
-		$tempPath = 0;
-		if(!empty($GLOBALS['TEMP_DIR_ROOT'])){
-			$tempPath = $GLOBALS['TEMP_DIR_ROOT'];
-		}
-		else{
-			$tempPath = ini_get('upload_tmp_dir');
-		}
-		if(!$tempPath){
-			$tempPath = $GLOBALS['SERVER_ROOT'];
-			if(substr($tempPath,-1) != '/') $tempPath .= '/';
-			$tempPath .= 'temp/';
-		}
-		if(substr($tempPath,-1) != '/') $tempPath .= '/';
+		$tempPath = UploadUtil::getTempDir();
+
 		if(file_exists($tempPath.'symbocr/') || mkdir($tempPath.'symbocr/')){
 			$tempPath .= 'symbocr/';
 		}

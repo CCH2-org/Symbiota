@@ -109,7 +109,7 @@ if($isEditor){
 		<?php
 		if($isEditor){
 			$reportsWritable = false;
-			if(is_writable($SERVER_ROOT.'/temp/report')) $reportsWritable = true;
+			if(is_writable($TEMP_DIR_ROOT)) $reportsWritable = true;
 			if(!$reportsWritable){
 				?>
 				<div style="padding:5px;">
@@ -200,8 +200,8 @@ if($isEditor){
 									</select>
 								</div>
 								<div style="margin-top:4px;">
-									<b><?php echo $LANG['ROWS_PER_PAGE']; ?>:</b>
-									<select name="rowcount">
+									<b><?php echo $LANG['COLUMNS_PER_PAGE']; ?>:</b>
+									<select name="columncount">
 										<option value="1">1</option>
 										<option value="2">2</option>
 										<option value="3" selected>3</option>

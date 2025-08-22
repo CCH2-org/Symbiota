@@ -1,6 +1,7 @@
 <?php
 include_once($SERVER_ROOT.'/classes/OccurrenceTaxaManager.php');
 include_once($SERVER_ROOT.'/classes/OccurrenceSearchSupport.php');
+include_once($SERVER_ROOT . '/classes/utilities/OccurrenceUtil.php');
 
 class ImageLibrarySearch extends OccurrenceTaxaManager{
 
@@ -183,6 +184,7 @@ class ImageLibrarySearch extends OccurrenceTaxaManager{
 			}
 			$sqlWhere .= 'IN(SELECT mediaid FROM imagetag '.$tagFrag.')';
 		}
+		/*
 		if($this->keywords){
 			$keywordArr = explode(";",$this->keywords);
 			$tempArr = Array();
@@ -191,6 +193,7 @@ class ImageLibrarySearch extends OccurrenceTaxaManager{
 			}
 			$sqlWhere .= "AND (".implode(" OR ",$tempArr).") ";
 		}
+		*/
 		if($this->imageType){
 			if($this->imageType == 1){
 				//Specimen or Vouchered Observations Images
@@ -205,6 +208,7 @@ class ImageLibrarySearch extends OccurrenceTaxaManager{
 			//Note mediaType is cleaned to only be 'image' and 'audio' strings
 			$sqlWhere .= 'AND (m.mediaType = "' . $this->mediaType . '") ';
 		}
+		//$sqlWhere .= OccurrenceUtil::appendFullProtectionSQL(true);
 		if(strpos($sqlWhere,'ts.taxauthid')) $sqlWhere = str_replace('m.tid', 'ts.tid', $sqlWhere);
 		if($sqlWhere) $this->sqlWhere = 'WHERE '.substr($sqlWhere,4);
 	}
@@ -215,7 +219,7 @@ class ImageLibrarySearch extends OccurrenceTaxaManager{
 			if($this->imageCount == 1) $sql = 'SELECT COUNT(DISTINCT m.tid) AS cnt ';
 			elseif($this->imageCount == 2) $sql = 'SELECT COUNT(DISTINCT m.occid) AS cnt ';
 		}
-		$sql .= $this->getSqlBase().$this->sqlWhere;
+		$sql .= $this->getSqlBase(true).$this->sqlWhere;
 		$result = $this->conn->query($sql);
 		if($row = $result->fetch_object()){
 			$this->recordCount = $row->cnt;
@@ -223,12 +227,12 @@ class ImageLibrarySearch extends OccurrenceTaxaManager{
 		$result->free();
 	}
 
-	private function getSqlBase(){
+	private function getSqlBase($isForCount = false){
 		$sql = 'FROM media m ';
 		if($this->taxaArr){
 			$sql .= 'INNER JOIN taxa t ON m.tid = t.tid ';
 		}
-		else{
+		elseif(!$isForCount){
 			$sql .= 'LEFT JOIN taxa t ON m.tid = t.tid ';
 		}
 		if(strpos($this->sqlWhere,'ts.taxauthid')){
@@ -238,9 +242,9 @@ class ImageLibrarySearch extends OccurrenceTaxaManager{
 			$sql .= 'INNER JOIN taxaenumtree e ON m.tid = e.tid ';
 		}
 		if($this->keywords){
-			$sql .= 'INNER JOIN imagekeywords ik ON m.mediaID = ik.mediaid ';
+			//$sql .= 'INNER JOIN imagekeywords ik ON m.mediaID = ik.mediaid ';
 		}
-		if($this->dbStr && $this->dbStr != 'all'){
+		if($this->imageType == 1){
 			$sql .= 'INNER JOIN omoccurrences o ON m.occid = o.occid ';
 		}
 		else{
@@ -263,16 +267,16 @@ class ImageLibrarySearch extends OccurrenceTaxaManager{
 	//Misc support functions
 	public function getQueryTermStr(){
 		$retStr = '';
-		if($this->dbStr) $retStr .= '&db='.$this->dbStr;
-		if($this->taxonType) $retStr .= '&taxontype='.$this->taxonType;
-		if($this->taxaStr) $retStr .= '&taxa='.$this->taxaStr;
+		if($this->dbStr) $retStr .= '&db=' . $this->dbStr;
+		if($this->taxonType) $retStr .= '&taxontype=' . $this->taxonType;
+		if($this->taxaStr) $retStr .= '&taxa=' . urlencode($this->taxaStr);
 		if($this->useThes) $retStr .= '&usethes=1';
-		if($this->creatorUid) $retStr .= '&phuid='.$this->creatorUid;
-		$retStr .= '&tagExistance='.$this->tagExistance;
+		if($this->creatorUid) $retStr .= '&phuid=' . $this->creatorUid;
+		$retStr .= '&tagExistance=' . $this->tagExistance;
 		if($this->tag) $retStr .= '&tag='.urlencode($this->tag);
-		if($this->keywords) $retStr .= '&keywords='.$this->keywords;
-		if($this->imageCount) $retStr .= '&imagecount='.$this->imageCount;
-		if($this->imageType) $retStr .= '&imagetype='.$this->imageType;
+		//if($this->keywords) $retStr .= '&keywords=' . urlencode($this->keywords);
+		if($this->imageCount) $retStr .= '&imagecount=' . $this->imageCount;
+		if($this->imageType) $retStr .= '&imagetype=' . $this->imageType;
 		return trim($retStr,' &');
 	}
 
@@ -366,7 +370,7 @@ class ImageLibrarySearch extends OccurrenceTaxaManager{
 		return $this->dbStr;
 	}
 
-	public function setCollectionVariables($reqArr){
+	public function setCollectionVariables(){
 		$this->dbStr = trim(OccurrenceSearchSupport::getDbRequestVariable(), ',; ');
 	}
 
@@ -421,7 +425,7 @@ class ImageLibrarySearch extends OccurrenceTaxaManager{
 	}
 
 	public function setKeywords($k){
-		$this->keywords = $k;
+		//$this->keywords = $k;
 	}
 
 	public function getKeywords(){

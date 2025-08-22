@@ -348,7 +348,7 @@ $_SESSION['citationvar'] = $searchVar;
 									$tradeName = !empty($splitSciname['tradeName']) ? ($taxonEditorObj->standardizeTradeName($splitSciname['tradeName']) . ' ') : '';
 									$nonItalicizedScinameComponent = $author . $cultivarEpithet . $tradeName;
 									echo '<tr><td width="60" valign="top" align="center">';
-									echo '<a href="misc/collprofiles.php?collid=' . $fieldArr['collid'] . '">';
+									echo '<a href="misc/collprofiles.php?collid=' . $fieldArr['collid'] . '" target="_blank">';
 									if ($fieldArr["icon"]) {
 										$icon = (substr($fieldArr["icon"], 0, 6) == 'images' ? '../' : '') . $fieldArr["icon"];
 										echo '<img align="bottom" src="' . $icon . '" style="width:35px;border:0px;" />';
@@ -373,7 +373,9 @@ $_SESSION['citationvar'] = $searchVar;
 									if (isset($fieldArr['has_image']) && $fieldArr['has_image']) {
 										echo '<div style="float:right;margin:5px 25px;">';
 										echo '<a href="#" onclick="return openIndPU(' . $occid . ',' . ($targetClid ? $targetClid : "0") . ');">';
-										echo '<img src="' . $fieldArr['media']['thumbnail'] . '" style="height:70px" alt="' . (isset($LANG['IMG_OCC']) ? $LANG['IMG_OCC'] : 'Image Associated With the Occurence') . '"/></a></div>';
+										echo '<img src="' . $fieldArr['media']['thumbnail'] . '" style="height:70px" alt="' . (isset($LANG['IMG_OCC']) ? $LANG['IMG_OCC'] : 'Image Associated With the Occurrence') . '" 
+											onerror="this.onerror=null; this.src=\'' . $CLIENT_ROOT . '/images/image-icon.svg\';" />';
+										echo '</a></div>';
 									}
 									if ($collManager->getClName() && $targetTid && array_key_exists('mode', $_REQUEST)) {
 										echo '<div style="float:right;" >';
@@ -397,8 +399,6 @@ $_SESSION['citationvar'] = $searchVar;
 												. (!empty($nonItalicizedScinameComponent) ? (' ' . $nonItalicizedScinameComponent) : '') . '</a>';
 										}
 										echo $sciStr;
-									} elseif ($fieldArr['localitysecurity'] > 1) {
-										echo (isset($LANG['ID_PROTECTED']) ? $LANG['ID_PROTECTED'] : 'Identification Protected');;
 									}
 									echo '</div>';
 									echo '<div style="margin:4px">';

@@ -96,7 +96,7 @@ if ($SYMB_UID) {
 			if(e.submitter.value === "edit") {
 				return processEditQuickSearch('<?php echo $CLIENT_ROOT ?>')
 			} else if(e.submitter.value === "search") {
-				return submitAndRedirectSearchForm('<?php echo $CLIENT_ROOT ?>/collections/list.php?db=','&catnum=', '&taxa=', '&includecult=' + <?= !empty($SHOULD_INCLUDE_CULTIVATED_AS_DEFAULT) ? '1' : '0' ?> + '&includeothercatnum=1', '&includecult=' + <?php echo $SHOULD_INCLUDE_CULTIVATED_AS_DEFAULT ? '1' : '0' ?> + '&usethes=1&taxontype=2 ');
+				return submitAndRedirectSearchForm('<?= $CLIENT_ROOT ?>/collections/list.php?db=','&catnum=', '&taxa=', '&includecult=' + <?= !empty($SHOULD_INCLUDE_CULTIVATED_AS_DEFAULT) ? '1' : '0' ?> + '&includeothercatnum=1', '&includecult=' + <?= !empty($SHOULD_INCLUDE_CULTIVATED_AS_DEFAULT) ? '1' : '0' ?> + '&usethes=1&taxontype=2 ');
 			}
 
 			e.preventDefault();
@@ -360,11 +360,17 @@ if ($SYMB_UID) {
 									<?= $LANG['EDIT_EXISTING'] ?>
 								</a>
 							</li>
-							<li>
-								<a href="../editor/batchdeterminations.php?collid=<?= $collid ?>">
-									<?= $LANG['ADD_BATCH_DETER'] ?>
-								</a>
-							</li>
+							<?php
+							if ($collData['colltype'] != 'General Observations') {
+								?>
+								<li>
+									<a href="../editor/batchdeterminations.php?collid=<?= $collid ?>">
+										<?= $LANG['ADD_BATCH_DETER'] ?>
+									</a>
+								</li>
+								<?php
+							}
+							?>
 							<li>
 								<a href="../reports/labelmanager.php?collid=<?= $collid ?>">
 									<?= $LANG['PRINT_LABELS'] ?>
@@ -376,32 +382,34 @@ if ($SYMB_UID) {
 								</a>
 							</li>
 							<?php
-							if ($collManager->traitCodingActivated()) {
+							if ($collData['colltype'] != 'General Observations') {
+								if ($collManager->traitCodingActivated()) {
+									?>
+									<li>
+										<a href="#" onclick="$('li.traitItem').show(); return false;">
+											<?= $LANG['TRAIT_CODING_TOOLS'] ?>
+										</a>
+									</li>
+									<li class="traitItem" style="margin-left:10px;display:none;">
+										<a href="../traitattr/occurattributes.php?collid=<?= $collid ?>">
+											<?= $LANG['TRAIT_CODING'] ?>
+										</a>
+									</li>
+									<li class="traitItem" style="margin-left:10px;display:none;">
+										<a href="../traitattr/attributemining.php?collid=<?= $collid ?>">
+											<?= $LANG['TRAIT_MINING'] ?>
+										</a>
+									</li>
+									<?php
+								}
 								?>
 								<li>
-									<a href="#" onclick="$('li.traitItem').show(); return false;">
-										<?= $LANG['TRAIT_CODING_TOOLS'] ?>
-									</a>
-								</li>
-								<li class="traitItem" style="margin-left:10px;display:none;">
-									<a href="../traitattr/occurattributes.php?collid=<?= $collid ?>">
-										<?= $LANG['TRAIT_CODING'] ?>
-									</a>
-								</li>
-								<li class="traitItem" style="margin-left:10px;display:none;">
-									<a href="../traitattr/attributemining.php?collid=<?= $collid ?>">
-										<?= $LANG['TRAIT_MINING'] ?>
+									<a href="../georef/batchgeoreftool.php?collid=<?= $collid ?>">
+										<?= $LANG['BATCH_GEOREF'] ?>
 									</a>
 								</li>
 								<?php
 							}
-							?>
-							<li>
-								<a href="../georef/batchgeoreftool.php?collid=<?= $collid ?>">
-									<?= $LANG['BATCH_GEOREF'] ?>
-								</a>
-							</li>
-							<?php
 							if ($collData['colltype'] == 'Preserved Specimens') {
 								?>
 								<li>
@@ -463,7 +471,7 @@ if ($SYMB_UID) {
 									<a href="#" onclick="$('li.importItem').show(); return false;">
 										<?= $LANG['IMPORT_SPECIMEN'] ?>
 									</a>
-									<a id="importinfo" href="https://biokic.github.io/symbiota-docs/coll_manager/upload/" title="<?php echo $LANG['MORE_INFO']; ?>" aria-label="<?php echo $LANG['MORE_INFO']; ?>">
+									<a id="importinfo" href="https://docs.symbiota.org/Collection_Manager_Guide/Importing_Uploading/" target="_blank" title="<?php echo $LANG['MORE_INFO']; ?>" aria-label="<?php echo $LANG['MORE_INFO']; ?>">
 											<img src="../../images/info.png" style="width:13px;" alt="<?= $LANG['INFO_ALT'] ?>" />
 									</a><br/>
 								</li>
@@ -630,7 +638,7 @@ if ($SYMB_UID) {
 					if(!empty($contactArr)){
 						?>
 						<section style="margin-left: 0;">
-							<h1><span><?= $LANG['CONTACT'] ?>: </span></h1>
+							<h2><span><?= $LANG['CONTACT'] ?>: </span></h2>
 							<ul>
 								<?php
 								foreach($contactArr as $cArr){
@@ -997,7 +1005,7 @@ if ($SYMB_UID) {
 										if(!empty($contactArr)){
 											?>
 											<section style="margin-left: 0;">
-												<h1 style="font: 1.5rem normal;"><span><?= $LANG['CONTACT'] ?>: </span></h1>
+												<h4><span><?= $LANG['CONTACT'] ?>: </span></h4>
 												<ul>
 													<?php
 													foreach($contactArr as $cArr){

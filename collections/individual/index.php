@@ -77,6 +77,10 @@ $collMetadata = $indManager->getMetadata();
 $genticArr = $indManager->getGeneticArr();
 
 $statusStr = '';
+if(!empty($occArr['recordsecurity']) && $occArr['recordsecurity'] == 5 && !$isEditor){
+	$occArr = null;
+	$statusStr = 'ERROR: record has full protection';
+}
 //  If other than HTML was requested, return just that content.
 if(isset($_SERVER['HTTP_ACCEPT'])){
 	$accept = RdfUtil::parseHTTPAcceptHeader($_SERVER['HTTP_ACCEPT']);
@@ -173,6 +177,7 @@ $traitArr = $indManager->getTraitArr();
 	<link href="<?= $CSS_BASE_PATH ?>/symbiota/collections/individual/popup.css" type="text/css" rel="stylesheet" >
 	<script src="<?= $CLIENT_ROOT; ?>/js/jquery-3.7.1.min.js" type="text/javascript"></script>
 	<script src="<?= $CLIENT_ROOT; ?>/js/jquery-ui.min.js" type="text/javascript"></script>
+	<script src="<?php echo $CLIENT_ROOT . '/collections/individual/domManipulationUtils.js'; ?>" type="text/javascript"></script>
 	<script type="text/javascript">
 		var tabIndex = <?= $tabIndex; ?>;
 		var map;
@@ -319,6 +324,9 @@ $traitArr = $indManager->getTraitArr();
 		}
 		#exsiccati-div{ clear: both; }
 		#rights-div{ clear: both; }
+		.danger{ 
+			color: var(--danger-color);
+		}
 		<?php
 		if($shouldUseMinimalMapHeader){
 			?>
@@ -341,31 +349,12 @@ $traitArr = $indManager->getTraitArr();
 		</h1>
 		<div id="end-nav"></div>
 	</header>
-	<div id="fb-root"></div>
-	<script>
-		(function(d, s, id) {
-			var js, fjs = d.getElementsByTagName(s)[0];
-			if (d.getElementById(id)) return;
-			js = d.createElement(s); js.id = id;
-			js.src = "//connect.facebook.net/en_US/sdk.js#xfbml=1&version=v2.0";
-			fjs.parentNode.insertBefore(js, fjs);
-		}(document, 'script', 'facebook-jssdk'));
-
-		window.twttr=(function(d,s,id){
-			var js,fjs=d.getElementsByTagName(s)[0],t=window.twttr||{};
-			if(d.getElementById(id))return;js=d.createElement(s);
-			js.id=id;js.src="https://platform.twitter.com/widgets.js";
-			fjs.parentNode.insertBefore(js,fjs);t._e=[];
-			t.ready=function(f){t._e.push(f);};
-			return t;
-		}(document,"script","twitter-wjs"));
-	</script>
 	<!-- This is inner text! -->
 	<div id="popup-innertext">
 		<?php
 		if($statusStr){
 			$statusColor = 'green';
-			if(strpos($statusStr, 'ERROR')) $statusColor = 'red';
+			if(strpos($statusStr, 'ERROR') !== false) $statusColor = 'red';
 			?>
 			<hr />
 			<div style="padding:15px;">
@@ -396,14 +385,6 @@ $traitArr = $indManager->getTraitArr();
 					?>
 				</ul>
 				<div id="occurtab">
-					<div id="media-div">
-						<div>
-							<a class="twitter-share-button" href="https://twitter.com/share" data-url="<?= $indManager->cleanOutStr($_SERVER['HTTP_HOST']) . $CLIENT_ROOT . '/collections/individual/index.php?occid=' . $occid . '&clid=' . $clid; ?>"><?= (isset($LANG['TWEET']) ? $LANG['TWEET'] : 'Tweet') ?></a>
-						</div>
-						<div>
-							<div class="fb-share-button" data-href="" data-layout="button_count"></div>
-						</div>
-					</div>
 					<?php
 					$iconUrl = '';
 					if($collMetadata['icon']) $iconUrl = (substr($collMetadata['icon'], 0, 6) == 'images' ? '../../' : '') . $collMetadata['icon'];
@@ -433,7 +414,7 @@ $traitArr = $indManager->getTraitArr();
 						if(array_key_exists('relation',$occArr)){
 							?>
 								<fieldset id="association-div" class="top-light-margin">
-									<legend><?php echo (isset($LANG['RELATED_OCCUR'])?$LANG['RELATED_OCCUR']:'Related Occurrences'); ?></legend>
+									<legend><?= $LANG['ASSOCIATIONS']; ?></legend>
 									<?php
 									$displayLimit = 5;
 									$cnt = 0;
@@ -536,11 +517,11 @@ $traitArr = $indManager->getTraitArr();
 								?>
 							</div>
 							<?php if($occArr['dateidentified']): ?>
-								<div id="identby-div" class="identby-div bottom-breathing-room-rel-sm">
-								<?php
-									echo '<label>'.$LANG['DATE_DET']  . ': '. '</label>' . $occArr['dateidentified'];
-								?>
-							</div>
+								<div id="identdate-div" class="identby-div bottom-breathing-room-rel-sm">
+									<?php
+										echo '<label>'.$LANG['DATE_DET']  . ': '. '</label>' . $occArr['dateidentified'];
+									?>
+								</div>
 							<?php endif; ?>
 							<?php
 						}
@@ -645,7 +626,7 @@ $traitArr = $indManager->getTraitArr();
 							<div id="typestatus-div" class="bottom-breathing-room-rel-sm">
 								<?php
 								echo '<label>'.$LANG['TYPE_STATUS'].': </label>';
-								echo $occArr['typestatus'];
+								echo '<span class="danger">' . $occArr['typestatus'] . '</span>';
 								?>
 							</div>
 							<?php
@@ -721,9 +702,9 @@ $traitArr = $indManager->getTraitArr();
 									$localityArr[] = $locStr;
 							}
 							echo implode(', ', $localityArr);
-							if($occArr['localitysecurity'] == 1){
-								echo '<div style="margin-left:10px"><span class="notice-span">'.$LANG['LOCALITY_PROTECTED'].':<span> ';
-								if($occArr['localitysecurityreason'] && substr($occArr['localitysecurityreason'],0,1) != '<') echo $occArr['localitysecurityreason'];
+							if($occArr['recordsecurity'] == 1){
+								echo '<div style="margin-left:10px"><span class="notice-span">'.$LANG['PROTECTED'].':<span> ';
+								if($occArr['securityreason'] && substr($occArr['securityreason'],0,1) != '<') echo $occArr['securityreason'];
 								else echo $LANG['PROTECTED_REASON'];
 								if(!isset($occArr['localsecure'])) echo '<br/>'.(isset($LANG['ACCESS_GRANTED'])?$LANG['ACCESS_GRANTED']:'Current user has been granted access');
 								echo '</div>';
@@ -1151,11 +1132,11 @@ $traitArr = $indManager->getTraitArr();
 									$otherCatNum = '';
 									if($occArr['othercatalognumbers']){
 										foreach($occArr['othercatalognumbers'] as $identArr){
-											$otherCatNum .= $identArr['value'] . ', ';
+											$otherCatNum .= urlencode($identArr['value']) . ', ';
 										}
 										$otherCatNum = ' (' . trim($otherCatNum, ', ') . ')';
 									}
-									$emailSubject = $DEFAULT_TITLE . ' occurrence: ' . $occArr['catalognumber'] . $otherCatNum;
+									$emailSubject = $DEFAULT_TITLE . ' occurrence: ' . urlencode($occArr['catalognumber']) . $otherCatNum;
 									$refPath = GeneralUtil::getDomain().$CLIENT_ROOT.'/collections/individual/index.php?occid='.$occArr['occid'];
 									$emailBody = $LANG['SPECIMEN_REFERENCED'].': '.$refPath;
 									$emailRef = 'subject=' . rawurlencode($emailSubject) . '&cc=' . $ADMIN_EMAIL . '&body=' . rawurlencode($emailBody);
@@ -1511,7 +1492,7 @@ $traitArr = $indManager->getTraitArr();
 			</div>
 			<?php
 		}
-		else{
+		elseif($occArr !== null){
 			?>
 			<h2><?php echo (isset($LANG['UNABLETOLOCATE'])?$LANG['UNABLETOLOCATE']:'Unable to locate occurrence record'); ?></h2>
 			<div style="margin:20px">
