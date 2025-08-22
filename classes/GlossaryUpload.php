@@ -449,6 +449,11 @@ class GlossaryUpload{
 		if(!$tPath && !empty($GLOBALS['TEMP_DIR_ROOT'])){
 			$tPath = $GLOBALS['TEMP_DIR_ROOT'];
 		}
+		if(!$tPath){
+			$tPath = $GLOBALS['SERVER_ROOT'];
+			if(substr($tPath,-1) != '/') $tPath .= "/";
+			$tPath .= "temp/downloads";
+		}
 		if(substr($tPath,-1) != '/') $tPath .= '/';
 		$this->uploadTargetPath = $tPath;
 	}
