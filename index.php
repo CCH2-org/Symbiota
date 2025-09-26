@@ -94,7 +94,7 @@ header('Content-Type: text/html; charset=' . $CHARSET);
 				<li style="margin-bottom:7px; ">Algae: <a href="http://macroalgae.org" targert="_blank">Algae Herbarium Portal</a></li>
 				<li style="margin-bottom:7px; ">Bryophytes: <a href="https://bryophyteportal.org/portal/" target="_blank">Consortium of Bryophyte Herbaria</a></li>
 				<li style="margin-bottom:7px; ">Fungi: <a href="http://mycoportal.org" target="_blank">Mycology Collections Portal (MyCoPortal)</a></li>
-				<li style="margin-bottom:7px; ">Lichens: <a href="https://lichenportal.org/cnalh/" target="_blank">Consortium of Lichen Herbaria</a></li>
+				<li style="margin-bottom:7px; ">Lichens: <a href="https://lichenportal.org/portal/" target="_blank">Consortium of Lichen Herbaria</a></li>
 				<li style="margin-bottom:7px; ">Pteridophytes: <a href="http://www.pteridoportal.org/portal/" target="_blank">Pteridophyte Collections Consortium</a></li>
 			</ul>
 			</p>
