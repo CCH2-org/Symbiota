@@ -1,9 +1,10 @@
 <?php
 include_once('config/symbini.php');
 include_once($SERVER_ROOT . '/classes/SiteMapManager.php');
-if($LANG_TAG != 'en' && file_exists($SERVER_ROOT . '/content/lang/sitemap.' . $LANG_TAG . '.php'))
-	include_once($SERVER_ROOT.'/content/lang/sitemap.' . $LANG_TAG . '.php');
-else include_once($SERVER_ROOT.'/content/lang/sitemap.en.php');
+include_once($SERVER_ROOT . '/classes/utilities/Language.php');
+
+Language::load('sitemap');
+
 header('Content-Type: text/html; charset=' . $CHARSET);
 
 $smManager = new SiteMapManager();
@@ -323,7 +324,7 @@ if(!$schemaVersion){
 							<?= $LANG['THEFOLLOWINGSPEC'] ?>
 					</p>
 						<ul>
-							<li><a href="taxa/profile/tpeditor.php?taxon="><?= $LANG['SYN_COM'] ?></a></li>
+							<li><a href="taxa/profile/tpeditor.php?taxon="><?= $LANG['VERNAC_COM'] ?></a></li>
 							<li><a href="taxa/profile/tpeditor.php?taxon=&tabindex=4"><?= $LANG['TEXTDESC'] ?></a></li>
 							<li><a href="taxa/profile/tpeditor.php?taxon=&tabindex=1"><?= $LANG['EDITIMG'] ?></a></li>
 							<li class="nested-li"><a href="taxa/profile/tpeditor.php?taxon=&category=imagequicksort&tabindex=2"><?= $LANG['IMGSORTORD'] ?></a></li>

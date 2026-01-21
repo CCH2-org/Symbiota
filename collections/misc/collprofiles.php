@@ -1,10 +1,11 @@
 <?php
 include_once('../../config/symbini.php');
-if($LANG_TAG != 'en' && file_exists($SERVER_ROOT.'/content/lang/collections/misc/collprofiles.' . $LANG_TAG . '.php')) include_once($SERVER_ROOT.'/content/lang/collections/misc/collprofiles.' . $LANG_TAG . '.php');
-else include_once($SERVER_ROOT . '/content/lang/collections/misc/collprofiles.en.php');
 include_once($SERVER_ROOT . '/classes/OccurrenceCollectionProfile.php');
 include_once($SERVER_ROOT . '/classes/OccurrenceEditorManager.php');
 include_once($SERVER_ROOT . '/classes/utilities/GeneralUtil.php');
+include_once($SERVER_ROOT . '/classes/utilities/Language.php');
+
+Language::load('collections/misc/collprofiles');
 
 header('Content-Type: text/html; charset=' . $CHARSET);
 unset($_SESSION['editorquery']);
@@ -102,6 +103,14 @@ if ($SYMB_UID) {
 			e.preventDefault();
 			return false;
 		}
+
+		function showItemsList(className) {
+  			const elements = document.getElementsByClassName(className);
+  			for (let i = 0; i < elements.length; i++) {
+				elements[i].style.display = 'list-item';
+			}
+		}
+
 	</script>
 	<style>
 		.importItem { margin-left:10px; display:none; }
@@ -130,6 +139,14 @@ if ($SYMB_UID) {
 		}
 		.bigger-left-margin-rel {
 			margin-left: 3rem;
+		}
+
+		.seemore-icon {
+			width: 13px;
+			height: 13px;
+		}
+		.link-icon {
+			text-decoration: none;
 		}
 
 		#quicksearch-box input {
@@ -221,8 +238,8 @@ if ($SYMB_UID) {
 			}
 		}
 	</style>
-	<link href="<?php echo $CLIENT_ROOT ?>/collections/search/css/searchStyles.css?ver=1" type="text/css" rel="stylesheet" />
-	<link href="<?php echo $CLIENT_ROOT ?>/collections/search/css/searchStylesInner.css" type="text/css" rel="stylesheet" />
+	<link href="<?php echo $CLIENT_ROOT ?>/css/searchStyles.css?ver=1" type="text/css" rel="stylesheet" />
+	<link href="<?php echo $CLIENT_ROOT ?>/css/searchStylesInner.css" type="text/css" rel="stylesheet" />
 </head>
 <body>
 	<?php
@@ -340,7 +357,7 @@ if ($SYMB_UID) {
 								</a><?= $deactivateTag ?>
 							</li>
 							<?php
-							if ($collData['colltype'] == 'Preserved Specimens') {
+							if (strpos($collData['colltype'], 'Specimens')) {
 								?>
 								<li style="margin-left:10px">
 									<a href="../editor/imageoccursubmit.php?collid=<?= $collid ?>" <?= $deactivateStyle ?>>
@@ -386,8 +403,11 @@ if ($SYMB_UID) {
 								if ($collManager->traitCodingActivated()) {
 									?>
 									<li>
-										<a href="#" onclick="$('li.traitItem').show(); return false;">
+										<a href="javascript:void(0)" onclick="showItemsList('traitItem')">
 											<?= $LANG['TRAIT_CODING_TOOLS'] ?>
+										</a>
+										<a onclick="showItemsList('traitItem')"> 
+											<img class = seemore-icon src="../../images/tochild.png">
 										</a>
 									</li>
 									<li class="traitItem" style="margin-left:10px;display:none;">
@@ -442,8 +462,11 @@ if ($SYMB_UID) {
 								</li>
 								<!--
 								<li>
-									<a href="" onclick="$('li.metadataItem').show(); return false;"  >
+									<a href="javascript:void(0)" onclick="showItemsList('metadataItem')"  >
 										<?= $LANG['OPEN_META'] ?>
+									</a>
+									<a onclick="showItemsList('metadataItem')"> 
+										<img class="seemore-icon" src="../../images/tochild.png">
 									</a>
 								</li>
 								<li class="metadataItem" style="margin-left:10px;display:none;">
@@ -468,12 +491,15 @@ if ($SYMB_UID) {
 									</a>
 								</li>
 								<li>
-									<a href="#" onclick="$('li.importItem').show(); return false;">
+									<a href="javascript:void(0)" onclick="showItemsList('importItem')">
 										<?= $LANG['IMPORT_SPECIMEN'] ?>
 									</a>
-									<a id="importinfo" href="https://docs.symbiota.org/Collection_Manager_Guide/Importing_Uploading/" target="_blank" title="<?php echo $LANG['MORE_INFO']; ?>" aria-label="<?php echo $LANG['MORE_INFO']; ?>">
+									<a id="importinfo" class="link-icon" href="https://docs.symbiota.org/Collection_Manager_Guide/Importing_Uploading/" target="_blank" title="<?php echo $LANG['MORE_INFO']; ?>" aria-label="<?php echo $LANG['MORE_INFO']; ?>">
 											<img src="../../images/info.png" style="width:13px;" alt="<?= $LANG['INFO_ALT'] ?>" />
-									</a><br/>
+									</a>
+									<a onclick="showItemsList('importItem')"> 
+										<img class="seemore-icon" src="../../images/tochild.png"">
+									</a>
 								</li>
 								<li class="importItem">
 									<a href="../admin/specupload.php?uploadtype=7&collid=<?php echo $collid; ?>">
@@ -791,6 +817,7 @@ if ($SYMB_UID) {
 						//if($extrastatsArr&&$extrastatsArr['TypeCount']) echo '<li>'.number_format($extrastatsArr['TypeCount']) . ' ' . $LANG['TYPE_SPECIMENS'] . '</li>';
 						?>
 					</ul>
+					<p style="margin-left:3em"><?= '(' . $LANG['LAST_UPDATED'] . ' ' . $statsArr['datelastmodified'] . ')'?></p>
 				</div>
 			</section>
 			<section class="fieldset-like no-left-margin">
@@ -883,7 +910,7 @@ if ($SYMB_UID) {
 							$rightsHtml = GeneralUtil::getRightsHtml($collData['rights']);
 							?>
 							<div class="bottom-breathing-room-rel">
-								<span class="label"><?= $LANG['USAGE_RIGHTS'] ?>:</span>
+								<span class="label"><?= $LANG['LICENSE'] ?>:</span>
 								<?= $rightsHtml ?>
 							</div>
 							<?php

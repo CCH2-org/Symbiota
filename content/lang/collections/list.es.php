@@ -31,10 +31,14 @@ $LANG['SCINAME'] = 'Nombre Científico';
 $LANG['COLLECTOR'] = 'Colector';
 $LANG['EVENT_DATE'] = 'Fecha';
 $LANG['NUMBER'] = 'Número de Colecta';
+$LANG['EVENT_TIME'] = 'Hora del evento';
 $LANG['COUNTRY'] = 'País';
 $LANG['STATE_PROVINCE'] = 'Estado/Provincia';
 $LANG['COUNTY'] = 'Condado';
 $LANG['ELEVATION'] = 'Elevación';
+$LANG['FORMATION'] = 'Formación';
+$LANG['EARLY_INT'] = 'Intervalo Temprano';
+$LANG['LATE_INT'] = 'Intervalo Tardío';
 
 $LANG['PAGINATION_FIRST'] = 'Primero';
 $LANG['LAST'] = 'último';
@@ -82,4 +86,5 @@ $LANG['SEE_MAP_POINT'] = 'Ver punto del mapa';
 $LANG['RECORD_COUNT_EXCEEDS_LIMIT'] = 'El recuento de registros supera el límite';
 $LANG['NO_RECORDS'] = 'No se encontraron registros que coincidan con la consulta';
 $LANG['ASSOCIATIONS'] = 'Recursos Relacionados';
+$LANG['GEO_CONTEXT'] = 'Contexto Geológico';
 ?>
