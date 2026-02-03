@@ -217,11 +217,12 @@ class ImageLibrarySearch extends OccurrenceTaxaManager{
 			elseif($this->imageCount == 2) $sql = 'SELECT COUNT(DISTINCT m.occid) AS cnt ';
 		}
 		$sql .= $this->getSqlBase(true).$this->sqlWhere;
-		$result = $this->conn->query($sql);
-		if($result && ($row = $result->fetch_object())){
-			$this->recordCount = $row->cnt;
+		if($result = $this->conn->query($sql)){
+			if($row = $result->fetch_object()){
+				$this->recordCount = $row->cnt;
+			}
+			$result->free();
 		}
-		$result->free();
 	}
 
 	private function getSqlBase($avoidLeftJoin = false){

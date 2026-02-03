@@ -23,8 +23,7 @@ class DwcArchiverCore extends Manager{
 	private $paleoWithSql;
 	protected $conditionSql = '';
 	protected $conditionArr = array();
-	private $condAllowArr;
-	private $overrideConditionLimit = false;
+	private $applyConditionLimit = false;
 	private $observerUid = 0;				//If set, this is a backup event of personally managed specimens
 
 	private $targetPath;
@@ -73,12 +72,6 @@ class DwcArchiverCore extends Manager{
 		//Character set
 		$this->charSetSource = strtoupper($GLOBALS['CHARSET']);
 		$this->charSetOut = $this->charSetSource;
-
-		$this->condAllowArr = array(
-			'catalognumber', 'othercatalognumbers', 'occurrenceid', 'family', 'sciname', 'country', 'stateprovince', 'county', 'municipality',
-			'recordedby', 'recordnumber', 'eventdate', 'decimallatitude', 'decimallongitude', 'minimumelevationinmeters', 'maximumelevationinmeters', 'cultivationstatus',
-			'datelastmodified', 'dateentered', 'processingstatus', 'dbpk', 'traitid', 'stateid'
-		);
 
 		$this->securityArr = array(
 			'eventDate', 'eventDate2', 'month', 'day', 'startDayOfYear', 'endDayOfYear', 'verbatimEventDate',
@@ -202,14 +195,24 @@ class DwcArchiverCore extends Manager{
 		if (!preg_match('/^[A-Za-z]+$/', $field)) return false;
 		if (!preg_match('/^[A-Z_]+$/', $cond)) return false;
 		if ($field) {
-			if ($this->overrideConditionLimit || in_array(strtolower($field), $this->condAllowArr)) {
-				if (!$cond) $cond = 'EQUALS';
-				if ($value != '' || ($cond == 'IS_NULL' || $cond == 'NOT_NULL')) {
-					if (is_array($value)) $this->conditionArr[$field][$cond] = $this->cleanInArray($value);
-					else $this->conditionArr[$field][$cond][] = $this->cleanInStr($value);
+			if ($this->applyConditionLimit){
+				//Downloads initiated via the dwcapubhandler.php webservice are limited to being filtered by only subset of indexed fields
+				$condAllowArr = array(
+					'catalognumber', 'othercatalognumbers', 'occurrenceid', 'family', 'sciname', 'country' ,'stateprovince', 'county', 'municipality',
+					'recordedby', 'recordnumber', 'eventdate', 'decimallatitude', 'decimallongitude', 'minimumelevationinmeters', 'maximumelevationinmeters', 'cultivationstatus',
+					'datelastmodified', 'dateentered', 'processingstatus', 'dbpk'
+				);
+				if(!in_array(strtolower($field), $condAllowArr)){
+					return false;
 				}
 			}
+			if (!$cond) $cond = 'EQUALS';
+			if ($value != '' || ($cond == 'IS_NULL' || $cond == 'NOT_NULL')) {
+				if (is_array($value)) $this->conditionArr[$field][$cond] = $this->cleanInArray($value);
+				else $this->conditionArr[$field][$cond][] = $this->cleanInStr($value);
+			}
 		}
+		return true;
 	}
 
 	private function applyConditions(){
@@ -669,7 +672,7 @@ class DwcArchiverCore extends Manager{
 			$this->logOrEcho('Creating DwC-A file: ' . $fileName . "\n");
 
 			if (!class_exists('ZipArchive')) {
-				$this->logOrEcho("FATAL ERROR: PHP ZipArchive class is not installed, please contact your server admin\n");
+				$this->logOrEcho("FATAL ERROR: PHP ZipArchive class is not installed, please contact your server admin\n", 1);
 				exit('FATAL ERROR: PHP ZipArchive class is not installed, please contact your server admin');
 			}
 			$occurFile = $this->targetPath . $this->ts . '-occur' . $this->fileExt;
@@ -765,11 +768,10 @@ class DwcArchiverCore extends Manager{
 				foreach($unlinkFileArr as $deleteFile){
 					if (file_exists($deleteFile)) unlink($deleteFile);
 				}
-				//$this->clearStagingTable();
 			}
 			else {
-				$this->errorMessage = 'FAILED to create archive file due to failure to return occurrence records; check and adjust search variables';
-				$this->logOrEcho($this->errorMessage);
+				$this->errorMessage = 'FAILED to create archive file due to failure to return occurrence records';
+				$this->logOrEcho($this->errorMessage, 1);
 				if($this->targetPath && strpos($this->targetPath, 'content/dwca')){
 					//Archive is being published to Dwc-A publishing directory, thus remove from RSS feed since it's an empty archive
 					if($this->collArr){
@@ -779,9 +781,10 @@ class DwcArchiverCore extends Manager{
 					}
 				}
 			}
+			$this->clearStagingTable();
 		}
 		else{
-			$this->logOrEcho('ERROR building DwC-Archive: '.$this->getErrorMessage());
+			$this->logOrEcho('ERROR building DwC-Archive: '.$this->getErrorMessage(), 1);
 		}
 		return $archiveFile;
 	}
@@ -812,6 +815,10 @@ class DwcArchiverCore extends Manager{
 			$fileName .=  '_DwC-A.zip';
 
 			//Set URL path to DwC-Archive file
+			if(substr($this->dwcaOutputUrl, -1 != '/')){
+				//Remove previous file name that was added during a batch DwC-A build event
+				$this->dwcaOutputUrl = substr($this->dwcaOutputUrl, 0, strrpos($this->dwcaOutputUrl, '/') + 1);
+			}
 			if($this->dwcaOutputUrl) $this->dwcaOutputUrl .= $fileName;
 		}
 		return $fileName;
@@ -854,7 +861,7 @@ class DwcArchiverCore extends Manager{
 	private function clearStagingTable(){
 		$status = false;
 		if($this->exportID){
-			$sql = 'DELETE FROM omexportoccurrences WHERE omExportID = ?';
+			$sql = 'DELETE FROM omexportoccurrences WHERE omExportID = ? OR initialTimestamp < DATE_SUB(NOW(), INTERVAL 3 HOUR)';
 			if($stmt = $this->conn->prepare($sql)){
 				$stmt->bind_param('i', $this->exportID);
 				if($stmt->execute()) $status = true;
@@ -866,7 +873,7 @@ class DwcArchiverCore extends Manager{
 
 	//Generate DwC support files
 	private function writeMetaFile(){
-		$this->logOrEcho("Creating meta.xml (" . date('h:i:s A') . ")... ");
+		$this->logOrEcho("Creating meta.xml (" . date('h:i:s A') . ")... ", 1);
 
 		//Create new DOM document
 		$newDoc = new DOMDocument('1.0', 'UTF-8');
@@ -944,7 +951,7 @@ class DwcArchiverCore extends Manager{
 
 		$newDoc->save($this->targetPath . $this->ts . '-meta.xml');
 
-		$this->logOrEcho('Done! (' . date('h:i:s A') . ")\n", 1);
+		$this->logOrEcho('Done! (' . date('h:i:s A') . ")\n", 2);
 	}
 
 	private function setExtensionNode(&$rootElem, $newDoc, $fieldMap, $rowType, $fileName){
@@ -978,13 +985,13 @@ class DwcArchiverCore extends Manager{
 	}
 
 	private function writeEmlFile(){
-		$this->logOrEcho("Creating eml.xml (" . date('h:i:s A') . ")... ");
+		$this->logOrEcho("Creating eml.xml (" . date('h:i:s A') . ")... ", 1);
 
 		$emlDoc = $this->getEmlDom();
 
 		$emlDoc->save($this->targetPath . $this->ts . '-eml.xml');
 
-		$this->logOrEcho('Done! (' . date('h:i:s A') . ")\n", 1);
+		$this->logOrEcho('Done! (' . date('h:i:s A') . ")\n", 2);
 	}
 
 	/*
@@ -1478,10 +1485,10 @@ class DwcArchiverCore extends Manager{
 	}
 
 	private function writeOccurrenceFile($filePath){
-		$this->logOrEcho('Creating occurrence file (' . date('h:i:s A') . ')... ');
+		$this->logOrEcho('Creating occurrence file (' . date('h:i:s A') . ')... ', 1);
 		$fh = fopen($filePath, 'w');
 		if (!$fh) {
-			$this->logOrEcho('ERROR establishing output file (' . $filePath . '), perhaps target folder is not readable by web server.');
+			$this->logOrEcho('ERROR establishing output file (' . $filePath . '), perhaps target folder is not readable by web server.', 2);
 			return false;
 		}
 
@@ -1492,9 +1499,9 @@ class DwcArchiverCore extends Manager{
 			$filePath = false;
 			//$this->writeOutRecord($fh,array('No records returned. Modify query variables to be more inclusive.'));
 			$this->errorMessage = 'No records returned. Modify query variables to be more inclusive.';
-			$this->logOrEcho($this->errorMessage);
+			$this->logOrEcho($this->errorMessage, 2);
 		}
-		$this->logOrEcho('Done! (' . date('h:i:s A') . ")\n", 1);
+		$this->logOrEcho('Done! (' . date('h:i:s A') . ")\n", 2);
 		return $filePath;
 	}
 
@@ -1843,7 +1850,7 @@ class DwcArchiverCore extends Manager{
 	private function writeDeterminationFile($targetFile){
 		$recordCnt = 0;
 		if($this->exportID){
-			$this->logOrEcho('Creating identification (aka determination) extension file (' . date('h:i:s A') . ')...');
+			$this->logOrEcho('Creating identification (aka determination) extension file (' . date('h:i:s A') . ')...', 1);
 			$detHandler = new DwcArchiverDetermination($this->conn);
 			$detHandler->setSchemaType($this->schemaType);
 			if($this->extended) $detHandler->setExtended(true);
@@ -1852,11 +1859,11 @@ class DwcArchiverCore extends Manager{
 			if($recordCnt){
 				$this->extensionFieldMap['det'] = $detHandler->getFieldArrTerms();
 				$msg = $recordCnt . ' records added ';
-				$this->logOrEcho($msg, 1);
+				$this->logOrEcho($msg, 2);
 			}
 			else{
 				$msg = 'No records located (file excluded)';
-				$this->logOrEcho($msg, 1);
+				$this->logOrEcho($msg, 2);
 			}
 		}
 		return $recordCnt;
@@ -1865,7 +1872,7 @@ class DwcArchiverCore extends Manager{
 	private function writeMediaFile($targetFile){
 		$recordCnt = 0;
 		if($this->exportID){
-			$this->logOrEcho('Creating Media extension file (' . date('h:i:s A') . ')...');
+			$this->logOrEcho('Creating Media extension file (' . date('h:i:s A') . ')...', 1);
 			$mediaHandler = new DwcArchiverMedia($this->conn);
 			$mediaHandler->setSchemaType($this->schemaType);
 			$mediaHandler->setRedactLocalities($this->redactLocalities);
@@ -1875,11 +1882,11 @@ class DwcArchiverCore extends Manager{
 			if($recordCnt){
 				$this->extensionFieldMap['media'] = $mediaHandler->getFieldArrTerms();
 				$msg = $recordCnt . ' records added ';
-				$this->logOrEcho($msg, 1);
+				$this->logOrEcho($msg, 2);
 			}
 			else{
 				$msg = 'No records located (file excluded)';
-				$this->logOrEcho($msg, 1);
+				$this->logOrEcho($msg, 2);
 			}
 		}
 		return $recordCnt;
@@ -1888,7 +1895,7 @@ class DwcArchiverCore extends Manager{
 	private function writeIdentifierData($targetFile){
 		$recordCnt = 0;
 		if($this->exportID){
-			$this->logOrEcho('Creating alternative Identifiers extension file (' . date('h:i:s A') . ')...');
+			$this->logOrEcho('Creating alternative Identifiers extension file (' . date('h:i:s A') . ')...', 1);
 			$identierHandler = new DwcArchiverIdentifier($this->conn);
 			$identierHandler->setSchemaType($this->schemaType);
 			$identierHandler->initiateProcess($targetFile);
@@ -1896,11 +1903,11 @@ class DwcArchiverCore extends Manager{
 			if($recordCnt){
 				$this->extensionFieldMap['identifier'] = $identierHandler->getFieldArrTerms();
 				$msg = $recordCnt . ' records added ';
-				$this->logOrEcho($msg, 1);
+				$this->logOrEcho($msg, 2);
 			}
 			else{
 				$msg = 'No records located (file excluded)';
-				$this->logOrEcho($msg, 1);
+				$this->logOrEcho($msg, 2);
 			}
 		}
 		return $recordCnt;
@@ -1909,7 +1916,7 @@ class DwcArchiverCore extends Manager{
 	private function writeAttributeData($targetFile){
 		$recordCnt = 0;
 		if($this->exportID){
-			$this->logOrEcho('Creating MeasurementsOrFact (aka Occurrence Attributes) extension file (' . date('h:i:s A') . ')...');
+			$this->logOrEcho('Creating MeasurementsOrFact (aka Occurrence Attributes) extension file (' . date('h:i:s A') . ')...', 1);
 			$attributeHandler = new DwcArchiverAttribute($this->conn);
 			$attributeHandler->setSchemaType($this->schemaType);
 			$attributeHandler->initiateProcess($targetFile);
@@ -1917,11 +1924,11 @@ class DwcArchiverCore extends Manager{
 			if($recordCnt){
 				$this->extensionFieldMap['attribute'] = $attributeHandler->getFieldArrTerms();
 				$msg = $recordCnt . ' records added ';
-				$this->logOrEcho($msg, 1);
+				$this->logOrEcho($msg, 2);
 			}
 			else{
 				$msg = 'No records located (file excluded)';
-				$this->logOrEcho($msg, 1);
+				$this->logOrEcho($msg, 2);
 			}
 		}
 		return $recordCnt;
@@ -1930,7 +1937,7 @@ class DwcArchiverCore extends Manager{
 	private function writeMaterialSampleData($targetFile){
 		$recordCnt = 0;
 		if($this->exportID){
-			$this->logOrEcho('Creating MaterialSample extension file (' . date('h:i:s A') . ')...');
+			$this->logOrEcho('Creating MaterialSample extension file (' . date('h:i:s A') . ')...', 1);
 			$materialSampleHandler = new DwcArchiverMaterialSample($this->conn);
 			$materialSampleHandler->setSchemaType($this->schemaType);
 			$materialSampleHandler->initiateProcess($targetFile);
@@ -1938,11 +1945,11 @@ class DwcArchiverCore extends Manager{
 			if($recordCnt){
 				$this->extensionFieldMap['materialSample'] = $materialSampleHandler->getFieldArrTerms();
 				$msg = $recordCnt . ' records added ';
-				$this->logOrEcho($msg, 1);
+				$this->logOrEcho($msg, 2);
 			}
 			else{
 				$msg = 'No records located (file excluded)';
-				$this->logOrEcho($msg, 1);
+				$this->logOrEcho($msg, 2);
 			}
 		}
 		return $recordCnt;
@@ -1951,7 +1958,7 @@ class DwcArchiverCore extends Manager{
 	private function writeAssociationData($targetFile){
 		$recordCnt = 0;
 		if($this->exportID){
-			$this->logOrEcho('Creating ResourceRelationship extension file (' . date('h:i:s A') . ')...');
+			$this->logOrEcho('Creating ResourceRelationship extension file (' . date('h:i:s A') . ')...', 1);
 			$associationHandler = new DwcArchiverResourceRelationship($this->conn);
 			$associationHandler->setSchemaType($this->schemaType);
 			$associationHandler->initiateProcess($targetFile);
@@ -1963,22 +1970,22 @@ class DwcArchiverCore extends Manager{
 			if($recordCnt){
 				$this->extensionFieldMap['associations'] = $associationHandler->getFieldArrTerms();
 				$msg = $recordCnt . ' records added ';
-				$this->logOrEcho($msg, 1);
+				$this->logOrEcho($msg, 2);
 			}
 			else{
 				$msg = 'No records located (file excluded)';
-				$this->logOrEcho($msg, 1);
+				$this->logOrEcho($msg, 2);
 			}
 		}
 		return $recordCnt;
 	}
 
 	private function writeCitationFile(){
-		$this->logOrEcho("Creating citation file (" . date('h:i:s A') . ")... ");
+		$this->logOrEcho("Creating citation file (" . date('h:i:s A') . ")... ", 1);
 		$filePath = $this->targetPath . $this->ts . '-citation.txt';
 		$fh = fopen($filePath, 'w');
 		if (!$fh) {
-			$this->logOrEcho('ERROR establishing output file (' . $filePath . '), perhaps target folder is not readable by web server.');
+			$this->logOrEcho('ERROR establishing output file (' . $filePath . '), perhaps target folder is not readable by web server.', 2);
 			return false;
 		}
 
@@ -2046,7 +2053,7 @@ class DwcArchiverCore extends Manager{
 
 		fclose($fh);
 
-		$this->logOrEcho('Done! (' . date('h:i:s A') . ")\n", 1);
+		$this->logOrEcho('Done! (' . date('h:i:s A') . ")\n", 2);
 	}
 
 	private function writeOutRecord($fh, $outputArr){
@@ -2289,9 +2296,10 @@ class DwcArchiverCore extends Manager{
 		}
 	}
 
-	public function setOverrideConditionLimit($bool){
-		if ($bool) $this->overrideConditionLimit = true;
-		else $this->overrideConditionLimit = false;
+	public function setApplyConditionLimit($bool){
+		//echo 'setting overrideCondition to: ' . ($bool?'true':'false') . '<br>';
+		if ($bool) $this->applyConditionLimit = true;
+		else $this->applyConditionLimit = false;
 	}
 
 	public function setObserverUid($uid){
@@ -2370,8 +2378,9 @@ class DwcArchiverCore extends Manager{
 		}
 	}
 
-	public function setIsPublicDownload(){
-		$this->isPublicDownload = true;
+	public function setIsPublicDownload($bool){
+		if($bool) $this->isPublicDownload = true;
+		else $this->isPublicDownload = false;
 	}
 
 	public function setPublicationGuid($guid){
