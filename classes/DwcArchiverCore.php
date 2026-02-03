@@ -1962,11 +1962,7 @@ class DwcArchiverCore extends Manager{
 			$associationHandler = new DwcArchiverResourceRelationship($this->conn);
 			$associationHandler->setSchemaType($this->schemaType);
 			$associationHandler->initiateProcess($targetFile);
-
 			$recordCnt = $associationHandler->writeOutData($this->exportID);
-			//Now add inverse relationships
-			$associationHandler->setSqlInverse();
-			$recordCnt += $associationHandler->writeOutData($this->exportID);
 			if($recordCnt){
 				$this->extensionFieldMap['associations'] = $associationHandler->getFieldArrTerms();
 				$msg = $recordCnt . ' records added ';
