@@ -26,7 +26,7 @@ if ($collid) {
 	$collManager->setCollid($collid);
 	$dwcaManager->setCollArr($collid);
 	$collArr = current($collManager->getCollectionMetadata());
-	if ($collArr['publishtogbif']) $publishGBIF = true;
+	if ($collArr['publishtogbif'] && !empty($GBIF_ORG_KEY)) $publishGBIF = true;
 }
 
 $_SESSION['citationvar'] = 'archivedcollid=' . $collid;

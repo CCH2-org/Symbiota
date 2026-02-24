@@ -366,7 +366,7 @@ class DwcArchiverCore extends Manager{
 					$sql .= 'INNER JOIN geographicpolygon gpoly ON gpoly.geothesid IN (' . implode(',', $polygonIDs) . ') ';
 					$sql .= 'INNER JOIN geographicthesaurus gth ON gpoly.geothesid = gth.geothesid ';
 			}
-			if($this->includePaleo){
+			if($this->includePaleo || strpos($this->conditionSql, 'paleo.')){
 				$sql .= 'LEFT JOIN omoccurpaleo paleo ON o.occid = paleo.occid ';
 				if(strpos($this->conditionSql, 'early.myaStart') !== false){
 					$sql .= 'JOIN omoccurpaleogts early ON paleo.earlyInterval = early.gtsterm ';
@@ -1514,14 +1514,12 @@ class DwcArchiverCore extends Manager{
 		$dwcOccurManager->setSchemaType($this->schemaType, $this->observerUid);
 		$dwcOccurManager->setExtended($this->extended);
 		$dwcOccurManager->setIncludeAcceptedNameUsage($this->includeAcceptedNameUsage);
-		$this->setIncludePaleo();
-		$dwcOccurManager->setIncludePaleo($this->includePaleo);
 		$dwcOccurManager->setServerDomain($this->serverDomain);
-		if (!$this->occurrenceFieldArr) $this->occurrenceFieldArr = $dwcOccurManager->getOccurrenceArr($this->schemaType, $this->extended);
 		$this->applyConditions();
 		if (!$this->conditionSql) return false;
-		$dwcOccurManager->setIncludePaleo($this->includePaleo);
 		if($this->primeStagingTables()){
+			$dwcOccurManager->setIncludePaleo($this->includePaleo);
+			if (!$this->occurrenceFieldArr) $this->occurrenceFieldArr = $dwcOccurManager->getOccurrenceArr();
 			$this->logOrEcho('Creating occurrence file (' . date('h:i:s A') . ')... ', 1);
 			$dwcOccurManager->setExportID($this->exportID);
 			if ($this->schemaType != 'coge') {
@@ -2290,22 +2288,6 @@ class DwcArchiverCore extends Manager{
 
 	public function getPolygons() {
 		return $this->polygons;
-	}
-
-	private function setIncludePaleo(){
-		if ((!empty($GLOBALS['ACTIVATE_PALEO'])) ||
-				(!empty($this->conditionSql) && (strpos($this->conditionSql, 'paleo.') !== false || strpos($this->conditionSql, 'early.myaStart') !== false)) ||
-				(!empty($this->customWhereSql) && (strpos($this->customWhereSql, 'paleo.') !== false || strpos($this->customWhereSql, 'early.myaStart') !== false))){
-					$this->includePaleo = true;
-		} elseif (!empty($this->collArr)) {
-			foreach ($this->collArr as $coll) {
-				if (!empty($coll['colltype']) && $coll['colltype'] === 'Fossil Specimens'){
-					//Activate if any one collection manages paleo specimens
-					$this->includePaleo = true;
-					break;
-				}
-			}
-		}
 	}
 
 	public function setApplyConditionLimit($bool){

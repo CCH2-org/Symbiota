@@ -773,11 +773,6 @@ class OccurrenceManager extends OccurrenceTaxaManager {
 		return $this->searchSupportManager->getFullCollectionList($catId);
 	}
 
-	public function outputFullCollArr($collGrpArr, $targetCatID = 0, $displayIcons = true, $displaySearchButtons = true, $collTypeLabel = '', $uniqGrouping=''){
-		if(!$this->searchSupportManager) $this->searchSupportManager = new OccurrenceSearchSupport($this->conn);
-		$this->searchSupportManager->outputFullCollArr($collGrpArr, $targetCatID, $displayIcons, $displaySearchButtons, $collTypeLabel, $uniqGrouping);
-	}
-
 	public function getOccurVoucherProjects(){
 		$retArr = Array();
 		$titleArr = Array();
@@ -799,38 +794,29 @@ class OccurrenceManager extends OccurrenceTaxaManager {
 	}
 
 	public function getCollectionSearchStr(){
-		$retStr ="";
-		if(!array_key_exists('db',$this->searchTermArr) || $this->searchTermArr['db'] == 'all'){
-			$retStr = "All Collections";
-		}
-		elseif($this->searchTermArr['db'] == 'allspec'){
-			$retStr = "All Specimen Collections";
-		}
-		elseif($this->searchTermArr['db'] == 'allobs'){
-			$retStr = "All Observation Projects";
-		}
-		else{
-			$cArr = explode(';',$this->cleanInStr($this->searchTermArr['db']));
-			if($cArr[0]){
-				$sql = 'SELECT collid, CONCAT_WS("-",institutioncode,collectioncode) as instcode '.
-					'FROM omcollections WHERE collid IN('.$cArr[0].') ORDER BY institutioncode,collectioncode';
-				$rs = $this->conn->query($sql);
-				while($r = $rs->fetch_object()){
-					$retStr .= '; '.$r->instcode;
-				}
-				$rs->free();
+		$retStr = 'ALL_COLLECTIONS';	//Defaults to all collections if db variable is not set or db variable contains "all" or other non-numeric variables
+		if(array_key_exists('db', $this->searchTermArr)){
+			if($this->searchTermArr['db'] == 'allspec'){
+				$retStr = 'ALL_SPECIMEN_COLLECTIONS';
 			}
-			/*
-			if(isset($cArr[1]) && $cArr[1]){
-				$sql = 'SELECT ccpk, category FROM omcollcategories WHERE ccpk IN('.$cArr[1].') ORDER BY category';
-				$rs = $this->conn->query($sql);
-				while($r = $rs->fetch_object()){
-					$retStr .= '; '.$r->category;
-				}
-				$rs->free();
+			elseif($this->searchTermArr['db'] == 'allobs'){
+				$retStr = 'ALL_OBSERVATION_COLLECTIONS';
 			}
-			*/
-			$retStr = substr($retStr,2);
+			elseif(preg_match('/^[0-9;,]+$/', $this->searchTermArr['db'])){
+				$cArr = explode(';', $this->cleanInStr($this->searchTermArr['db']));
+				if($cArr[0]){
+					$retStr = '';
+					$sql = 'SELECT collid, institutionCode, collectionCode FROM omcollections WHERE collid IN(' . $cArr[0] . ') ORDER BY institutioncode,collectioncode';
+					$rs = $this->conn->query($sql);
+					while($r = $rs->fetch_object()){
+						$code = $r->institutionCode;
+						if($r->collectionCode) $code .= '-' . $r->collectionCode;
+						$retStr .= '; ' . $code;
+					}
+					$rs->free();
+				}
+				$retStr = trim($retStr, '; ');
+			}
 		}
 		return $retStr;
 	}
@@ -910,9 +896,10 @@ class OccurrenceManager extends OccurrenceTaxaManager {
 			if($v) $retStr .= '&'. $this->cleanOutStr($k) . '=' . $this->cleanOutStr($v);
 		}
 		if(isset($this->taxaArr['search'])){
-			$patternTaxonChars = '/^[a-zA-Z0-9\s\-\,\.×†]*$/';
-			if (preg_match($patternTaxonChars, $this->getTaxaSearchTerm())==1) {
-				$retStr .= '&taxa=' . $this->getTaxaSearchTerm();
+			$patternTaxonChars = '/^[a-zA-Z0-9\s\-\,\.\(\)\'×†]*$/';
+			$taxonSearchTerm = $this->getTaxaSearchTerm();
+			if (preg_match($patternTaxonChars, $taxonSearchTerm)==1) {
+				$retStr .= '&taxa=' . $taxonSearchTerm;
 			}
 			if($this->taxaArr['usethes']) $retStr .= '&usethes=1';
 			if(is_numeric($this->taxaArr['taxontype'])) {

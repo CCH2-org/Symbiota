@@ -11,18 +11,47 @@ document.addEventListener('DOMContentLoaded', function() {
 	getCurrentPage();
 });
 
-function copyUrl(){
+function copyUrl(comingFrom){
 	host = window.location.protocol + '//' + window.location.host;
 	var $temp = $("<input>");
 	$("body").append($temp);
 	let activeLink = host + window.location.pathname;
-	if(sessionStorage.querystr){
-		activeLink = activeLink + "?" + sessionStorage.querystr;
-	}
-
+	const calcualtedQueryStr = calculateQueryStr(comingFrom);
+	activeLink = activeLink + "?" + calcualtedQueryStr;
 	$temp.val(activeLink).select();
 	document.execCommand("copy");
 	$temp.remove();
+}
+
+function calculateQueryStr(comingFrom) {
+  let returnVal = '';
+  const comingFromMap = {
+		"newsearch": "collections/search/index.php",
+		"harvestparams": "collections/harvestparams.php"
+	};
+	if(comingFrom && comingFromMap[comingFrom]){
+		const expectedUrlPart = comingFromMap[comingFrom];
+		const currentPage = getCurrentPage();
+		const targetUrlPart = currentPage.includes("collections/listtabledisplay.php") ? "collections/listtabledisplay.php" : "collections/list.php";
+		const pageKey = 'querystr' + getCurrentPage()?.replace(targetUrlPart, expectedUrlPart);
+		const sessionStorageKeys = Object.keys(sessionStorage);
+		const relevantKeys = sessionStorageKeys.filter(key => key.startsWith(pageKey) && key.value !== "null");
+		relevantKeys.forEach((relevantKey) => {
+		  let justFormFieldName = relevantKey.replace(pageKey + "/", "");
+		  if(justFormFieldName){
+			let relevantVal = sessionStorage.getItem(relevantKey);
+			if (relevantVal.includes("db=") || justFormFieldName === "db"){ // it looks like db= is in the value rather than the key for harvestparams but not for search/index.php
+				justFormFieldName = "db";
+				relevantVal = relevantVal.replace("db=", "");
+				if(relevantVal.includes("all")){
+					relevantVal = "all";
+				}
+			}
+			returnVal += justFormFieldName + "=" + encodeURIComponent(relevantVal) + "&";
+		  }
+		});
+	}
+	return returnVal.slice(0, -1);
 }
 
 function addVoucherToCl(occidIn,clidIn,tidIn){

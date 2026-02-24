@@ -505,18 +505,20 @@ class OccurrenceDownload{
 			}
 			$sql .= 'FROM omcollections c INNER JOIN omoccurrences o ON c.collid = o.collid LEFT JOIN taxa t ON o.tidinterpreted = t.tid LEFT JOIN taxstatus ts ON t.tid = ts.tid ';
 			$sql .= $this->setTableJoins($this->sqlWhere);
+			$this->applyConditions();
 			if($this->sqlWhere){
-				$this->applyConditions();
 				$sql .= $this->sqlWhere;
-				if($this->redactLocalities){
-					if($this->rareReaderArr){
-						$sql .= 'AND (o.recordSecurity = 0 OR c.collid IN('.implode(',',$this->rareReaderArr).')) ';
+				if(empty($_REQUEST['source']) || $_REQUEST['source'] != 'collection_exporter'){
+					if($this->redactLocalities){
+						if($this->rareReaderArr){
+							$sql .= 'AND (o.recordSecurity = 0 OR c.collid IN('.implode(',',$this->rareReaderArr).')) ';
+						}
+						else{
+							$sql .= 'AND (o.recordSecurity = 0) ';
+						}
 					}
-					else{
-						$sql .= 'AND (o.recordSecurity = 0) ';
-					}
+					$sql .= OccurrenceUtil::appendFullProtectionSQL();
 				}
-				$sql .= OccurrenceUtil::appendFullProtectionSQL();
 				$sql .= 'ORDER BY o.collid';
 			}
 			else{

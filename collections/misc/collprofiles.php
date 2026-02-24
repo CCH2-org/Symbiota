@@ -460,31 +460,6 @@ if ($SYMB_UID) {
 										<?= $LANG['EDIT_META'] ?>
 									</a>
 								</li>
-								<!--
-								<li>
-									<a href="javascript:void(0)" onclick="showItemsList('metadataItem')"  >
-										<?= $LANG['OPEN_META'] ?>
-									</a>
-									<a onclick="showItemsList('metadataItem')">
-										<img class="seemore-icon" src="../../images/tochild.png">
-									</a>
-								</li>
-								<li class="metadataItem" style="margin-left:10px;display:none;">
-									<a href="collmetadata.php?collid=<?= $collid ?>">
-										<?= $LANG['EDIT_META'] ?>
-									</a>
-								</li>
-								<li class="metadataItem" style="margin-left:10px;display:none;">
-									<a href="colladdress.php?collid=<?= $collid ?>">
-										<?= $LANG['EDIT_ADDRESS'] ?>
-									</a>
-								</li>
-								<li class="metadataItem" style="margin-left:10px;display:none;">
-									<a href="collproperties.php?collid=<?= $collid ?>">
-										<?= $LANG['EDIT_COLL_PROPS'] ?>
-									</a>
-								</li>
-								 -->
 								<li>
 									<a href="collpermissions.php?collid=<?= $collid ?>">
 										<?= $LANG['MANAGE_PERMISSIONS'] ?>
@@ -817,7 +792,6 @@ if ($SYMB_UID) {
 						//if($extrastatsArr&&$extrastatsArr['TypeCount']) echo '<li>'.number_format($extrastatsArr['TypeCount']) . ' ' . $LANG['TYPE_SPECIMENS'] . '</li>';
 						?>
 					</ul>
-					<p style="margin-left:3em"><?= '(' . $LANG['LAST_UPDATED'] . ' ' . $statsArr['datelastmodified'] . ')'?></p>
 				</div>
 			</section>
 			<section class="fieldset-like no-left-margin">
@@ -853,11 +827,17 @@ if ($SYMB_UID) {
 							}
 							?>
 						</div>
+						<?php if($collData['managementtype'] == 'Live Data'): ?>
+							<div class="bottom-breathing-room-rel">
+								<span class="label"><?= $LANG['LAST_MODIFIED'] ?>:</span>
+								<?= $statsArr['datelastmodified'] ?>
+							</div>
+						<?php endif ?>
 						<?php if($collData['managementtype'] != 'Live Data'): ?>
-						<div class="bottom-breathing-room-rel">
-							<span class="label"><?= $LANG['LAST_UPDATE'] ?>:</span>
-							<?= $collData['uploaddate'] ?>
-						</div>
+							<div class="bottom-breathing-room-rel">
+								<span class="label"><?= $LANG['LAST_UPDATE'] ?>:</span>
+								<?= $collData['uploaddate'] ?>
+							</div>
 						<?php endif ?>
 						<?php
 						if($collData['managementtype'] == 'Live Data'){

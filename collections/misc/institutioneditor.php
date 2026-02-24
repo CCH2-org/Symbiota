@@ -176,11 +176,6 @@ include($SERVER_ROOT.'/includes/header.php');
 <!-- This is inner text! -->
 <div role="main" id="innertext">
 	<h1 class="page-heading"><?php echo $LANG['INSTITUTION_EDITOR']; ?></h1>
-	<div id="dialog" title="" style="display: none;">
-		<div id="dialogmsg"></div>
-		<select id="getresult">
-		</select>
-	</div>
 	<?php
 	if($statusStr){
 		?>

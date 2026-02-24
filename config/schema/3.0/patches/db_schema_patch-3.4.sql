@@ -479,8 +479,7 @@ UPDATE `omoccurrences` o LEFT JOIN `omoccurpaleo` p on o.`occid` = p.`occid`
   
 #Remove deprecated field 'storageAge'
 ALTER TABLE `omoccurpaleo` 
-  DROP COLUMN `storageAge`
-
+  DROP COLUMN `storageAge`;
 
 
 ALTER TABLE `portalindex` 

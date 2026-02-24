@@ -43,8 +43,8 @@ $relationshipTypes = $associationManager->getRelationshipTypes();
 
 $collectionFormManager = new CollectionFormManager();
 $requestSuppliedCatOrd = (array_key_exists('catOrd', $_REQUEST) && $collectionFormManager->areCollectionIdsValid($_REQUEST['catOrd'])) ? explode(',', $_REQUEST['catOrd']) : null;
-$requestSuppliedCatExpnd = (array_key_exists('catExpnd', $_REQUEST) && $collectionFormManager->areCollectionIdsValid($_REQUEST['catExpnd'])) ? explode(',', $_REQUEST['catExpnd']) : null;
-$requestSuppliedCatChk = (array_key_exists('catChk', $_REQUEST) && $collectionFormManager->areCollectionIdsValid($_REQUEST['catChk'])) ? explode(',', $_REQUEST['catChk']) : null;
+$requestSuppliedCatExpnd = (array_key_exists('catExpnd', $_REQUEST) && $collectionFormManager->areCollectionCategoriesValid($_REQUEST['catExpnd'])) ? explode(',', $_REQUEST['catExpnd']) : null;
+$requestSuppliedCatChk = (array_key_exists('catChk', $_REQUEST) && $collectionFormManager->areCollectionCategoriesValid($_REQUEST['catChk'])) ? explode(',', $_REQUEST['catChk']) : null;
 
 ?>
 <!DOCTYPE html>
@@ -162,6 +162,7 @@ $requestSuppliedCatChk = (array_key_exists('catChk', $_REQUEST) && $collectionFo
 							<label for="usethes">
 								<span class="ml-1"><?php echo $LANG['INCLUDE_SYNONYMS'] ?></span>
 							</label>
+							<img src="../../images/info.png" style="width:1em; margin-left:1px;" alt="<?php echo $LANG['SYNONYM_NOTE'] ?>" title="<?php echo $LANG['SYNONYM_NOTE'] ?>" onclick="alert('<?php echo addslashes($LANG['SYNONYM_NOTE']) ?>')"/>
 						</div>
 					</div>
 				</section>

@@ -2,6 +2,7 @@
 include_once('../../config/symbini.php');
 include_once($SERVER_ROOT . '/classes/OccurrenceMapManager.php');
 include_once($SERVER_ROOT . '/classes/utilities/GeneralUtil.php');
+include_once($SERVER_ROOT . '/classes/utilities/MappingUtil.php');
 include_once($SERVER_ROOT . '/classes/utilities/Language.php');
 include_once($SERVER_ROOT . '/classes/CollectionFormManager.php');
 
@@ -18,11 +19,7 @@ ob_start('ob_gzhandler');
 ini_set('max_execution_time', 180); //180 seconds = 3 minutes
 
 $distFromMe = array_key_exists('distFromMe', $_REQUEST) ? filter_var($_REQUEST['distFromMe'], FILTER_SANITIZE_NUMBER_FLOAT) : '';
-$gridSize = !empty($_REQUEST['gridSizeSetting']) ? filter_var($_REQUEST['gridSizeSetting'], FILTER_SANITIZE_NUMBER_INT) : 60;
-$minClusterSize = !empty($_REQUEST['minClusterSetting']) ? filter_var($_REQUEST['minClusterSetting'], FILTER_SANITIZE_NUMBER_INT) : 10;
-$clusterOff = !empty($_REQUEST['clusterSwitch']) ? $_REQUEST['clusterSwitch'] : 'y';
 $menuClosed = array_key_exists('menuClosed',$_REQUEST)? true: false;
-$recLimit = array_key_exists('recordlimit', $_REQUEST) ? filter_var($_REQUEST['recordlimit'], FILTER_SANITIZE_NUMBER_INT) : 15000;
 $catId = array_key_exists('catid',$_REQUEST) ? filter_var($_REQUEST['catid'], FILTER_SANITIZE_NUMBER_INT) : 0;
 $tabIndex = array_key_exists('tabindex',$_REQUEST) ? filter_var($_REQUEST['tabindex'], FILTER_SANITIZE_NUMBER_INT) : 0;
 $submitForm = array_key_exists('submitform', $_REQUEST) ? $_REQUEST['submitform'] : '';
@@ -34,100 +31,26 @@ if(!$catId && isset($DEFAULTCATID) && $DEFAULTCATID) $catId = $DEFAULTCATID;
 
 $collectionFormManager = new CollectionFormManager();
 $requestSuppliedCatOrd = (array_key_exists('catOrd', $_REQUEST) && $collectionFormManager->areCollectionIdsValid($_REQUEST['catOrd'])) ? explode(',', $_REQUEST['catOrd']) : null;
-$requestSuppliedCatExpnd = (array_key_exists('catExpnd', $_REQUEST) && $collectionFormManager->areCollectionIdsValid($_REQUEST['catExpnd'])) ? explode(',', $_REQUEST['catExpnd']) : null;
-$requestSuppliedCatChk = (array_key_exists('catChk', $_REQUEST) && $collectionFormManager->areCollectionIdsValid($_REQUEST['catChk'])) ? explode(',', $_REQUEST['catChk']) : null;
+$requestSuppliedCatExpnd = (array_key_exists('catExpnd', $_REQUEST) && $collectionFormManager->areCollectionCategoriesValid($_REQUEST['catExpnd'])) ? explode(',', $_REQUEST['catExpnd']) : null;
+$requestSuppliedCatChk = (array_key_exists('catChk', $_REQUEST) && $collectionFormManager->areCollectionCategoriesValid($_REQUEST['catChk'])) ? explode(',', $_REQUEST['catChk']) : null;
 
 $mapManager = new OccurrenceMapManager();
 $searchVar = $mapManager->getQueryTermStr();
-if($searchVar && $recLimit) $searchVar .= '&reclimit='.$recLimit;
-
-$obsIDs = $mapManager->getObservationIds();
-
-//Sanitation
-if(!is_string($clusterOff) || strlen($clusterOff) > 1) $clusterOff = 'y';
 
 $activateGeolocation = 0;
 if(isset($ACTIVATE_GEOLOCATION) && $ACTIVATE_GEOLOCATION == 1) $activateGeolocation = 1;
 
-//Set default bounding box for portal
-$boundLatMin = -90;
-$boundLatMax = 90;
-$boundLngMin = -180;
-$boundLngMax = 180;
-if(!empty($MAPPING_BOUNDARIES)){
-	$coorArr = explode(';', $MAPPING_BOUNDARIES);
-	if($coorArr && count($coorArr) == 4){
-		$boundLatMin = $coorArr[2];
-		$boundLatMax = $coorArr[0];
-		$boundLngMin = $coorArr[3];
-		$boundLngMax = $coorArr[1];
-	}
-}
-$bounds = [ [$boundLatMax, $boundLngMax], [$boundLatMin, $boundLngMin] ];
+$bounds = MappingUtil::getMappingBoundary();
 
 //Gets Coordinates
-$coordArr = $mapManager->getCoordinateMap(0,$recLimit);
-$taxaArr = [];
-$recordArr = [];
-$collArr = [];
-
-$recordCnt = 0;
+list(
+	'taxaArr' => $taxaArr,
+	'recordArr' => $recordArr,
+	'collArr' => $collArr
+) = $mapManager->getCoordinateMap();
 
 if(empty($EXTERNAL_PORTAL_HOSTS)) {
 	$EXTERNAL_PORTAL_HOSTS = [];
-}
-
-foreach ($coordArr as $collName => $coll) {
-	//Collect all the collections
-	foreach ($coll as $recordId => $record) {
-		if($recordId == 'c') continue;
-
-		//Collect all taxon
-		if(!array_key_exists($record['tid'], $taxaArr)) {
-			$taxaArr[$record['tid']] = [
-				'sn' => $record['sn'],
-				'tid' => $record['tid'],
-				'family' => $record['fam'],
-				'color' => $coll['c'],
-				'records' => [$recordCnt]
-			];
-		} else {
-			array_push($taxaArr[$record['tid']]['records'], $recordCnt);
-		}
-
-		//Collect all Collections
-		if(!array_key_exists($record['collid'], $collArr)) {
-			$collArr[$record['collid']] = [
-				'name' => $collName,
-				'collid' => $record['collid'],
-				'color' => $coll['c'],
-				'records' => [$recordCnt]
-			];
-		} else {
-			array_push($collArr[$record['collid']]['records'], $recordCnt);
-		}
-
-		$llstrArr = explode(',', $record['llStr']);
-		if(count($llstrArr) != 2) continue;
-
-		//Collect all records
-		array_push($recordArr, [
-			'id' => $record['id'],
-			'tid' => $record['tid'],
-			'catalogNumber' => $record['catalogNumber'],
-			'eventdate' => $record['eventdate'],
-			'sciname' => $record['sn'],
-			'collid' => $record['collid'],
-			'family' => $record['fam'],
-			'occid' => $recordId,
-			'collname' => $collName,
-			'type' => in_array($record['collid'], $obsIDs)? 'observation':'specimen',
-			'lat' => floatval($llstrArr[0]),
-			'lng' => floatval($llstrArr[1]),
-		]);
-
-		$recordCnt++;
-	}
 }
 
 if(isset($_REQUEST['llpoint'])) {
@@ -151,8 +74,8 @@ if(isset($_REQUEST['llpoint'])) {
 //Gets the geo context terms
 $gtsTermArr = $mapManager->getPaleoGtsTerms();
 $paleoTimes = $mapManager->getPaleoTimes();
-
 $serverHost = GeneralUtil::getDomain();
+
 ?>
 <!DOCTYPE html>
 <html lang="<?php echo $LANG_TAG ?>">
@@ -331,7 +254,7 @@ $serverHost = GeneralUtil::getDomain();
 
 		//Map Globals
 		let shape;
-		let map_bounds= [ [90, 180], [-90, -180] ];
+		let map_bounds= [ {lat: 90, lng: 180}, {lat:-90, lng: -180} ];
 
 		//Array for holding all search results from current and outside portals
 		let mapGroups = [];
@@ -348,6 +271,8 @@ $serverHost = GeneralUtil::getDomain();
 
 		//Indciates if clustering should be drawn. Only comes into effect after redraw or refreshes
 		let clusteroff = true;
+		// Imported value of 
+		let MAP_RECORD_LIMIT;
 
 		//Get paleo times
 		const paleoTimes = <?= json_encode($paleoTimes ?? []) ?>;
@@ -655,6 +580,18 @@ $serverHost = GeneralUtil::getDomain();
 			}
 		}
 
+		function setHeatmap(value) {
+			const heatmap_on_el = document.getElementById('heatmap_on');
+			heatmap_on_el.checked = value;
+			heatmap_on_el.dispatchEvent(new Event('change'))
+		}
+
+		function setClusteringOff(value) {
+			const cluster_off_el = document.getElementById('clusteroff');
+			cluster_off_el.checked = value;
+			cluster_off_el.dispatchEvent(new Event('change'))
+		}
+
 		function leafletInit() {
 
 			L.DivIcon.CustomColor = L.DivIcon.extend({
@@ -690,6 +627,7 @@ $serverHost = GeneralUtil::getDomain();
 
 			let heatmapLayer;
 			let heatmap;
+			let highRecordMode = false;
 
 			let groupClusters = [];
 
@@ -896,23 +834,23 @@ $serverHost = GeneralUtil::getDomain();
 				let maxDensityInput = document.getElementById('heat-max-density')
 
 				var cfg = {
-					"radius": (radius_input? parseFloat(radius_input.value): 50) / 100.00,
-					"maxOpacity": .9,
-					"scaleRadius": true,
+					"radius": radius_input? parseFloat(radius_input.value): 20,
+					"minOpacity": 0.2,
+					"maxOpacity": 0.9,
+					"scaleRadius": false,
 					"useLocalExtrema": false,
 					latField: 'lat',
 					lngField: 'lng',
 				};
 				heatmapLayer = new HeatmapOverlay(cfg);
 
-				let heatMaxDensity = maxDensityInput? parseInt(maxDensityInput.value) : 3
-				let heatMinDensity = minDensityInput? parseInt(minDensityInput.value) : 1
+				let heatMaxDensity = maxDensityInput && maxDensityInput.value? parseInt(maxDensityInput.value) : Math.floor((recordArr.length * .05))
+				let heatMinDensity = minDensityInput && minDensityInput.value? parseInt(minDensityInput.value) : 1
 
 				heatmapLayer.addTo(map.mapLayer);
-
 				heatmapLayer.setData({
-					max: heatMaxDensity || 3,
-					min: heatMinDensity || 1,
+					max: heatMaxDensity,
+					min: heatMinDensity,
 					data: recordArr
 				});
 			}
@@ -927,6 +865,15 @@ $serverHost = GeneralUtil::getDomain();
 					map.mapLayer.fitBounds(group.getBounds());
 				} else if(map_bounds) {
 					map.mapLayer.fitBounds(map_bounds);
+				}
+			}
+
+			function setDynamicHeatmap() {
+				zoom =  map.mapLayer.getZoom();
+				if(zoom > 10) {
+					setHeatmap(false);
+				} else if(!heatmap) {
+					setHeatmap(true);
 				}
 			}
 
@@ -1015,8 +962,27 @@ $serverHost = GeneralUtil::getDomain();
 					group.portalMapGroup.genClusters();
 				})
 
-				autoColorTaxa();
+				if(recordArr && recordArr.length >= map.HIGH_RECORD_THRESHOLD || recordArr.length >= MAP_RECORD_LIMIT ) {
+					if(recordArr.length >= MAP_RECORD_LIMIT) {
+						alert('<?= $LANG["MAP_RECORD_LIMIT_MESSAGE"] ?>');
+					} else {
+						alert('<?= $LANG["DYNAMIC_HEATMAP_AUTO_ENABLED"] ?>');
+					}
 
+					highRecordMode = true;
+					setHeatmap(true);
+					setClusteringOff(false);
+					map.mapLayer.on('zoomend', setDynamicHeatmap);
+				} else if(highRecordMode) {
+					highRecordMode = false;
+					setHeatmap(false);
+					map.mapLayer.off('zoomend', setDynamicHeatmap);
+				}
+
+				if(cluster_type === 'taxa') {
+					autoColorTaxa();
+				}
+				
 				drawPoints();
 				fitMap();
 				hideWorking();
@@ -1157,11 +1123,9 @@ $serverHost = GeneralUtil::getDomain();
 				group.origin = "<?= $serverHost . $CLIENT_ROOT?>";
 				mapGroups = [group];
 
-
 				$( document ).ready(function() {
 					// Build Records Panel
 					buildRecordsPanel(recordArr);
-
 					// Build Taxa | Portal | Collection Panels
 					buildPanels(formData.get('cross_portal_switch'));
 
@@ -1171,16 +1135,33 @@ $serverHost = GeneralUtil::getDomain();
 						group.portalMapGroup.genClusters();
 					})
 
-					autoColorTaxa();
+					if(recordArr && recordArr.length >= map.HIGH_RECORD_THRESHOLD || recordArr.length >= MAP_RECORD_LIMIT) {
+						if(recordArr.length >= MAP_RECORD_LIMIT) {
+							alert('<?= $LANG["MAP_RECORD_LIMIT_MESSAGE"] ?>');
+						} else {
+							alert('<?= $LANG["DYNAMIC_HEATMAP_AUTO_ENABLED"] ?>');
+						}
+						highRecordMode = true;
+						setHeatmap(true);
+						setClusteringOff(false);
+						map.mapLayer.on('zoomend', setDynamicHeatmap);
+					} else if(highRecordMode) {
+						highRecordMode = false;
+						setHeatmap(false);
+						map.mapLayer.off('zoomend', setDynamicHeatmap);
+					}
+
+					if(cluster_type === 'taxa') {
+						autoColorTaxa();
+					}
 
 					drawPoints();
-
 					fitMap();
 				})
 			}
 			fitMap();
 		}
-
+	
 		function googleInit() {
 			let map = new GoogleMap('map')
 
@@ -1413,8 +1394,8 @@ $serverHost = GeneralUtil::getDomain();
 				else if(bounds) map.mapLayer.fitBounds(bounds);
 				else if (map_bounds) {
 					const new_bounds = new google.maps.LatLngBounds()
-					new_bounds.extend(new google.maps.LatLng(parseFloat(map_bounds[0][0]), parseFloat(map_bounds[0][1])))
-					new_bounds.extend(new google.maps.LatLng(parseFloat(map_bounds[1][0]), parseFloat(map_bounds[1][1])))
+					new_bounds.extend(new google.maps.LatLng(parseFloat(map_bounds[0].lat), parseFloat(map_bounds[0].lng)))
+					new_bounds.extend(new google.maps.LatLng(parseFloat(map_bounds[1].lat), parseFloat(map_bounds[1].lng)))
 					map.mapLayer.fitBounds(new_bounds)
 				}
 			}
@@ -1425,7 +1406,7 @@ $serverHost = GeneralUtil::getDomain();
 				let radius_input = document.getElementById('heat-radius');
 
 				var cfg = {
-					"radius": (radius_input? parseFloat(radius_input.value): 50) / 100.00,
+					"radius": radius_input? parseFloat(radius_input.value): 20,
 					"maxOpacity": .9,
 					"scaleRadius": true,
 					"useLocalExtrema": false,
@@ -1441,12 +1422,12 @@ $serverHost = GeneralUtil::getDomain();
 				let minDensityInput = document.getElementById('heat-min-density')
 				let maxDensityInput = document.getElementById('heat-max-density')
 
-				let heatMaxDensity = maxDensityInput? parseInt(maxDensityInput.value) : 3
-				let heatMinDensity = minDensityInput? parseInt(minDensityInput.value) : 1
+				let heatMaxDensity = maxDensityInput && maxDensityInput.value? parseInt(maxDensityInput.value) : Math.floor((recordArr.length * .05))
+				let heatMinDensity = minDensityInput && minDensityInput.value? parseInt(minDensityInput.value) : 1
 
 				heatmapLayer.setData({
-					max: heatMaxDensity || 3,
-					min: heatMinDensity || 1,
+					max: heatMaxDensity,
+					min: heatMinDensity,
 					data: recordArr
 				});
 			}
@@ -2057,6 +2038,7 @@ $serverHost = GeneralUtil::getDomain();
 				collArr = JSON.parse(data.getAttribute('data-coll-map'));
 				recordArr = JSON.parse(data.getAttribute('data-records'));
 
+				MAP_RECORD_LIMIT = parseInt(data.getAttribute('data-record-limit'));
 				clusteroff = data.getAttribute('data-cluster-off') ==='y'? true: false;
 
 				externalPortalHosts = JSON.parse(data.getAttribute('data-external-portal-hosts'));
@@ -2141,7 +2123,8 @@ $serverHost = GeneralUtil::getDomain();
 			data-taxa-map="<?=htmlspecialchars(json_encode($taxaArr))?>"
 			data-coll-map="<?=htmlspecialchars(json_encode($collArr))?>"
 			data-records="<?=htmlspecialchars(json_encode($recordArr))?>"
-			data-cluster-off="<?=htmlspecialchars($clusterOff)?>"
+			data-record-limit="<?= OccurrenceMapManager::MAP_RECORD_LIMIT ?>"
+			data-cluster-off="<?= $mapManager->getSearchTerm('clusterSwitch') ?>"
 			data-external-portal-hosts="<?=htmlspecialchars(json_encode($EXTERNAL_PORTAL_HOSTS))?>"
 			class="service-container"
 		>
@@ -2198,18 +2181,7 @@ $serverHost = GeneralUtil::getDomain();
 								</div>
 								<div id="searchcriteria" style="padding-top: 0.5rem">
 									<div>
-										<!-- <div style="float:left;<?= (isset($SOLR_MODE) && $SOLR_MODE ? 'display:none;' : '') ?>">
-											Record Limit:
-											<input data-role="none" type="text" id="recordlimit" style="width:75px;" name="recordlimit" value="<?php echo ($recLimit?$recLimit:""); ?>" title="Maximum record amount returned from search." onchange="return checkRecordLimit(this.form);" />
-										</div> -->
 										<div style="display:flex; gap: 1rem; justify-content: right; height: 2rem">
-											<input type="hidden" id="selectedpoints" value="" />
-											<input type="hidden" id="deselectedpoints" value="" />
-											<input type="hidden" id="selecteddspoints" value="" />
-											<input type="hidden" id="deselecteddspoints" value="" />
-											<input type="hidden" id="gridSizeSetting" name="gridSizeSetting" value="<?php echo $gridSize; ?>" />
-											<input type="hidden" id="minClusterSetting" name="minClusterSetting" value="<?php echo $minClusterSize; ?>" />
-											<input type="hidden" id="clusterSwitch" name="clusterSwitch" value="<?php echo $clusterOff; ?>" />
 											<input type="hidden" id="pointlat" name="pointlat" value='<?php echo isset($pointLat)? $pointLat:"" ?>' />
 											<input type="hidden" id="pointlong" name="pointlong" value='<?php echo isset($pointLng)? $pointLng:"" ?>' />
 											<input type="hidden" id="pointunits" name="pointunits" value='<?php echo isset($pointUnit)? $pointUnit:"km" ?>' />
@@ -2435,7 +2407,7 @@ $serverHost = GeneralUtil::getDomain();
 									<fieldset>
 										<legend><?= $LANG['CLUSTERING'] ?></legend>
 										<label><?= $LANG['TURN_OFF_CLUSTERING'] ?>:</label>
-										<input data-role="none" type="checkbox" id="clusteroff" name="clusteroff" value='1' <?= ($clusterOff=="y"?'checked':'') ?>/>
+										<input data-role="none" type="checkbox" id="clusteroff" name="clusteroff" value='1' <?= ($mapManager->getSearchTerm('clusterSwitch') == "y"? 'checked':'') ?>/>
 	
 										<span style="display: flex; align-items:center">
 											<label for="cluster-radius"><?= $LANG['CLUSTER_RADIUS'] ?>: 1 </label>
@@ -2449,16 +2421,16 @@ $serverHost = GeneralUtil::getDomain();
 										<input data-role="none" type="checkbox" id="heatmap_on" name="heatmap_on" value='1'/>
 										<br/>
 										<span style="display: flex; align-items:center">
-											<label for="heat-radius"><?= $LANG['HEAT_RADIUS'] ?>: 0.1</label>
-											<input style="margin: 0 1rem;"type="range" value="70" id="heat-radius" name="heat-radius" min="1" max="100">1
+											<label for="heat-radius"><?= $LANG['HEAT_RADIUS'] ?>: 10</label>
+											<input style="margin: 0 1rem;"type="range" value="20" id="heat-radius" name="heat-radius" min="10" max="100">100
 										</span>
 	
 										<label for="heat-min-density"><?= $LANG['MIN_DENSITY'] ?>: </label>
-										<input style="margin: 0 1rem; width: 5rem;"value="1" id="heat-min-density" name="heat-min-density">
+										<input style="margin: 0 1rem; width: 5rem;" id="heat-min-density" name="heat-min-density">
 	
 										<br/>
 										<label for="heat-max-density"><?= $LANG['MAX_DENSITY'] ?>: </label>
-										<input style="margin: 0 1rem; width: 5rem;"value="3" id="heat-max-density" name="heat-max-density">
+										<input style="margin: 0 1rem; width: 5rem;" id="heat-max-density" name="heat-max-density">
 										<br/>
 									</fieldset>
 									<br/>
@@ -2538,7 +2510,7 @@ $serverHost = GeneralUtil::getDomain();
 								<input data-role="none" name="format" id="formatcsv" type="hidden" value="" />
 								<input data-role="none" name="cset" id="csetcsv" type="hidden" value="" />
 								<input data-role="none" name="zip" id="zipcsv" type="hidden" value="" />
-								<input data-role="none" name="csvreclimit" id="csvreclimit" type="hidden" value="<?= $recLimit; ?>" />
+								<input data-role="none" name="csvreclimit" id="csvreclimit" type="hidden" value="<?= $mapManager->getSearchTerm('reclimit') ?>" />
 							</form>
 						</div>
 						<h3 id="recordstaxaheader" style="display:none;"><?= $LANG['RECORDS_TAXA'] ?></h3>
@@ -2556,7 +2528,7 @@ $serverHost = GeneralUtil::getDomain();
 											<svg style="width:1.3em" alt="<?= $LANG['IMG_DWNL_DATA']; ?>" xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 -960 960 960" width="24"><path d="M480-320 280-520l56-58 104 104v-326h80v326l104-104 56 58-200 200ZM240-160q-33 0-56.5-23.5T160-240v-120h80v120h480v-120h80v120q0 33-23.5 56.5T720-160H240Z"/></svg>
 										</button>
 										<input name="searchvar" type="hidden" value="<?= $searchVar ?> " />
-										<input name="reclimit" type="hidden" value="<?= $recLimit; ?>" />
+										<input name="reclimit" type="hidden" value="<?= $mapManager->getSearchTerm('reclimit') ?>" />
 										<input name="sourcepage" type="hidden" value="map" />
 										<input name="dltype" type="hidden" value="specimen" />
 									</form>

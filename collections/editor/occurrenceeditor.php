@@ -524,7 +524,9 @@ else{
 		}
 	}
 	include_once($SERVER_ROOT.'/includes/googleanalytics.php');
+	$filename = file_exists($SERVER_ROOT . '/js/symb/' . $LANG_TAG . '.js') ? $CLIENT_ROOT . '/js/symb/' . $LANG_TAG . '.js' : $CLIENT_ROOT . '/js/symb/en.js';
 	?>
+	<script src="<?php echo $filename ?>" type="text/javascript"></script>
 	<script src="<?php echo $CLIENT_ROOT; ?>/js/jquery-3.7.1.min.js" type="text/javascript"></script>
 	<script src="<?php echo $CLIENT_ROOT; ?>/js/jquery-ui.min.js" type="text/javascript"></script>
 	<script src="<?= $CLIENT_ROOT ?>/js/symb/mapAidUtils.js" type="text/javascript"></script>
@@ -805,7 +807,7 @@ else{
 																		<input class="idNameInput" name="idname[]" type="text" value="<?php echo $idArr['name']; ?>" onchange="fieldChanged('idname');" autocomplete="off" />
 																	</div>
 																	<div class="divTableCell">
-																		<input class="idValueInput" name="idvalue[]" type="text" value="<?php echo $idArr['value']; ?>" onchange="fieldChanged('idvalue');" autocomplete="off" /><a href="#" onclick="deleteIdentifier(<?php echo "'".$idKey."',".$occId; ?>);return false" tabindex="-1"><img src="../../images/del.png" /></a>
+																		<input class="idValueInput" name="idvalue[]" type="text" value="<?php echo $idArr['value']; ?>" onchange="fieldChanged('idvalue');" autocomplete="off" /><a href="#" onclick="confirmDeleteIdentifier(<?php echo "'".$idKey."',".$occId; ?>);return false" tabindex="-1"><img src="../../images/del.png" /></a>
 																	</div>
 																</div>
 																<?php
@@ -1672,7 +1674,7 @@ else{
 														<?php
 														$targetArr = $occManager->getCollectionList(true);
 														unset($targetArr[$collId]);
-														if(count($targetArr) > 1){
+														if($targetArr){
 															?>
 															<div class="fieldGroup-div">
 																<label><?php echo $LANG['TARGET_COLL']; ?>:</label>

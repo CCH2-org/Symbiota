@@ -319,44 +319,49 @@ class DwcArchiverOccurrence extends Manager{
 		$this->occurDefArr['fields']['recordID'] = 'o.recordID';
 		$this->occurDefArr['terms']['references'] = 'http://purl.org/dc/terms/references';
 		$this->occurDefArr['fields']['references'] = '';
+
 		if($this->schemaType == 'pensoft'){
 			$this->occurDefArr['fields']['occid'] = 'o.occid';
 		}
 
-		foreach($this->occurDefArr as $k => $vArr){
-			if($this->schemaType == 'dwc' || $this->schemaType == 'pensoft'){
-				$trimArr = array('recordedByID','associatedCollectors','substrate','verbatimAttributes','cultivationStatus',
-					'securityReason','genericcolumn1','genericcolumn2','storageLocation','observerUid','processingStatus',
-					'duplicateQuantity','labelProject','dateEntered','dateLastModified','sourcePrimaryKey-dbpk');
-				if($this->includePaleo){
-					$trimArr = array_merge($trimArr, array('absoluteAge','stage','localStage','biostratigraphy','taxonEnvironment','stratRemarks','element','slideProperties', 'lithology'));
-				}
-				$this->occurDefArr[$k] = array_diff_key($vArr,array_flip($trimArr));
+		//Trim out fields depending on schema settings
+		$trimArr = array();
+		if($this->schemaType == 'dwc' || $this->schemaType == 'pensoft'){
+			$trimArr = array('recordedByID','associatedCollectors','substrate','verbatimAttributes','cultivationStatus','securityReason','genericcolumn1','genericcolumn2',
+				'observerUid','processingStatus','duplicateQuantity','labelProject','dateEntered','dateLastModified','sourcePrimaryKey-dbpk');
+			if($this->includePaleo){
+				$trimArr = array_merge($trimArr, array('absoluteAge','stage','localStage','biostratigraphy','taxonEnvironment','stratRemarks','element','slideProperties', 'lithology'));
 			}
-			elseif($this->schemaType == 'symbiota'){
-				$trimArr = array();
-				if(!$this->extended){
-					$trimArr = array('collectionID','rights','rightsHolder','accessRights','observerUid','processingStatus','duplicateQuantity','labelProject','dateEntered','dateLastModified');
-				}
-				$this->occurDefArr[$k] = array_diff_key($vArr,array_flip($trimArr));
+		}
+		elseif($this->schemaType == 'symbiota'){
+			if(!$this->extended){
+				$trimArr = array('collectionID','rights','rightsHolder','accessRights','observerUid','processingStatus','duplicateQuantity','labelProject','dateEntered','dateLastModified');
 			}
-			elseif($this->schemaType == 'backup'){
-				$trimArr = array('collectionID','rights','rightsHolder','accessRights');
-				$this->occurDefArr[$k] = array_diff_key($vArr,array_flip($trimArr));
-			}
-			elseif($this->schemaType == 'backup-personal'){
-				$trimArr = array('collectionID','rights','rightsHolder','accessRights');
-				$this->occurDefArr[$k] = array_diff_key($vArr,array_flip($trimArr));
-			}
-			elseif($this->schemaType == 'coge'){
-				$targetArr = array('id','basisOfRecord','institutionCode','collectionCode','catalogNumber','occurrenceID','family','scientificName','scientificNameAuthorship',
-					'kingdom','phylum','class','order','genus','specificEpithet','infraSpecificEpithet','recordedBy','recordNumber','eventDate','year','month','day','fieldNumber',
-					'eventID', 'locationID','continent','waterBody','islandGroup','island','country','stateProvince','county','municipality',
-					'locality','recordSecurity','geodeticDatum','decimalLatitude','decimalLongitude','verbatimCoordinates',
-					'minimumElevationInMeters','maximumElevationInMeters','verbatimElevation','maximumDepthInMeters','minimumDepthInMeters','establishmentMeans',
-					'occurrenceRemarks','dateEntered','dateLastModified','recordID','references','collID');
-				$this->occurDefArr[$k] = array_intersect_key($vArr,array_flip($targetArr));
-			}
+		}
+		elseif($this->schemaType == 'backup'){
+			$trimArr = array('collectionID','rights','rightsHolder','accessRights');
+		}
+		elseif($this->schemaType == 'backup-personal'){
+			$trimArr = array('collectionID','rights','rightsHolder','accessRights');
+		}
+		if($this->schemaType != 'backup'){
+			$trimArr[] = 'storageLocation';
+		}
+		if($trimArr){
+			$this->occurDefArr['terms'] = array_diff_key($this->occurDefArr['terms'], array_flip($trimArr));
+			$this->occurDefArr['fields'] = array_diff_key($this->occurDefArr['fields'], array_flip($trimArr));
+		}
+
+		//Set to array to specific field definition
+		if($this->schemaType == 'coge'){
+			$targetArr = array('id','basisOfRecord','institutionCode','collectionCode','catalogNumber','occurrenceID','family','scientificName','scientificNameAuthorship',
+				'kingdom','phylum','class','order','genus','specificEpithet','infraSpecificEpithet','recordedBy','recordNumber','eventDate','year','month','day','fieldNumber',
+				'eventID', 'locationID','continent','waterBody','islandGroup','island','country','stateProvince','county','municipality',
+				'locality','recordSecurity','geodeticDatum','decimalLatitude','decimalLongitude','verbatimCoordinates',
+				'minimumElevationInMeters','maximumElevationInMeters','verbatimElevation','maximumDepthInMeters','minimumDepthInMeters','establishmentMeans',
+				'occurrenceRemarks','dateEntered','dateLastModified','recordID','references','collID');
+			$this->occurDefArr['terms'] = array_intersect_key($this->occurDefArr['terms'], array_flip($targetArr));
+			$this->occurDefArr['fields'] = array_intersect_key($this->occurDefArr['fields'], array_flip($targetArr));
 		}
 
 		if($this->schemaType == 'dwc' || $this->schemaType == 'pensoft'){

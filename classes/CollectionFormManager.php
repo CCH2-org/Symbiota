@@ -26,9 +26,9 @@ class CollectionFormManager extends Manager {
 
         try {
             $rs = QueryUtil::executeQuery(Database::connect('readonly'), $sql);
-
+            $specimenTypes = ['Preserved Specimens', 'Fossil Specimens'];
             foreach ($rs->fetch_all(MYSQLI_ASSOC) as $collection) {
-                $type = $collection['colltype'] === 'Preserved Specimens' ?
+                $type = in_array($collection['colltype'], $specimenTypes) ?
                     'Specimens' :
                     'Observations';
 
@@ -156,6 +156,14 @@ class CollectionFormManager extends Manager {
      */
     public function areCollectionIdsValid(string $requestStr): bool {
         if(!preg_match('/^[,\d]+$/',$requestStr)) return false;
+        return true;
+     }
+
+     public function areCollectionCategoriesValid(string $requestStr): bool {
+        $categories = explode(",", $requestStr);
+        foreach ($categories as $category) {
+            if(!preg_match('/^(Specimens_|Observations_)\d+$/', $category)) return false;
+        }
         return true;
      }
 
