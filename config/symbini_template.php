@@ -51,7 +51,7 @@ $NLP_SALIX_ACTIVATED = 0;
 
 // Vouchervision OCR/Transcription
 $VOUCHERVISION_API_KEY = ''; // API key to use to access Vouchervision API. See https://leafmachine.org/vouchervisiongo/
-$VOUCHERVISION_API_URL = 'https://vouchervision-go-738307415303.us-central1.run.app/process-url'; // URL to the Vouchervision API server
+$VOUCHERVISION_API_URL = 'https://vouchervision-go-xxxxxxxxxxxx.us-central1.run.app/process-url'; // URL to the Vouchervision API server
 
 //Module activations
 $OCCURRENCE_MOD_IS_ACTIVE = 1;
@@ -77,6 +77,7 @@ $GOOGLE_ANALYTICS_KEY = '';			//Needed for setting up Google Analytics
 $GOOGLE_ANALYTICS_TAG_ID = '';		//Needed for setting up Google Analytics 4 Tag ID
 $RECAPTCHA_PUBLIC_KEY = '';			//Now called site key
 $RECAPTCHA_PRIVATE_KEY = '';		//Now called secret key
+$CAPTCHA_ENDPOINT = 0;              //Alternative to Google recaptcha.  Example Value: $CLIENT_ROOT . '/rpc/captcha.php';
 $TAXONOMIC_AUTHORITIES = array('COL' => '', 'WoRMS' => '');		//List of taxonomic authority APIs to use in data cleaning and thesaurus building tools, concatenated with commas and order by preference; E.g.: array('COL'=>'', 'WoRMS'=>'', 'bryonames' => '', 'fdex'=>'', 'TROPICOS'=>'', 'EOL'=>'')
 $QUICK_HOST_ENTRY_IS_ACTIVE = 0;   	//Allows quick entry for host taxa in occurrence editor
 $GLOSSARY_EXPORT_BANNER = '';		//Banner image for glossary exports. Place in images/layout folder.
