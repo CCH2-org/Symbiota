@@ -69,12 +69,12 @@ $serverHost = GeneralUtil::getDomain();
         <p>
             The CCH now shares 5,250,000 herbarium records in this portal. Most of the CCH herbaria also upload their records to 
             <a href="https://www.gbif.org/" target="_blank">GBIF</a>,
-            the Global Biological Information Facility, which hosts worldwide records of biological collections and images, and example seen
-            <a href="https://www.gbif.org/species/2925739" target="_blank">here</a>.
+            the Global Biological Information Facility, which hosts worldwide records of biological collections and images (see an example 
+            <a href="https://www.gbif.org/species/2925739" target="_blank">here</a>).
         </p>
         <p>
             CCH2 uses the software 
-            <a href="https://symbiota.org/" target="_blank">Symbiota</a> ,
+            <a href="https://symbiota.org/" target="_blank">Symbiota</a>,
             an open-source biodiversity data management software that has become the standard for many biological collections around the world.
             This database has numerous and diverse capabilities, only a few of which are exemplified here:
         </p>
@@ -83,13 +83,13 @@ $serverHost = GeneralUtil::getDomain();
             <?php echo "SEARCHES & MAPPING" ?>
         </h2>
         <p>
-            The CCH2 allows for 
+            CCH2 allows for 
             <a href="https://cch2.org/portal/collections/search/index.php" target="_blank">Searches</a>
             across multiple fields, such as taxonomic name(s), locality, latitude/longitude/elevation, collector/number/date,
             catalog (accession/barcode) number, numerous trait and association fields, and collection (specifying all or a subset of herbaria).
             One or more taxa are easily
-            <a href="https://cch2.org/portal/collections/map/index.php" target="_blank">Mapped</a>
-            on the CCH2 to illustrate their distribution, the points linked to current herbarium records and easily color-coded by taxon.
+            <a href="https://cch2.org/portal/collections/map/index.php" target="_blank">mapped</a>
+            in CCH2 to illustrate their distribution, the points linked to current herbarium records and easily color-coded by taxon.
         </p>
         <div class="image-container">
             <div class="images">
@@ -102,19 +102,19 @@ $serverHost = GeneralUtil::getDomain();
             </div>
             <div class="caption">
                 Left: Search data fields of the Symbiota-based CCH2. Right: Map of CCH2 collection data
-                of Pectocarya linearis (Boraginaceae), showing worldwide distribution.
-                Click on a point on the map to see current herbarium record.
+                of <u>Pectocarya linearis</u> (Boraginaceae). Click the image above to be taken to the dynamic map. On the dynamic map, 
+				click on a point on the map to see the herbarium record.
             </div>
         </div>
         <h2>
             <?php echo "CHECKLISTS" ?>
         </h2>
         <p>
-            "The CCH2 allows for creation of taxon
-            <a href="https://cch2.org/portal/checklists/index.php" target="_blank">Checklists</a>,
-            listing and linking all herbarium records of a given region. These serve as a definitive record of documented plants
+            CCH2 allows for creation of taxon
+            <a href="https://cch2.org/portal/checklists/index.php" target="_blank">Checklists</a>
+            which can be used to list and link all herbarium records of a given region. These can serve as definitive records of documented plants
             in that region, from which a printed checklist may easily be generated. In addition,
-            <a href="https://www.inaturalist.org/home" target="_blank">iNaturalist</a> and
+            <a href="https://www.inaturalist.org/" target="_blank">iNaturalist</a> and
             <a href="https://www.calflora.org/" target="_blank">Calflora</a>
             records of a taxon in that specified region may be linked and used as additional taxon documentation for the checklist.
         </p>
@@ -129,7 +129,7 @@ $serverHost = GeneralUtil::getDomain();
                 </a>
             </div>
             <div class="caption">
-                An example of the Checklist function of CCH2. Click to see regional records and maps.
+                An example of the Checklist function of CCH2. Click the left image to see the checklist and the right image to see a map of linked voucher specimens in the checklist.
             </div>
         </div>
 
@@ -137,32 +137,33 @@ $serverHost = GeneralUtil::getDomain();
             <?php echo "MEDIA" ?>
         </h2>
         <p>
-            and may be the precursor to and observing and studying various types of 
+            CCH2 shares  
             <a href="https://cch2.org/portal/imagelib/search.php?taxontype=2&usethes=1&tagExistance=1" target="_blank">media</a>
-            associated with a given collection. Media generally consist of high-resolution
+            associated with taxa and specimens in the portal. Media generally consist of high-resolution
             photographs of herbarium sheet vouchers, an example seen 
-            <a href="https://cch2.org/portal/taxa/index.php?tid=202621" target="_blank">here</a> .
+            <a href="https://cch2.org/portal/taxa/index.php?tid=202621" target="_blank">here</a>.
             However, other images of a plant collection, taken from the field or lab, may be uploaded to a CCH2 record, as exemplified
-            <a href="https://cch2.org/portal/collections/individual/index.php?occid=1298386&clid=0" target="_blank">here</a> .
+            <a href="https://cch2.org/portal/collections/individual/index.php?occid=1298386&clid=0" target="_blank">here</a>.
             Observations on
             <a href="https://www.inaturalist.org/home" target="_blank">iNaturalist</a>
             of a specimen collected may also be linked to a given herbarium record, as seen
-            <a href="https://cch2.org/portal/collections/individual/index.php?occid=5803812" target="_blank">media</a>here.
-            A recent addition allows uploads of audio files with video files is in the works.
+            <a href="https://cch2.org/portal/collections/individual/index.php?occid=5803812" target="_blank">here</a>.
+            A recent addition allows uploads of audio files.
         </p>
 
        <h2>
             <?php echo "PHENOLOGY" ?>
         </h2>
         <p>
-            Herbarium records may now be used to assess phenology of taxa (timing of flowering and fruiting), exemplified
-            <a href=https://cch2.org/portal/taxa/index.php?tid=202621" target="_blank">here</a>,
-            which allows for study of phenological changes over time and space (see below).
+            Herbarium records may now be used to assess the timing of phenological events (e.g., timing of flowering and fruiting) of taxa, exemplified
+            <a href=https://cch2.org/portal/taxa/index.php?tid=202621" target="_blank">here</a>.
+			Taxon pages in CCH2 include a tally of number of records scored for a given phenological status by month (see below). 
+			These data allow for study of phenological changes over time and space.
         </p>
 
        <div class="image-container">
             <div class="images">
-                <a href="https://cch2.org/portal/taxa/index.php?tid=211646">
+                <a href="https://cch2.org/portal/taxa/index.php?tid=211646" target="_blank">
                     <img src="<?php echo $CLIENT_ROOT . '/images/Picture5.png'; ?>" alt="Image 5">
                 </a>
             </div>
@@ -172,21 +173,17 @@ $serverHost = GeneralUtil::getDomain();
         </div>
 
         <h2>
-            <?php echo "ASSOCIATIONS" ?>
-        </h2>
-
-        <h2>
-            <?php echo "THE EXTENDED SPECIMEN" ?>
+            <?php echo "ASSOCIATIONS: THE EXTENDED SPECIMEN" ?>
         </h2>
         <p>
-            The CCH2 now allows linking of external data. A very important one is linking genetic data to the specimen
-            from which that data was derived. For example, sequence data derived from tissue of a sample
+            CCH2 allows linking of external data, such as genetic data derived from specimens. 
+			For example, sequence data derived from tissue of a sample
             may now be linked to the NCBI (National Center for Biotechnology Information) record housing those data, as seen
             <a href="https://cch2.org/portal/collections/individual/index.php?occid=393367&clid=0" target="_blank">here</a>
             (click the Genetic tab).
         </p>
         <p>
-            In addition, the CCH2 now allows linkages between institutions for developing Extended Specimen Networks; see examples below.
+            In addition, CCH2 allows linkages between institutions for developing Extended Specimen Networks; see examples below.
         </p>
         <div class="image-container">
             <div class="images">
@@ -199,7 +196,7 @@ $serverHost = GeneralUtil::getDomain();
             </div>
             <div class="caption">
                 Left: Linked resources of a CCH2 (RSA) herbarium specimen to liquid-preserved material, wood samples, and prepared microscope slide images of wood sections.
-                Right: Link of RSA specimen to BRIT (Botanical Research Institute of Texas) resources, part of the Extending Specimen Network. 
+                Right: Link of RSA specimen to BRIT (Botanical Research Institute of Texas) resources. 
 
             </div>
         </div>
@@ -208,7 +205,7 @@ $serverHost = GeneralUtil::getDomain();
             <a href="https://www.capturingcaliforniasflowers.org/" target="_blank">California Phenology Thematic Collections Network</a>.
             This project generated over 1 million images (currently many more) of specimens that can now be viewed in this portal,
             and more are added every day. To advance research of the California flora and the impacts of climate change,
-            this project also developed phenological data for the specimens, and those data can be downloaded on the CCH2 Data Portal.
+            this project also developed phenological data for the specimens, and those data can be downloaded from CCH2. 
             The portal is managed the Symbiota Support Hub. See the CCH2 homepage for more information, including the
             <a href="https://cch2.org/portal/includes/usagepolicy.php" target="_blank">Data Use</a>
             policy and contacts.
@@ -216,7 +213,7 @@ $serverHost = GeneralUtil::getDomain();
 
         <p>
             If you maintain an herbarium of California plants and wish to join the CCH, please contact
-            <a href="http://jyost@calpoly.edu" target="_blank">Jenn Yost</a>
+            <a href="mailto:jyost@calpoly.edu" target="_blank">Jenn Yost</a>
             for guidelines and help in setting up a CCH2 collection.
         </p>
 	<?php
