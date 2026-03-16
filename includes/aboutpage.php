@@ -145,7 +145,7 @@ $serverHost = GeneralUtil::getDomain();
             However, other images of a plant collection, taken from the field or lab, may be uploaded to a CCH2 record, as exemplified
             <a href="https://cch2.org/portal/collections/individual/index.php?occid=1298386&clid=0" target="_blank">here</a>.
             Observations on
-            <a href="https://www.inaturalist.org/home" target="_blank">iNaturalist</a>
+            <a href="https://www.inaturalist.org/" target="_blank">iNaturalist</a>
             of a specimen collected may also be linked to a given herbarium record, as seen
             <a href="https://cch2.org/portal/collections/individual/index.php?occid=5803812" target="_blank">here</a>.
             A recent addition allows uploads of audio files.
