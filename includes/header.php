@@ -94,7 +94,7 @@ $collectionSearchPage = $SHOULD_USE_HARVESTPARAMS ? '/collections/index.php' : '
 						</a>
 					</li>
 					<li>
-						<a href="http://ucjeps.berkeley.edu/consortium/about.html" target="_blank">About CCH</a>
+						<a href="<?= $CLIENT_ROOT ?>/includes/aboutpage.php">About CCH</a>
 					</li>
 					<li>
 						<a href="https://www.capturingcaliforniasflowers.org/symbiota.html" target="_blank">Help & Resources</a>
