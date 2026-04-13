@@ -178,9 +178,11 @@ $serverHost = GeneralUtil::getDomain();
         <p>
             CCH2 allows linking of external data, such as genetic data derived from specimens. 
 			For example, sequence data derived from tissue of a sample
-            may now be linked to the NCBI (National Center for Biotechnology Information) record housing those data, as seen
+            may now be linked to the <a href="https://www.ncbi.nlm.nih.gov/nucleotide/">NCBI</a> (National Center for Biotechnology Information) or 
+            <a href="https://www.boldsystems.org/">Barcode of Life</a> record housing those data, as seen
             <a href="https://cch2.org/portal/collections/individual/index.php?occid=393367&clid=0" target="_blank">here</a>
-            (click the Genetic tab).
+            (click the Genetic tab). See <a href="https://docs.symbiota.org/Editor_Guide/linking_records/#linking-to-genetic-resources-and-sequences">this article</a> 
+            for more information about linking records to genetic resources.
         </p>
         <p>
             In addition, CCH2 allows linkages between institutions for developing Extended Specimen Networks; see examples below.
