@@ -62,12 +62,7 @@ $collectionSearchPage = $SHOULD_USE_HARVESTPARAMS ? '/collections/index.php' : '
 						<a href="<?= $CLIENT_ROOT ?>/index.php">
 							<?= $LANG['H_HOME'] ?>
 						</a>
-					</li>	
-					<li>
-						<a href="<?= $CLIENT_ROOT ?>/collections/misc/collprofiles.php">
-							Collections
-						</a>
-					</li>				
+					</li>			
 					<li>
 						<a href="<?= $CLIENT_ROOT . $collectionSearchPage ?>">
 							<?= $LANG['H_SEARCH'] ?>
@@ -95,12 +90,25 @@ $collectionSearchPage = $SHOULD_USE_HARVESTPARAMS ? '/collections/index.php' : '
 					</li>
 					<li>
 						<a href="<?= $CLIENT_ROOT ?>/includes/aboutpage.php">About CCH</a>
+						<ul>
+							<li>
+								<a href="<?= $CLIENT_ROOT ?>/includes/aboutpage.php">About CCH</a>
+							</li>
+						<li>
+						<a href="<?= $CLIENT_ROOT ?>/collections/misc/collprofiles.php">
+							Collections
+						</a>
+							</li>	
+							<li>
+								<a href="<?= $CLIENT_ROOT ?>/misc/supporters.php">Supporters</a>
+							</li>
+						</ul>
 					</li>
 					<li>
 						<a href="https://www.capturingcaliforniasflowers.org/symbiota.html" target="_blank">Help & Resources</a>
 					</li>
 					<li>
-						<a href='<?= $CLIENT_ROOT ?>/sitemap.php'>
+						<a href='<?= $CLIENT_ROOT ?>/sitemap.php'>	
 							<?= $LANG['H_SITEMAP'] ?>
 						</a>
 					</li>
