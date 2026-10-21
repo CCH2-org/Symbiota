@@ -89,6 +89,9 @@ header("Content-Type: text/html; charset=" . $CHARSET);
                 <li>
                     <p>David L. Magney</p></a>
                 </li>
+                <li>
+                    <p>Lawrence Janeway</p></a>
+                </li>
             </ul>
         </div>
     </div>
