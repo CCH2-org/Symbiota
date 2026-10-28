@@ -1,10 +1,18 @@
+
 <?php
-if($LANG_TAG == 'en' || !file_exists($SERVER_ROOT.'/content/lang/templates/header.' . $LANG_TAG . '.php'))
-	include_once($SERVER_ROOT . '/content/lang/templates/header.en.php');
-else include_once($SERVER_ROOT . '/content/lang/templates/header.' . $LANG_TAG . '.php');
-$SHOULD_USE_HARVESTPARAMS = $SHOULD_USE_HARVESTPARAMS ?? false;
-$collectionSearchPage = $SHOULD_USE_HARVESTPARAMS ? '/collections/index.php' : '/collections/search/index.php';
+include_once($SERVER_ROOT . '/classes/utilities/Language.php');
+
+Language::load('templates/header');
+
+$collectionSearchPage = !empty($SHOULD_USE_HARVESTPARAMS) ? '/collections/index.php' : '/collections/search/index.php';
 ?>
+<script src="<?= $CLIENT_ROOT ?>/js/symb/ask/ask.js" defer></script>
+<script>
+	const Donate_link = '<?= $DONATE_LINK ?>';
+</script>
+<script src="<?= $CLIENT_ROOT ?>/js/symb/ask/translations/<?= $LANG_TAG ?>/common.js"></script>
+<script src="<?= $CLIENT_ROOT ?>/js/symb/ask/translations/overrides/<?= $LANG_TAG ?>/common.overrides.js"></script>
+
 <div class="header-wrapper">
 	<header>
 		<div class="top-wrapper">
@@ -62,12 +70,7 @@ $collectionSearchPage = $SHOULD_USE_HARVESTPARAMS ? '/collections/index.php' : '
 						<a href="<?= $CLIENT_ROOT ?>/index.php">
 							<?= $LANG['H_HOME'] ?>
 						</a>
-					</li>	
-					<li>
-						<a href="<?= $CLIENT_ROOT ?>/collections/misc/collprofiles.php">
-							Collections
-						</a>
-					</li>				
+					</li>			
 					<li>
 						<a href="<?= $CLIENT_ROOT . $collectionSearchPage ?>">
 							<?= $LANG['H_SEARCH'] ?>
@@ -95,12 +98,25 @@ $collectionSearchPage = $SHOULD_USE_HARVESTPARAMS ? '/collections/index.php' : '
 					</li>
 					<li>
 						<a href="<?= $CLIENT_ROOT ?>/includes/aboutpage.php">About CCH</a>
+						<ul>
+							<li>
+								<a href="<?= $CLIENT_ROOT ?>/includes/aboutpage.php">About CCH</a>
+							</li>
+						<li>
+						<a href="<?= $CLIENT_ROOT ?>/collections/misc/collprofiles.php">
+							Collections
+						</a>
+							</li>	
+							<li>
+								<a href="<?= $CLIENT_ROOT ?>/misc/supporters.php">Supporters</a>
+							</li>
+						</ul>
 					</li>
 					<li>
 						<a href="https://www.capturingcaliforniasflowers.org/symbiota.html" target="_blank">Help & Resources</a>
 					</li>
 					<li>
-						<a href='<?= $CLIENT_ROOT ?>/sitemap.php'>
+						<a href='<?= $CLIENT_ROOT ?>/sitemap.php'>	
 							<?= $LANG['H_SITEMAP'] ?>
 						</a>
 					</li>
