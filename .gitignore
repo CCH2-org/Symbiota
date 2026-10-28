@@ -1,3 +1,5 @@
 /config/dbconnection.php
 /config/symbini.php
 /config/auth_config.php
+misc/supporters.php
+temp/cap_storage.json
